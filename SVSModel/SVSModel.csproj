@@ -1,0 +1,122 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<id>SVSModel</id>
+		<version>1.1.0</version>
+		<authors>PotatoesNZ</authors>
+		<description>A wrapper of the SVS Model code</description>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Data\CropCoefficientTableFull.csv" />
+		<None Remove="Data\Met\ashburton.csv" />
+		<None Remove="Data\Met\balclutha.csv" />
+		<None Remove="Data\Met\blenheim.csv" />
+		<None Remove="Data\Met\christchurch.csv" />
+		<None Remove="Data\Met\culverden.csv" />
+		<None Remove="Data\Met\dannevirke.csv" />
+		<None Remove="Data\Met\dargaville.csv" />
+		<None Remove="Data\Met\dunedin.csv" />
+		<None Remove="Data\Met\gisborne.csv" />
+		<None Remove="Data\Met\gore.csv" />
+		<None Remove="Data\Met\hamilton.csv" />
+		<None Remove="Data\Met\hastings.csv" />
+		<None Remove="Data\Met\hokitika.csv" />
+		<None Remove="Data\Met\invercargill.csv" />
+		<None Remove="Data\Met\kaitaia.csv" />
+		<None Remove="Data\Met\kerikeri.csv" />
+		<None Remove="Data\Met\lauder.csv" />
+		<None Remove="Data\Met\levin.csv" />
+		<None Remove="Data\Met\lincoln.csv" />
+		<None Remove="Data\Met\lumsden.csv" />
+		<None Remove="Data\Met\manukau.csv" />
+		<None Remove="Data\Met\martinborough.csv" />
+		<None Remove="Data\Met\masterton.csv" />
+		<None Remove="Data\Met\matamata.csv" />
+		<None Remove="Data\Met\middlemarch.csv" />
+		<None Remove="Data\Met\motueka.csv" />
+		<None Remove="Data\Met\napier.csv" />
+		<None Remove="Data\Met\nelson.csv" />
+		<None Remove="Data\Met\new_plymouth.csv" />
+		<None Remove="Data\Met\north_auckland.csv" />
+		<None Remove="Data\Met\oamaru.csv" />
+		<None Remove="Data\Met\ohakune.csv" />
+		<None Remove="Data\Met\palmerston_north.csv" />
+		<None Remove="Data\Met\paraparaumu.csv" />
+		<None Remove="Data\Met\pukekohe.csv" />
+		<None Remove="Data\Met\rotorua.csv" />
+		<None Remove="Data\Met\taupo.csv" />
+		<None Remove="Data\Met\tauranga.csv" />
+		<None Remove="Data\Met\timaru.csv" />
+		<None Remove="Data\Met\waipawa.csv" />
+		<None Remove="Data\Met\wellington.csv" />
+		<None Remove="Data\Met\whakatane.csv" />
+		<None Remove="Data\Met\whakatu.csv" />
+		<None Remove="Data\Met\whanganui.csv" />
+		<None Remove="Data\Met\whangarei.csv" />
+		<None Remove="Data\Met\whitianga.csv" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Data\CropCoefficientTableFull.csv" />
+		<EmbeddedResource Include="Data\Met\ashburton.csv" />
+		<EmbeddedResource Include="Data\Met\balclutha.csv" />
+		<EmbeddedResource Include="Data\Met\blenheim.csv" />
+		<EmbeddedResource Include="Data\Met\christchurch.csv" />
+		<EmbeddedResource Include="Data\Met\culverden.csv" />
+		<EmbeddedResource Include="Data\Met\dannevirke.csv" />
+		<EmbeddedResource Include="Data\Met\dargaville.csv" />
+		<EmbeddedResource Include="Data\Met\dunedin.csv" />
+		<EmbeddedResource Include="Data\Met\gisborne.csv" />
+		<EmbeddedResource Include="Data\Met\gore.csv" />
+		<EmbeddedResource Include="Data\Met\hamilton.csv" />
+		<EmbeddedResource Include="Data\Met\hastings.csv" />
+		<EmbeddedResource Include="Data\Met\hokitika.csv" />
+		<EmbeddedResource Include="Data\Met\invercargill.csv" />
+		<EmbeddedResource Include="Data\Met\kaitaia.csv" />
+		<EmbeddedResource Include="Data\Met\kerikeri.csv" />
+		<EmbeddedResource Include="Data\Met\lauder.csv" />
+		<EmbeddedResource Include="Data\Met\levin.csv" />
+		<EmbeddedResource Include="Data\Met\lincoln.csv" />
+		<EmbeddedResource Include="Data\Met\lumsden.csv" />
+		<EmbeddedResource Include="Data\Met\manukau.csv" />
+		<EmbeddedResource Include="Data\Met\martinborough.csv" />
+		<EmbeddedResource Include="Data\Met\masterton.csv" />
+		<EmbeddedResource Include="Data\Met\matamata.csv" />
+		<EmbeddedResource Include="Data\Met\middlemarch.csv" />
+		<EmbeddedResource Include="Data\Met\motueka.csv" />
+		<EmbeddedResource Include="Data\Met\napier.csv" />
+		<EmbeddedResource Include="Data\Met\nelson.csv" />
+		<EmbeddedResource Include="Data\Met\new_plymouth.csv" />
+		<EmbeddedResource Include="Data\Met\north_auckland.csv" />
+		<EmbeddedResource Include="Data\Met\oamaru.csv" />
+		<EmbeddedResource Include="Data\Met\ohakune.csv" />
+		<EmbeddedResource Include="Data\Met\palmerston_north.csv" />
+		<EmbeddedResource Include="Data\Met\paraparaumu.csv" />
+		<EmbeddedResource Include="Data\Met\pukekohe.csv" />
+		<EmbeddedResource Include="Data\Met\rotorua.csv" />
+		<EmbeddedResource Include="Data\Met\taupo.csv" />
+		<EmbeddedResource Include="Data\Met\tauranga.csv" />
+		<EmbeddedResource Include="Data\Met\timaru.csv" />
+		<EmbeddedResource Include="Data\Met\waipawa.csv" />
+		<EmbeddedResource Include="Data\Met\wellington.csv" />
+		<EmbeddedResource Include="Data\Met\whakatane.csv" />
+		<EmbeddedResource Include="Data\Met\whakatu.csv" />
+		<EmbeddedResource Include="Data\Met\whanganui.csv" />
+		<EmbeddedResource Include="Data\Met\whangarei.csv" />
+		<EmbeddedResource Include="Data\Met\whitianga.csv" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
+		<PackageReference Include="CsvHelper" Version="30.0.1" />
+		<PackageReference Include="Microsoft.Data.Analysis" Version="0.20.0" />
+		<PackageReference Include="python" Version="3.9.13" />
+	</ItemGroup>
+</Project>

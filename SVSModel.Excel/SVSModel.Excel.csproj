@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
+		<PackageReference Include="ExcelDna.AddIn" Version="1.7.0-rc1" />
+		<PackageReference Include="python" Version="3.9.13" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SVSModel\SVSModel.csproj" />
+	</ItemGroup>
+
+	<Target Name="PackedReferences" AfterTargets="AfterBuild" BeforeTargets="ExcelDnaBuild">
+		<ItemGroup>
+			<References Include="$(OutDir)*.dll" Exclude="$(OutDir)$(TargetFileName)" />
+		</ItemGroup>
+
+		<PropertyGroup>
+			<ExcelAddInInclude>@(References)</ExcelAddInInclude>
+		</PropertyGroup>
+	</Target>
+
+</Project>

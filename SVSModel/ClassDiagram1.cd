@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SVSModel.Configuration.Config" Collapsed="true">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAACACAAAAAAAAAAAgAAAAAAAAAgAA=</HashCode>
+      <FileName>Configuration\Config.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Configuration.Constants" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AkAAAAAAAAAAAAAAAgAwBABAAAIAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Configuration\Constants.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Configuration.CropConfig" Collapsed="true">
+    <Position X="4.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAQAQAiAAIAQAABQAQAAAAIAgAAAEAAgAAggAAA=</HashCode>
+      <FileName>Configuration\CropConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Configuration.CropParams" Collapsed="true">
+    <Position X="6" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAACAKAACBAAhEACABBAAACAYICAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Configuration\CropParams.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Configuration.Tryout" Collapsed="true">
+    <Position X="4.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Configuration\DummyChecker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Configuration.FieldConfig" Collapsed="true">
+    <Position X="4.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAABABAAghAwIAAAAABkAAAQAAAAABAAAQA=</HashCode>
+      <FileName>Configuration\FieldConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Configuration.Functions" Collapsed="true">
+    <Position X="6" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IEAAEAAABEAAAAAQBAAAACAAAAAIIAABAAAAAAAAAAA=</HashCode>
+      <FileName>Configuration\Functions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.Crop" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAgCAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Crop.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.Defaults" Collapsed="true">
+    <Position X="9.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>RQAAAYAQRAiAApAIwBBIIAAAAAIkAIAREAAgBAiBARg=</HashCode>
+      <FileName>Models\Defaults.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.Fertiliser" Collapsed="true">
+    <Position X="11.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Models\Fertiliser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.CropCoefficient" Collapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAACUoAACBAAgAADBABIAgCCIMAAACAIwEIQAIARIA=</HashCode>
+      <FileName>Models\InterfaceModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.CropCoefficientMap" Collapsed="true">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\InterfaceModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.WeatherStationData" Collapsed="true">
+    <Position X="6" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAQAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Models\InterfaceModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.MetDataDictionaries" Collapsed="true">
+    <Position X="9.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Models\InterfaceModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.DailyNBalance" Collapsed="true">
+    <Position X="7.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEIMAAACAAgAIAEgAABAAAgAAAgAAA=</HashCode>
+      <FileName>Models\InterfaceModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.MetData" Collapsed="true">
+    <Position X="7.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAQAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Models\MetData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.Residues" Collapsed="true">
+    <Position X="4.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Residues.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.SoilNitrogen" Collapsed="true">
+    <Position X="7.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Models\SoilNitrogen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.SoilOrganic" Collapsed="true">
+    <Position X="9.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAABAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Models\SoilOrganic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.Models.SoilWater" Collapsed="true">
+    <Position X="11.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\SoilWater.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVSModel.ModelInterface" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAACAAAAAAAAggAAQAAAAA=</HashCode>
+      <FileName>ModelInterface.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SVSModel.Simulation" Collapsed="true">
+    <Position X="6" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Simulation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="SVSModel.IModelInterface" Collapsed="true">
+    <Position X="4.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAggAAAAAAAA=</HashCode>
+      <FileName>ModelInterface.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
