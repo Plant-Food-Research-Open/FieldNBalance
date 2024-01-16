@@ -14,11 +14,11 @@ namespace TestModel
     {
         public static void RunAllTests()
         {
-            string path = Directory.GetCurrentDirectory().Split("\\SVSModelBuildDeploy\\")[0] + "\\SVSModelBuildDeploy\\TestComponents\\TestSets\\";
+            string path = Directory.GetCurrentDirectory().Split("\\FieldNBalance\\")[0] + "\\FieldNBalance\\TestComponents\\TestSets\\";
             List<string> sets = new List<string> { "WS2", "Residues", "Location", "Moisture" };
 
             //Delete graphs from previous test run
-            string graphFolder = Directory.GetCurrentDirectory().Split("\\SVSModelBuildDeploy\\")[0] + "\\SVSModelBuildDeploy\\TestGraphs\\Outputs";
+            string graphFolder = Directory.GetCurrentDirectory().Split("\\FieldNBalance\\")[0] + "\\FieldNBalance\\TestGraphs\\Outputs";
             string[] graphPaths = Directory.GetFiles(graphFolder);
             foreach (string graphPath in graphPaths)
                 File.Delete(graphPath);

@@ -22,8 +22,8 @@ import matplotlib.dates as mdates
 
 # Path for current Tests
 
-inPath = os.getcwd().split("\\SVSModelBuildDeploy\\")[0]+"\\SVSModelBuildDeploy\\TestComponents\\TestSets\\Residues\\Outputs\\"
-outPath = os.getcwd().split("\\SVSModelBuildDeploy\\")[0]+"\\SVSModelBuildDeploy\\TestGraphs\\Outputs\\"
+inPath = os.getcwd().split("\\FieldNBalance\\")[0]+"\\FieldNBalance\\TestComponents\\TestSets\\Residues\\Outputs\\"
+outPath = os.getcwd().split("\\FieldNBalance\\")[0]+"\\FieldNBalance\\TestGraphs\\Outputs\\"
 
 # Get names and results from each test
 

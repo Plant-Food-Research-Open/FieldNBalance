@@ -34,8 +34,8 @@ CBcolors = {
 } 
 # -
 
-inPath = os.getcwd().split("\\SVSModelBuildDeploy\\")[0]+"\\SVSModelBuildDeploy\\TestComponents\\TestSets\\WS2"
-outPath = os.getcwd().split("\\SVSModelBuildDeploy\\")[0]+"\\SVSModelBuildDeploy\\TestGraphs\\Outputs\\"
+inPath = os.getcwd().split("\\FieldNBalance\\")[0]+"\\FieldNBalance\\TestComponents\\TestSets\\WS2"
+outPath = os.getcwd().split("\\FieldNBalance\\")[0]+"\\FieldNBalance\\TestGraphs\\Outputs\\"
 
 Configs = pd.read_pickle(inPath+"\\FieldConfigs.pkl")
 
