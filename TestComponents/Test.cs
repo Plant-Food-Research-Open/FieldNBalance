@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Net;
+using System.IO;
+using System.Reflection;
 using Microsoft.Data.Analysis;
 using SVSModel;
 using SVSModel.Models;
@@ -7,6 +9,7 @@ using System.CodeDom.Compiler;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text.RegularExpressions;
 using System.Data;
+using System.Globalization;
 
 namespace TestModel
 {
@@ -14,29 +17,41 @@ namespace TestModel
     {
         public static void RunAllTests()
         {
-            string path = Directory.GetCurrentDirectory().Split("\\FieldNBalance\\")[0] + "\\FieldNBalance\\TestComponents\\TestSets\\";
+            string path = Path.Join(Directory.GetCurrentDirectory(), "TestComponents", "TestSets");
             List<string> sets = new List<string> { "WS2", "Residues", "Location", "Moisture" };
 
             //Delete graphs from previous test run
-            string graphFolder = Directory.GetCurrentDirectory().Split("\\FieldNBalance\\")[0] + "\\FieldNBalance\\TestGraphs\\Outputs";
+            string graphFolder = Path.Join(Directory.GetCurrentDirectory(), "TestGraphs", "Outputs");
+            if (!Directory.Exists(graphFolder))
+            {
+                System.IO.Directory.CreateDirectory(graphFolder);
+            }
+
             string[] graphPaths = Directory.GetFiles(graphFolder);
             foreach (string graphPath in graphPaths)
                 File.Delete(graphPath);
 
+            string basePath = Directory.GetCurrentDirectory();
             foreach (string s in sets)
             {
                 //Make config file in format that .NET DataTable is able to import
-                runPythonScript(path, @"TestGraphs\MakeConfigs\"+s+".py");
+                runPythonScript(basePath, Path.Join("TestGraphs", "MakeConfigs", $"{s}.py"));
                 //Run each test
                 runTestSet(path, s);
                 //Make graphs associated with each test
-                runPythonScript(path, @"TestGraphs\MakeGraphs\"+ s+".py");
+                runPythonScript(basePath, Path.Join("TestGraphs", "MakeGraphs", $"{s}.py"));
             }
         }
 
         public static void runTestSet(string path, string set)
         {
-            string[] filePaths = Directory.GetFiles(path+"\\"+set+"\\Outputs");
+            string graphFolder = Path.Join(path, set, "Outputs");
+            if (!Directory.Exists(graphFolder))
+            {
+                System.IO.Directory.CreateDirectory(graphFolder);
+            }
+
+            string[] filePaths = Directory.GetFiles(graphFolder);
             foreach (string filePath in filePaths)
                 File.Delete(filePath);
 
@@ -50,7 +65,7 @@ namespace TestModel
             DataFrame allFert = new DataFrame();
             if (fertcsv != null)
             {
-               allFert = DataFrame.LoadCsv(fertcsv);
+                allFert = DataFrame.LoadCsv(fertcsv);
             }
 
             List<string> Tests = new List<string>();
@@ -109,17 +124,19 @@ namespace TestModel
                     System.IO.Directory.CreateDirectory("OutputFiles");
                 }
 
-                DataFrame.SaveCsv(newDataframe, path + "\\" + set + "\\Outputs\\" + test + ".csv");
+                DataFrame.SaveCsv(
+                    newDataframe, Path.Join(path, set, "Outputs", $"{test}.csv")
+                );
             }
         }
 
         private static void runPythonScript(string path, string pyProg)
         {
             string newPath = Path.GetFullPath(Path.Combine(path, @"..\..\"));
-            string progToRun = newPath + pyProg;
+            string progToRun = pyProg;
 
             Process proc = new Process();
-            proc.StartInfo.FileName = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python39_64\\python.exe";
+            proc.StartInfo.FileName = "python";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.Arguments = progToRun;
@@ -184,7 +201,7 @@ namespace TestModel
                 testConfigDict.Add(c, allTests[c][testRow]);
             }
 
-            List<string> datesNames = new List<string>(){ "PriorEstablishDate", "PriorHarvestDate", "CurrentEstablishDate", "CurrentHarvestDate", "FollowingEstablishDate", "FollowingHarvestDate" };
+            List<string> datesNames = new List<string>() { "PriorEstablishDate", "PriorHarvestDate", "CurrentEstablishDate", "CurrentHarvestDate", "FollowingEstablishDate", "FollowingHarvestDate" };
 
             SVSModel.Configuration.Config ret = new SVSModel.Configuration.Config(testConfigDict);
 
@@ -214,7 +231,9 @@ namespace TestModel
             {
                 if (row[0].ToString() == site) //if this date row holds data for current site
                 {
-                    DateTime date = DateTime.Parse(row[1].ToString());
+                    DateTime date = DateTime.ParseExact(
+                        row[1].ToString(), "d/M/yyyy", CultureInfo.InvariantCulture
+                    );
                     DateTime last = new DateTime();
                     if (fert.Keys.Count > 0)
                     {

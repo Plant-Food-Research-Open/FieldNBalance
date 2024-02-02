@@ -16,6 +16,7 @@
 # +
 #from io import BytesIO
 import os
+from os.path import join
 import pandas as pd
 import matplotlib.pyplot as plt
 import datetime as dt
@@ -34,23 +35,23 @@ CBcolors = {
 } 
 # -
 
-inPath = os.getcwd().split("\\FieldNBalance\\")[0]+"\\FieldNBalance\\TestComponents\\TestSets\\WS2"
-outPath = os.getcwd().split("\\FieldNBalance\\")[0]+"\\FieldNBalance\\TestGraphs\\Outputs\\"
+inPath = join("TestComponents", "TestSets", "WS2")
+outPath = join("TestGraphs", "Outputs")  
 
-Configs = pd.read_pickle(inPath+"\\FieldConfigs.pkl")
+Configs = pd.read_pickle(join(inPath, "FieldConfigs.pkl"))
 
-observedCrop = pd.read_csv(inPath + "\\CropData.csv",index_col=0)
+observedCrop = pd.read_csv(join(inPath, "CropData.csv"), index_col=0)
 observedCrop.sort_index(axis=0,inplace=True)
 observedCrop['Date'] = pd.to_datetime(observedCrop['Date'],dayfirst=True)
 
-observedSoil = pd.read_csv(inPath + "\\SoilData.csv",index_col=0)
+observedSoil = pd.read_csv(join(inPath, "SoilData.csv"),index_col=0)
 observedSoil.sort_index(axis=0,inplace=True)
 observedSoil['Date'] = pd.to_datetime(observedSoil['Date'],dayfirst=True)
 observedSoil['SoilMineralN'] = observedSoil.loc[:,['SoilN0_15', 'SoilN15_30', 'SoilN30_60', 'SoilN60_90']].sum(axis=1)
 
 testFiles = []
 tests = []
-for file in os.listdir(inPath+"\\Outputs"):
+for file in os.listdir(join(inPath,"Outputs")):
     if file.endswith('.csv'):
         testFiles.append(file)
         tests.append(file.replace(".csv",""))
@@ -58,7 +59,7 @@ for file in os.listdir(inPath+"\\Outputs"):
 # +
 Alltests =[]
 for t in testFiles[:]:  
-    testframe = pd.read_csv(inPath+"\\Outputs\\"+t,index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
+    testframe = pd.read_csv(join(inPath, "Outputs", t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
     Alltests.append(testframe)   
 
 AllData = pd.concat(Alltests,axis=1,keys=tests)
@@ -99,7 +100,7 @@ for t in tests:
         pos+=1
         c+=1
 
-plt.savefig(outPath+'\\TimeCourse.png')
+plt.savefig(join(outPath, "TimeCourse.png"))
 # +
 # colors = ['orange','green']
 # Graph = plt.figure(figsize=(10,10))
