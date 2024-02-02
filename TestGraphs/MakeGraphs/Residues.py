@@ -14,6 +14,7 @@
 # ---
 
 import os
+from os.path import join
 import datetime as dt
 import pandas as pd
 import numpy as np
@@ -22,8 +23,8 @@ import matplotlib.dates as mdates
 
 # Path for current Tests
 
-inPath = os.getcwd().split("\\FieldNBalance\\")[0]+"\\FieldNBalance\\TestComponents\\TestSets\\Residues\\Outputs\\"
-outPath = os.getcwd().split("\\FieldNBalance\\")[0]+"\\FieldNBalance\\TestGraphs\\Outputs\\"
+inPath = join("TestComponents", "TestSets", "Residues", "Outputs")
+outPath = join("TestGraphs", "Outputs")  
 
 # Get names and results from each test
 
@@ -39,7 +40,7 @@ for file in os.listdir(inPath):
 # +
 Alltests =[]
 for t in testFiles[:]:  
-    testframe = pd.read_csv(inPath+t,index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
+    testframe = pd.read_csv(join(inPath, t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
     Alltests.append(testframe)   
 
 AllData = pd.concat(Alltests,axis=1,keys=tests)
@@ -64,4 +65,4 @@ plt.ylabel('Cum Net Residue mineralisation (kg/ha)')
 plt.xticks(rotation=60)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
 Graph.tight_layout(pad=1.5)
-plt.savefig(outPath+'\\Residues.png')
+plt.savefig(join(outPath, 'Residues.png'))

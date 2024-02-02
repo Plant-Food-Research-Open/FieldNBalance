@@ -1,0 +1,67 @@
+name: Validation Tests 
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  release:
+    types: [ published ]
+  workflow_dispatch: {}
+  
+permissions:
+  actions: write
+  contents: write
+
+jobs:
+  build:  
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 16
+
+    concurrency:
+      group: "pages"
+      cancel-in-progress: true      
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+                     
+    - name: Install Python 3
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.11
+
+    - name: Add conda to system path
+      run: |
+        # $CONDA is an environment variable pointing to the root of the miniconda directory
+        echo $CONDA/bin >> $GITHUB_PATH
+
+    - name: Install dependencies
+      run: |
+        pip install --no-cache-dir -r requirements.txt
+      
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+      
+    - name: run
+      run: dotnet run --project TestConsole/TestsConsole.csproj
+     
+    - name: run python 
+      run: python TestGraphs/report.py   
+                  
+    - name: Deploy to GitHub pages 🚀
+      if: github.event_name != 'pull_request'
+      uses: JamesIves/github-pages-deploy-action@v4.4.1
+      with:
+        clean: false
+        branch: gh-pages
+        folder: html
+        

@@ -13,19 +13,20 @@
 #     name: python3
 # ---
 
-import os
+from os.path import join
 import pandas as pd
 
-path = os.getcwd().split("\\FieldNBalance\\")[0]+"\\FieldNBalance\\TestComponents\\TestSets\\Moisture"
+path = join("TestComponents", "TestSets", "Moisture")
 
-Configs = pd.read_excel(path+"\\FieldConfigs.xlsx",nrows=48,
-                        usecols=lambda x: 'Unnamed' not in x,
-                        keep_default_na=False
-                    )
+Configs = pd.read_excel(
+    join(path, "FieldConfigs.xlsx"),
+    nrows=48,
+    usecols=lambda x: 'Unnamed' not in x,
+    keep_default_na=False)
 
 Configs.set_index('Name',inplace=True)
 
 CSConfigs = Configs.transpose()
-CSConfigs.to_csv(path+"\\FieldConfigs.csv",header=True)
+CSConfigs.to_csv(join(path, "FieldConfigs.csv"),header=True)
 
-Configs.to_pickle(path+"\\FieldConfigs.pkl")
+Configs.to_pickle(join(path, "FieldConfigs.pkl"))
