@@ -63,4 +63,5 @@ jobs:
         clean: false
         branch: gh-pages
         folder: html
+        token: ${{ secrets.GITHUB_TOKEN }}
         
