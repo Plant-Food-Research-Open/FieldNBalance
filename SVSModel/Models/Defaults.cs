@@ -26,7 +26,7 @@ namespace SVSModel.Models
 
         public static readonly double FieldLoss = 0;
         public static readonly double DressingLoss = 0;
-        public static readonly double MoistureContent = 9;
+        public static readonly double MoistureContent = 0;
 
         public static readonly int GrowingDays = 125;
         public static readonly DateTime EstablishDate = DateTime.Today;
@@ -39,9 +39,9 @@ namespace SVSModel.Models
         public static readonly string SoilTexture = "Clay";
         public static readonly string SampleDepth = "0-30cm";
         public static readonly double BulkDensity = 1.22;
-        public static readonly string PMNtype = "PMN";
-        public static readonly double PMN = 60;
-        public static readonly int Splits = 1;
+        public static readonly string PMNtype = "HWEON";
+        public static readonly double PMN = 55;
+        public static readonly int Splits = 3;
         public static readonly string RainPrior = "Typical";
         public static readonly string RainDuring = "Typical";
         public static readonly string IrrigationApplied = "None";
