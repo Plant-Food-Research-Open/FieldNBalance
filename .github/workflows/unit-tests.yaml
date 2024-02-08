@@ -43,5 +43,5 @@ jobs:
       if: success()
       with:
         name: Unit Tests            
-        path: unit_results.xml
+        path: SVSModel.Tests/unit_results.xml
         reporter: java-junit    
