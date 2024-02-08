@@ -37,7 +37,7 @@ CBcolors = {
 
 # Path for current Tests
 
-inPath = join("TestComponents", "TestSets", "Moisture", "OutPuts")
+inPath = join("TestComponents", "TestSets", "Moisture", "Outputs")
 outPath = join("TestGraphs", "Outputs")  
 
 # Get names and results from each test
@@ -54,12 +54,12 @@ for file in os.listdir(inPath):
 # +
 Alltests =[]
 for t in testFiles[:]:  
-    testframe = pd.read_csv(join(inPath, t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
+    testframe = pd.read_csv(join(inPath, t),index_col=0,dayfirst=False,date_format='%m/%d/%Y %H:%M:%S')  
     Alltests.append(testframe)   
 
 AllData = pd.concat(Alltests,axis=1,keys=tests)
 AllData.sort_index(axis=0,inplace=True)
-AllData.index = pd.to_datetime(AllData.index)
+AllData.index = pd.to_datetime(AllData.index, dayfirst=False)
 # -
 
 AllData.columns
