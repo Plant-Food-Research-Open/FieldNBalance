@@ -1,4 +1,4 @@
-name: Validation Tests 
+name: Validation Test Plots
 
 on:
   push:
