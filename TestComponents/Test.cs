@@ -141,6 +141,7 @@ namespace TestModel
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.Arguments = progToRun;
             proc.Start();
+            proc.WaitForExit();
         }
 
         public static SVSModel.Configuration.Config SetConfigFromDataFrame(string test, DataFrame allTests)

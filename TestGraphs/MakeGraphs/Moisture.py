@@ -37,7 +37,7 @@ CBcolors = {
 
 # Path for current Tests
 
-inPath = join("TestComponents", "TestSets", "Moisture", "Outputs")
+inPath = join("TestComponents", "TestSets", "Moisture", "OutPuts")
 outPath = join("TestGraphs", "Outputs")  
 
 # Get names and results from each test
