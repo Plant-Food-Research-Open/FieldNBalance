@@ -15,8 +15,8 @@
 
 # +
 #from io import BytesIO
-import os
-from os.path import join
+import os.path as osp
+import os 
 import pandas as pd
 import matplotlib.pyplot as plt
 import datetime as dt
@@ -35,23 +35,24 @@ CBcolors = {
 } 
 # -
 
-inPath = join("TestComponents", "TestSets", "WS2")
-outPath = join("TestGraphs", "Outputs")  
+root = osp.split(osp.abspath('WS2.ipynb'))[0][:-22]
+inPath = osp.join(root,"TestComponents", "TestSets", "WS2")
+outPath = osp.join(root,"TestGraphs", "Outputs")  
 
-Configs = pd.read_pickle(join(inPath, "FieldConfigs.pkl"))
+Configs = pd.read_pickle(osp.join(inPath, "FieldConfigs.pkl"))
 
-observedCrop = pd.read_csv(join(inPath, "CropData.csv"), index_col=0)
+observedCrop = pd.read_csv(osp.join(inPath, "CropData.csv"), index_col=0)
 observedCrop.sort_index(axis=0,inplace=True)
 observedCrop['Date'] = pd.to_datetime(observedCrop['Date'],dayfirst=True)
 
-observedSoil = pd.read_csv(join(inPath, "SoilData.csv"),index_col=0)
+observedSoil = pd.read_csv(osp.join(inPath, "SoilData.csv"),index_col=0)
 observedSoil.sort_index(axis=0,inplace=True)
 observedSoil['Date'] = pd.to_datetime(observedSoil['Date'],dayfirst=True)
-observedSoil['SoilMineralN'] = observedSoil.loc[:,['SoilN0_15', 'SoilN15_30', 'SoilN30_60', 'SoilN60_90']].sum(axis=1)
+observedSoil['SoilMineralN'] = observedSoil.loc[:,['SoilN0_15', 'SoilN15_30']].sum(axis=1)
 
 testFiles = []
 tests = []
-for file in os.listdir(join(inPath,"Outputs")):
+for file in os.listdir(osp.join(inPath,"Outputs")):
     if file.endswith('.csv'):
         testFiles.append(file)
         tests.append(file.replace(".csv",""))
@@ -59,48 +60,70 @@ for file in os.listdir(join(inPath,"Outputs")):
 # +
 Alltests =[]
 for t in testFiles[:]:  
-    testframe = pd.read_csv(join(inPath, "Outputs", t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
+    testframe = pd.read_csv(osp.join(inPath, "Outputs", t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
     Alltests.append(testframe)   
 
 AllData = pd.concat(Alltests,axis=1,keys=tests)
 AllData.sort_index(axis=0,inplace=True)
 AllData.index = pd.to_datetime(AllData.index)
+# -
+
+TestsFrame = pd.DataFrame(index = [int(x[0]) for x in tests],data=tests,columns = ['crop'])
+TestsFrame.index.name = 'Site'
+
+TestsFrame
+
+
+
+ObsPredCropN = observedCrop.loc[:,['Date','CropN']]
+ObsPredCropN.set_index('Date',append=True,inplace=True)
+ObsPredCropN.columns = ['obs']
+
+ObsPredCropN
+
+ AllData
 
 # +
 colors = ['orange','green']
-Graph = plt.figure(figsize=(10,10))
+Graph = plt.figure(figsize=(10,100))
 pos = 1
 row_num=len(tests)
 
-for t in tests:
-    site = ''
-    for c in t:     
-        if c in ['0','1','2','3','4','5','6','7','8','9']: site += c
-    site = int(site)
-    
-    dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
-    c = 0    
-    for v in ['SoilMineralN','CropN']:
-        ax = Graph.add_subplot(row_num,2,pos)
-        Data = AllData.loc[dates,(t,v)]
-        plt.plot(Data,color=CBcolors[colors[c]],label=v)
-        
-        if v == 'CropN':
-            sData = observedCrop.loc[site,:]
-        if v == 'SoilMineralN':
-            sData = observedSoil.loc[site,:]
-        dFilter = [dates.min() <= sData['Date'].iloc[x] <= dates.max() for x in range(len(sData['Date']))]
-        plt.plot(sData.loc[dFilter,'Date'],sData.loc[dFilter,v],'o',color=CBcolors[colors[c]])
-                        
-        plt.title(t)
-        plt.xticks(rotation=60)
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
-        plt.legend()
-        Graph.tight_layout(pad=1.5)
-        pos+=1
-        c+=1
+for s in range(1,10):
+    testsAtSite = TestsFrame.loc[s,'crop'].values
+    for t in testsAtSite: #['1Gra-A']:#tests:
+        site = t[0]
+        #for c in t:     
+        #    if c in ['0','1','2','3','4','5','6','7','8','9']: site += c
+        site = int(site)
 
-plt.savefig(join(outPath, "TimeCourse.png"))
+        dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
+        c = 0    
+        for v in ['SoilMineralN','CropN']:
+            ax = Graph.add_subplot(row_num,2,pos)
+            Data = AllData.loc[dates,(t,v)]
+            plt.plot(Data,color=CBcolors[colors[c]],label=v)
+
+            if v == 'CropN':
+                sData = observedCrop.loc[site,:]
+            if v == 'SoilMineralN':
+                sData = observedSoil.loc[site,:]
+            dFilter = [dates.min() <= sData['Date'].iloc[x] <= dates.max() for x in range(len(sData['Date']))]
+            plt.plot(sData.loc[dFilter,'Date'],sData.loc[dFilter,v],'o',color=CBcolors[colors[c]])
+
+            plt.title(t)
+            plt.xticks(rotation=60)
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b-%y'))
+            #plt.ylim(0,800)
+            plt.legend()
+            Graph.tight_layout(pad=1.5)
+            pos+=1
+            c+=1
+
+    plt.savefig(osp.join(outPath, "TimeCourse.png"))
+# -
+
+
 # +
 # colors = ['orange','green']
 # Graph = plt.figure(figsize=(10,10))
