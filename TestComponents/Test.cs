@@ -17,7 +17,9 @@ namespace TestModel
     {
         public static void RunAllTests()
         {
-            string path = Path.Join(Directory.GetCurrentDirectory(), "TestComponents", "TestSets");
+            //string root = Directory.GetCurrentDirectory();
+            string root = "C:\\GitHubRepos\\FieldNBalance";
+            string path = Path.Join(root, "TestComponents", "TestSets");
             List<string> sets = new List<string> { "WS2", "Residues", "Location", "Moisture" };
 
             //Delete graphs from previous test run
@@ -232,9 +234,11 @@ namespace TestModel
             {
                 if (row[0].ToString() == site) //if this date row holds data for current site
                 {
-                    DateTime date = DateTime.ParseExact(
-                        row[1].ToString(), "d/M/yyyy", CultureInfo.InvariantCulture
-                    );
+
+                    //DateTime date = DateTime.ParseExact(
+                    //    row[1].ToString(), "d/M/yyyy", CultureInfo.InvariantCulture);
+                    DateTime date = (DateTime)row[1];
+                    
                     DateTime last = new DateTime();
                     if (fert.Keys.Count > 0)
                     {
