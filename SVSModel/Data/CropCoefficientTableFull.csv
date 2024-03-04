@@ -84,3 +84,6 @@ TestResidue10,24,Grain,Cereal,Wheat,Feed,Poaceae ,Triticum,astevium,,Triticum as
 TestResidue15,24,Grain,Cereal,Wheat,Feed,Poaceae ,Triticum,astevium,,Triticum astevium ,astevium ,Seed,Apr,Maturity,Feb,12,t/ha,Saleable grain ,50000,Total,0,0,0.5,0,15,0.1,1.5,1,1,1.5,1.5,1.5
 TestResidue30,24,Grain,Cereal,Wheat,Feed,Poaceae ,Triticum,astevium,,Triticum astevium ,astevium ,Seed,Apr,Maturity,Feb,12,t/ha,Saleable grain ,50000,Total,0,0,0.5,0,15,0.1,1.5,1,1,3,3,3
 TestResidue45,24,Grain,Cereal,Wheat,Feed,Poaceae ,Triticum,astevium,,Triticum astevium ,astevium ,Seed,Apr,Maturity,Feb,12,t/ha,Saleable grain ,50000,Total,0,0,0.5,0,15,0.1,1.5,1,1,4.5,4.5,4.5
+Parsley Vegetable General,76,Vegetable,Green,Parsley,General,Apiaceae,Petroselinum,crispum,,Petroselinum crispum,crispum,Seed,May,Vegetative,Sep,10,t/ha,Saleable product ,50000,Total,0,0,0.7,0,92,0.1,1.5,0.8,1,0.8,4,4.5
+Pumpkin Seed General,77,Seed,Fruit,Pumpkin,General,Cucurbitaceae,Cucurbita,pepo,,Cucurbita pepo ,pepo ,Seed,Oct,LateReproductive,Mar,40,t/ha,Saleable product ,50000,Total,0,0,0.8,0,88,0.1,0.8,1,1,1,1.4,2
+Tall fescue Seed Turf,78,Seed,Forage,Tall fescue,Turf,Tall fescue Seed Turf,Poaceae,Festuca,arundinacea,x,Festuca arundinacea,Seed,May,LateReproductive,Jan,1.8,t/ha,Saleable seed,1000000,Total,15,5,0.15,0.04,15,0.1,0.6,1,0.7,0.9,1.2,2
