@@ -17,8 +17,8 @@ namespace TestModel
     {
         public static void RunAllTests()
         {
-            //string root = Directory.GetCurrentDirectory();
-            string root = "C:\\GitHubRepos\\FieldNBalance";
+            string root = Directory.GetCurrentDirectory();
+            //string root = "C:\\GitHubRepos\\FieldNBalance";
             string path = Path.Join(root, "TestComponents", "TestSets");
             List<string> sets = new List<string> { "WS2", "Residues", "Location", "Moisture" };
 
