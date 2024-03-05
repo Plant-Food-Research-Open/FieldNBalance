@@ -39,7 +39,7 @@ CBcolors = {
 # inPath = osp.join(root,"TestComponents", "TestSets", "WS2")
 # outPath = osp.join(root,"TestGraphs", "Outputs")  
 inPath = osp.join("TestComponents", "TestSets", "WS2")
-outPath = osp.join(root,"TestGraphs", "Outputs")  
+outPath = osp.join("TestGraphs", "Outputs")  
 
 Configs = pd.read_pickle(osp.join(inPath, "FieldConfigs.pkl"))
 
