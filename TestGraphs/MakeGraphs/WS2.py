@@ -21,6 +21,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import datetime as dt
 import matplotlib.dates as mdates
+import MathsUtilities as MUte
 
 CBcolors = {
     'blue':    '#377eb8', 
@@ -35,11 +36,11 @@ CBcolors = {
 } 
 # -
 
-#root = osp.split(osp.abspath('WS2.ipynb'))[0][:-22]
-# inPath = osp.join(root,"TestComponents", "TestSets", "WS2")
-# outPath = osp.join(root,"TestGraphs", "Outputs")  
-inPath = osp.join("TestComponents", "TestSets", "WS2")
-outPath = osp.join("TestGraphs", "Outputs")  
+root = osp.split(osp.abspath('WS2.ipynb'))[0][:-22]
+inPath = osp.join(root,"TestComponents", "TestSets", "WS2")
+outPath = osp.join(root,"TestGraphs", "Outputs")  
+# inPath = osp.join("TestComponents", "TestSets", "WS2")
+# outPath = osp.join("TestGraphs", "Outputs")  
 
 Configs = pd.read_pickle(osp.join(inPath, "FieldConfigs.pkl"))
 
@@ -73,17 +74,93 @@ AllData.index = pd.to_datetime(AllData.index)
 TestsFrame = pd.DataFrame(index = [int(x[0]) for x in tests],data=tests,columns = ['crop'])
 TestsFrame.index.name = 'Site'
 
-TestsFrame
+ObsCropN = observedCrop.loc[:,['Date','CropN']]
+ObsCropN.loc[:,'Date'] = [(ObsCropN.iloc[x,0] + dt.timedelta(hours=12)) for x in range(ObsCropN.index.size)]
+ObsCropN.set_index('Date',append=True,inplace=True)
+ObsCropN.columns = ['obs']
+ObsCropN = ObsCropN.groupby(['Site','Date']).mean()
+blankIndex = pd.MultiIndex.from_product([[],[],[]], names = ['site','test','date'])
+ObsPredCropN = pd.DataFrame(index = blankIndex, columns = ['obs','pred'])
+for t in tests:
+    s = int(t[0])
+    obs = ObsCropN.loc[site,:]
+    dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
+    Pred = AllData.loc[dates,(t,'CropN')]
+    pred = Pred.reindex(obs.index.values)
+    for d in obs.index.values:
+        ObsPredCropN.loc[(s,t,d),'pred'] = pred[d]
+        ObsPredCropN.loc[(s,t,d), 'obs'] = obs.loc[d,'obs']
+
+graph = plt.figure(figsize=(10,10))
+pos = 1
+for s in range(1,10):
+    Obs = ObsPredCropN.loc[s,'obs']
+    Pred = ObsPredCropN.loc[s,'pred']
+    RegStats = MUte.MathUtilities.CalcRegressionStats('LN',Pred,Obs)
+    ax = graph.add_subplot(3,3,pos)
+    plt.plot(Obs,Pred,'o')
+    maxval = max(ObsPredCropN.loc[s,'obs'].max(),ObsPredCropN.loc[s,'pred'].max()) * 1.05
+    plt.ylim(-10,maxval)
+    plt.xlim(-10,maxval)
+    plt.plot([0,maxval],[0,maxval],'-')
+    plt.text(0.05,0.9,'site '+str(s),transform = ax.transAxes)
+    plt.text(0.05,0.8,'NSE = ' +str(RegStats.NSE),transform = ax.transAxes)
+    pos +=1
 
 
+Obs = ObsPredCropN.obs.values
+Pred = ObsPredCropN.pred.values
+graph = plt.figure(figsize = (5,5))
+ax = graph.add_subplot(1,1,1)
+plt.plot(Obs,Pred,'o')
+RegStats = MUte.MathUtilities.CalcRegressionStats('LN',Pred,Obs)
+plt.text(0.05,0.8,'NSE = ' +str(RegStats.NSE),transform = ax.transAxes)
+plt.ylabel('Predicted')
+plt.xlabel('Observed')
 
-ObsPredCropN = observedCrop.loc[:,['Date','CropN']]
-ObsPredCropN.set_index('Date',append=True,inplace=True)
-ObsPredCropN.columns = ['obs']
+ObsSoilN = observedSoil.loc[:,['Date','SoilMineralN']]
+ObsSoilN.loc[:,'Date'] = [(ObsSoilN.iloc[x,0] + dt.timedelta(hours=12)) for x in range(ObsSoilN.index.size)]
+ObsSoilN.set_index('Date',append=True,inplace=True)
+ObsSoilN.columns = ['obs']
+ObsSoilN = ObsSoilN.groupby(['Site','Date']).mean()
+blankIndex = pd.MultiIndex.from_product([[],[],[]], names = ['site','test','date'])
+ObsPredSoilN = pd.DataFrame(index = blankIndex, columns = ['obs','pred'])
+for t in tests:
+    s = int(t[0])
+    obs = ObsSoilN.loc[site,:]
+    dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'SoilMineralN')].index
+    Pred = AllData.loc[dates,(t,'SoilMineralN')]
+    pred = Pred.reindex(obs.index.values)
+    for d in obs.index.values:
+        ObsPredSoilN.loc[(s,t,d),'pred'] = pred[d]
+        ObsPredSoilN.loc[(s,t,d), 'obs'] = obs.loc[d,'obs']
 
-ObsPredCropN
+graph = plt.figure(figsize=(10,10))
+pos = 1
+for s in range(1,10):
+    Obs = ObsPredSoilN.loc[s,'obs']
+    Pred = ObsPredSoilN.loc[s,'pred']
+    RegStats = MUte.MathUtilities.CalcRegressionStats('LN',Pred,Obs)
+    ax = graph.add_subplot(3,3,pos)
+    plt.plot(Obs,Pred,'o')
+    maxval = max(ObsPredSoilN.loc[s,'obs'].max(),ObsPredSoilN.loc[s,'pred'].max()) * 1.05
+    plt.ylim(-10,maxval)
+    plt.xlim(-10,maxval)
+    plt.plot([0,maxval],[0,maxval],'-')
+    plt.text(0.05,0.9,'site '+str(s),transform = ax.transAxes)
+    plt.text(0.05,0.8,'NSE = ' +str(RegStats.NSE),transform = ax.transAxes)
+    pos +=1
 
- AllData
+
+Obs = ObsPredSoilN.obs.values
+Pred = ObsPredSoilN.pred.values
+graph = plt.figure(figsize = (5,5))
+ax = graph.add_subplot(1,1,1)
+plt.plot(Obs,Pred,'o')
+RegStats = MUte.MathUtilities.CalcRegressionStats('LN',Pred,Obs)
+plt.text(0.05,0.8,'NSE = ' +str(RegStats.NSE),transform = ax.transAxes)
+plt.ylabel('Predicted')
+plt.xlabel('Observed')
 
 # +
 colors = ['orange','green']
@@ -92,7 +169,7 @@ pos = 1
 row_num=len(tests)
 
 for s in range(1,10):
-    testsAtSite = TestsFrame.loc[s,'crop'].values
+    testsAtSite = TestsFrame.loc[s,'Soil'].values
     for t in testsAtSite: #['1Gra-A']:#tests:
         site = t[0]
         #for c in t:     
