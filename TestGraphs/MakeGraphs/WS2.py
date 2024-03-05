@@ -35,8 +35,10 @@ CBcolors = {
 } 
 # -
 
-root = osp.split(osp.abspath('WS2.ipynb'))[0][:-22]
-inPath = osp.join(root,"TestComponents", "TestSets", "WS2")
+#root = osp.split(osp.abspath('WS2.ipynb'))[0][:-22]
+# inPath = osp.join(root,"TestComponents", "TestSets", "WS2")
+# outPath = osp.join(root,"TestGraphs", "Outputs")  
+inPath = osp.join("TestComponents", "TestSets", "WS2")
 outPath = osp.join(root,"TestGraphs", "Outputs")  
 
 Configs = pd.read_pickle(osp.join(inPath, "FieldConfigs.pkl"))
