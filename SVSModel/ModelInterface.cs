@@ -9,6 +9,7 @@ using System.Text;
 using CsvHelper;
 using SVSModel.Configuration;
 using SVSModel.Models;
+using SVSModel.Simulation;
 
 namespace SVSModel
 {
@@ -40,7 +41,7 @@ namespace SVSModel
             var endDate = config.Following.HarvestDate.AddDays(2);
             var metData = BuildMetDataDictionaries(startDate, endDate, weatherStation);
 
-            var rawResult = Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, config);
+            var rawResult = Simulation.Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, config);
 
             var result = new List<DailyNBalance>();
 

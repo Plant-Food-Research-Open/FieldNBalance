@@ -4,6 +4,7 @@ using System.Reflection;
 using Microsoft.Data.Analysis;
 using SVSModel;
 using SVSModel.Models;
+using SVSModel.Simulation;
 using System.Diagnostics;
 using System.CodeDom.Compiler;
 using static System.Net.Mime.MediaTypeNames;

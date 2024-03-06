@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SVSModel.Configuration;
+using SVSModel.Simulation;
 
 namespace SVSModel.Models
 {
@@ -13,22 +14,21 @@ namespace SVSModel.Models
         /// <param name="meanT">A date indexed dictionary of daily mean temperatures</param>
         /// /// <param name="rswc">A date indexed dictionary of daily releative soil water content</param>
         /// <returns>Date indexed series of daily N mineralised from residues</returns>
-        public static Dictionary<DateTime, double> Mineralisation(Dictionary<DateTime, double> rswc, Dictionary<DateTime, double> meanT, Config config)
+        public static void Mineralisation(ref SimulationType thisSim)
         {
-            DateTime[] simDates = rswc.Keys.ToArray();
+            DateTime[] simDates = thisSim.simDates;
+            Config config = thisSim.config;
             double depthfactor = 30 * config.Field.SampleDepthFactor; //Assumes all mineralisation happens in the top 30 cm but has an adjustment if sample only taken to 15 cm
             double pmn_mgPerg = config.Field.PMN * config.Field.PMNconversion;
             double pmn_kgPerha = pmn_mgPerg * config.Field.BulkDensity * depthfactor * 0.1;
 
-            Dictionary<DateTime, double> NSoilOM = Functions.dictMaker(simDates, new double[simDates.Length]);
             foreach (DateTime d in simDates)
             {
-                double tempF = LloydTaylorTemp(meanT[d]);
-                double waterF = QiuBeareCurtinWater(rswc[d]);
+                double tempF = LloydTaylorTemp(thisSim.meanT[d]);
+                double waterF = QiuBeareCurtinWater(thisSim.RSWC[d]);
                 double somMin = pmn_kgPerha / 98 * tempF * waterF;
-                NSoilOM[d] = somMin;
+                thisSim.NSoilOM[d] = somMin;
             }
-            return NSoilOM;
         }
 
         public static double LloydTaylorTemp(double t)

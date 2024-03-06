@@ -53,7 +53,7 @@ namespace SVSModel.Excel
 
                 Trace.WriteLine("exxcelentinterface");
 
-                return Simulation.SimulateField(_tt, _rain, _pet, _testResults, _nApplied, _config);
+                return Simulation.Simulation.SimulateField(_tt, _rain, _pet, _testResults, _nApplied, _config);
             }
             else
             {
