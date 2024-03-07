@@ -9,20 +9,10 @@ namespace SVSModel.Configuration
     public class FieldConfig
     {
         public double InitialN { get; set; }
-        public string SoilOrder { get; set; }
+        public string SoilTexture { get; set; }
+        public double Rocks { get; set; }
         public double SampleDepthFactor { get; set; }
         public double BulkDensity { get; set; }
-        public string PMNtype { get; set; }
-        public double PMNconversion
-        {
-            get
-            {
-                if (PMNtype == "PMN")
-                    return 1.0;
-                else
-                    return 0.964;
-            }
-        }
         public double PMN { get; set; }
         public double Trigger { get; set; }
         public double Efficiency { get; set; }
@@ -38,15 +28,15 @@ namespace SVSModel.Configuration
         public FieldConfig(Dictionary<string, object> c)
         {
             InitialN = Functions.Num(c["InitialN"]);
-            SoilOrder = c["SoilOrder"].ToString();
+            SoilTexture = c["Texture"].ToString();
+            Rocks = Functions.Num(c["Rocks"]);
             SampleDepthFactor = Constants.SampleDepthFactor[c["SampleDepth"].ToString()];
             BulkDensity = Functions.Num(c["BulkDensity"]);
-            PMNtype = c["PMNtype"].ToString();
             PMN = Functions.Num(c["PMN"]);
             Trigger = Functions.Num(c["Trigger"]);
             Efficiency = Functions.Num(c["Efficiency"]) / 100;
             Splits = int.Parse(c["Splits"].ToString());
-            AWC = Functions.Num(c["AWC"]);
+            AWC = 3 * Constants.AWCpct[SoilTexture] * (1-Rocks/100);
             PrePlantRainFactor = Constants.PPRainFactors[c["PrePlantRain"].ToString()];
             InCropRainFactor = Constants.ICRainFactors[c["InCropRain"].ToString()];
             IrrigationRefill = Constants.IrrigationRefill[c["Irrigation"].ToString()];
