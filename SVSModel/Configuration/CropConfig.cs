@@ -16,7 +16,7 @@ namespace SVSModel.Configuration
         /// <summary>
         /// Model code is expecting kg/ha, so this field _must_ be in those units
         /// </summary>
-        public double SaleableYield { get; private set; }
+        public double FieldYield { get; private set; }
 
         public double FieldLoss { get; set; }
         public double DressingLoss { get; set; }
@@ -41,9 +41,8 @@ namespace SVSModel.Configuration
             EstablishStage = c[pos + "EstablishStage"].ToString();
             HarvestStage = c[pos + "HarvestStage"].ToString();
             // UI sends yield in t/ha but model works in kg/ha so convert here
-            SaleableYield = Functions.Num(c[pos + "SaleableYield"]) * Constants.UnitConversions["t/ha"];
+            FieldYield = Functions.Num(c[pos + "SaleableYield"]) * Constants.UnitConversions["t/ha"];
             FieldLoss = Functions.Num(c[pos + "FieldLoss"]);
-            DressingLoss = Functions.Num(c[pos + "DressingLoss"]);
             MoistureContent = Functions.Num(c[pos + "MoistureContent"]);
             EstablishDate = Functions.Date(c[pos + "EstablishDate"]);
             HarvestDate = Functions.Date(c[pos + "HarvestDate"]);
@@ -65,11 +64,11 @@ namespace SVSModel.Configuration
 
             if (rawUnits == "kg/head")
             {
-                SaleableYield = rawYield * population.GetValueOrDefault();
+                FieldYield = rawYield * population.GetValueOrDefault();
             }
             else
             {
-                SaleableYield = rawYield * toKGperHA;
+                FieldYield = rawYield * toKGperHA;
             }
         }
     }

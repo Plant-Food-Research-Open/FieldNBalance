@@ -29,14 +29,14 @@ namespace SVSModel.Configuration
         {
             InitialN = Functions.Num(c["InitialN"]);
             SoilTexture = c["Texture"].ToString();
-            Rocks = Functions.Num(c["Rocks"]);
+            Rocks = Functions.Num(c["Rocks"])/100;
             SampleDepthFactor = Constants.SampleDepthFactor[c["SampleDepth"].ToString()];
             BulkDensity = Functions.Num(c["BulkDensity"]);
             PMN = Functions.Num(c["PMN"]);
             Trigger = Functions.Num(c["Trigger"]);
             Efficiency = Functions.Num(c["Efficiency"]) / 100;
             Splits = int.Parse(c["Splits"].ToString());
-            AWC = 3 * Constants.AWCpct[SoilTexture] * (1-Rocks/100);
+            AWC = 3 * Constants.AWCpct[SoilTexture] * (1-Rocks);
             PrePlantRainFactor = Constants.PPRainFactors[c["PrePlantRain"].ToString()];
             InCropRainFactor = Constants.ICRainFactors[c["InCropRain"].ToString()];
             IrrigationRefill = Constants.IrrigationRefill[c["Irrigation"].ToString()];

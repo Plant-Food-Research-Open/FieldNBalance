@@ -16,7 +16,7 @@ namespace SVSModel.Models
         public static Dictionary<DateTime, double> Mineralisation(Dictionary<DateTime, double> rswc, Dictionary<DateTime, double> meanT, Config config)
         {
             DateTime[] simDates = rswc.Keys.ToArray();
-            double depthfactor = 30 * config.Field.SampleDepthFactor * (1-config.Field.Rocks/100); //Assumes all mineralisation happens in the top 30 cm but has an adjustment if sample only taken to 15 cm
+            double depthfactor = 30 * config.Field.SampleDepthFactor * (1-config.Field.Rocks); //Assumes all mineralisation happens in the top 30 cm but has an adjustment if sample only taken to 15 cm
             double pmn_kgPerha = config.Field.PMN * config.Field.BulkDensity * depthfactor * 0.1;
 
             Dictionary<DateTime, double> NSoilOM = Functions.dictMaker(simDates, new double[simDates.Length]);
