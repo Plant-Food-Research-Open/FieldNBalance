@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using SVSModel.Configuration;
 using ExcelDna.Integration;
-using System.Diagnostics;
 using System.Linq;
 using SVSModel.Models;
 
@@ -51,8 +50,6 @@ namespace SVSModel.Excel
                 Dictionary<DateTime, double> _nApplied = Functions.dictMaker(nApplied, "Amount");
                 var _config = new Config(Functions.dictMaker(config));
 
-                Trace.WriteLine("exxcelentinterface");
-
                 return Simulation.Simulation.SimulateField(_tt, _rain, _pet, _testResults, _nApplied, _config);
             }
             else
@@ -66,23 +63,6 @@ namespace SVSModel.Excel
                 }
                 return listOfComplaints;
             }
-        }
-
-        /// <summary>
-        /// Takes daily mean temperature 2D array format with date in the first column, calculates variables for a single crop and returns them in a 2D array)
-        /// </summary>
-        /// <param name="Tt">Array of daily thermal time over the duration of the crop</param>
-        /// <param name="Config">2D aray with parameter names and values for crop configuration parameters</param>
-        /// <returns>Dictionary with parameter names as keys and parameter values as values</returns>
-        [ExcelFunction(Description = "Returns crop model predictions")]
-        public static object[,] GetDailyCropData(double[] Tt, object[,] Config)
-        {
-            Dictionary<string, object> c = Functions.dictMaker(Config);
-            CropConfig config = new CropConfig(c, "Current");
-            DateTime[] cropDates = Functions.DateSeries(config.EstablishDate, config.HarvestDate);
-            Dictionary<DateTime, double> tt = Functions.dictMaker(cropDates, Tt);
-            Dictionary<DateTime, double> AccTt = Functions.AccumulateTt(cropDates, tt);
-            return Crop.Grow(AccTt, config);
         }
 
         [ExcelFunction(Description = "Gets crop coefficient table")]

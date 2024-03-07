@@ -78,7 +78,7 @@ namespace SVSModel.Models
             double sigmaFtm = 0;
             foreach (DateTime d in thisSim.simDates)
             {
-                if (d >= additionDate)
+                if (d >= additionDate.AddDays(1))
                 {
                     double Ft = SoilOrganic.LloydTaylorTemp(thisSim.meanT[d]);
                     double Fm = SoilOrganic.QiuBeareCurtinWater(thisSim.RSWC[d]);

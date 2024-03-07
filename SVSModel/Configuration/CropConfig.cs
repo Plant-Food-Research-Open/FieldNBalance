@@ -29,6 +29,7 @@ namespace SVSModel.Configuration
         public double ResStover { get; set; }
         public double ResFieldLoss { get; set; }
         public double NUptake { get; set; }
+        public CropType SimResults { get; set; }
 
         public CropConfig() { }
 

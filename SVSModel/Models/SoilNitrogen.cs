@@ -54,6 +54,7 @@ namespace SVSModel.Models
             DateTime[] updateDates = Functions.DateSeries(updateDate, thisSim.config.Following.HarvestDate);
             foreach (DateTime d in updateDates)
             {
+                CheckNBalance todayCheck = new CheckNBalance();
                 if (d == updateDate)
                 {
                     thisSim.SoilN[d] = StartDayN;
@@ -61,13 +62,27 @@ namespace SVSModel.Models
                 else
                 {
                     thisSim.SoilN[d] = thisSim.SoilN[d.AddDays(-1)];
+                    todayCheck = new CheckNBalance(thisSim.SoilN[d.AddDays(-1)], thisSim.CropN[d.AddDays(-1)], 
+                                                    thisSim.FertiliserN[d], thisSim.TransPlantN[d], thisSim.ExportN[d]);
                 }
+
                 thisSim.SoilN[d] += thisSim.NResidues[d];
+                todayCheck.dResidueN = thisSim.NResidues[d];
                 thisSim.SoilN[d] += thisSim.NSoilOM[d];
-                double actualUptake = Math.Min(thisSim.NUptake[d], thisSim.SoilN[d]*.1);
+                todayCheck.dSOMN += thisSim.NSoilOM[d];
+                double actualUptake = thisSim.NUptake[d];//Math.Min(thisSim.NUptake[d], thisSim.SoilN[d]*.1);
+                //double Nshortage = thisSim.NUptake[d] - actualUptake;
+                //if (Nshortage < 0)
+                //    Crop.ConstrainNUptake(ref thisSim, Nshortage,d);
+                todayCheck.CropN = thisSim.CropN[d];
                 thisSim.SoilN[d] -= actualUptake;
                 thisSim.LostN[d] = Losses.DailyLoss(d, thisSim);
+                todayCheck.LostN = thisSim.LostN[d];
                 thisSim.SoilN[d] -= thisSim.LostN[d];
+                todayCheck.FinalMinearlN = thisSim.SoilN[d];
+                if (d != updateDate)
+                    todayCheck.DoCheck();
+
             }
 
         }
@@ -86,4 +101,53 @@ namespace SVSModel.Models
             }
         }
     }
+    public class CheckNBalance
+    {
+
+        /// IN
+        public double INs
+        {
+            get
+            {
+                return InitialN + TransplantN + InitialCropN + dResidueN + dSOMN + dFertN;
+            }
+        }
+        public double InitialN { get; set; }
+        public double TransplantN { get; set; }
+        public double InitialCropN { get; set; }
+        public double dResidueN { get; set; }
+        public double dSOMN { get; set; }
+        public double dFertN { get; set; }
+
+
+        /// Out
+        public double OUTs
+        {
+            get
+            {
+                return FinalMinearlN + CropN + LostN + ExportN;
+            }
+        }
+        public double FinalMinearlN { get; set; }
+        public double CropN { get; set; }
+        public double LostN { get; set; }
+        public double ExportN { get; set; }
+
+        public void DoCheck()
+        {
+            if (Math.Abs(INs - OUTs) > 0.000001)
+                throw new Exception("Mass balance violated");
+        }
+
+        public CheckNBalance() { }
+        public CheckNBalance(double initialN, double cropN, double fertN, double transN, double exportN)
+        {
+            InitialN = initialN;
+            InitialCropN = cropN;
+            dFertN = fertN;
+            TransplantN = transN;
+            ExportN = exportN;
+        }
+    }
+
 }

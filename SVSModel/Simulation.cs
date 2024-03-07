@@ -28,7 +28,7 @@ namespace SVSModel.Simulation
         {
             
             
-            DateTime[] simDates = Functions.DateSeries(config.Prior.HarvestDate.AddDays(-1), config.Following.HarvestDate);
+            DateTime[] simDates = Functions.DateSeries(config.StartDate, config.EndDate);
 
             thisSim = new SimulationType(simDates, config, meanT, meanRain, meanPET);
 
@@ -48,29 +48,27 @@ namespace SVSModel.Simulation
                 Dictionary<DateTime, double> AccTt = Functions.AccumulateTt(cropDates, meanT);
 
                 //Calculated outputs for each crop
-                object[,] cropsOutPuts = Crop.Grow(AccTt, crop);
+                CropType currentCrop = Crop.Grow(AccTt, crop);
 
-                //Pack Crop N and N uptake results for each crop into the corresponding variables for the rotation (i.e stick all crops together to form the rotation)
-                Dictionary<DateTime, double> cropsNUptake = Functions.dictMaker(cropsOutPuts, "CropUptakeN");
-                Dictionary<DateTime, double> totalCropN = Functions.dictMaker(cropsOutPuts, "TotalCropN");
-                Dictionary<DateTime, double> productN = Functions.dictMaker(cropsOutPuts, "SaleableProductN");
-                Dictionary<DateTime, double> cover = Functions.dictMaker(cropsOutPuts, "Cover");
-                foreach (DateTime d in cropsNUptake.Keys)
+                foreach (DateTime d in currentCrop.growDates)
                 {
                     if (d >= simDates[0])
                     {
-                        thisSim.NUptake[d] = cropsNUptake[d];
-                        thisSim.CropN[d] = totalCropN[d];
-                        thisSim.ProductN[d] = productN[d];
-                        thisSim.Cover[d] = cover[d];
+                        thisSim.NUptake[d] = currentCrop.CropUptakeN[d];
+                        thisSim.CropN[d] = currentCrop.TotalCropN[d];
+                        thisSim.ProductN[d] = currentCrop.SaleableProductN[d];
+                        thisSim.Cover[d] = currentCrop.Cover[d];
+                        if (d == crop.EstablishDate)
+                            thisSim.TransPlantN[d] = currentCrop.TotalCropN[d];
+                        if (d == crop.HarvestDate)
+                            thisSim.ExportN[d.AddDays(1)] = currentCrop.TotalCropN[d];
                     }
                 }
-
-                //Pack final crop variables to field config dict for use in other parts of the N balance
-                crop.ResRoot = Functions.GetFinal(cropsOutPuts, "RootN");
-                crop.ResStover = Functions.GetFinal(cropsOutPuts, "StoverN") * crop.ResidueFactRetained;
-                crop.ResFieldLoss = Functions.GetFinal(cropsOutPuts, "FieldLossN") * crop.ResidueFactRetained;
-                crop.NUptake = Functions.GetFinal(cropsOutPuts, "TotalCropN");
+                crop.SimResults = currentCrop;
+                crop.ResRoot = crop.SimResults.RootN[crop.HarvestDate];
+                crop.ResStover = crop.SimResults.StoverN[crop.HarvestDate];
+                crop.ResFieldLoss = crop.SimResults.FieldLossN[crop.HarvestDate];
+                crop.NUptake = crop.SimResults.TotalCropN[crop.HarvestDate];
             }
 
             // Calculate soil water content and drainage
@@ -91,10 +89,10 @@ namespace SVSModel.Simulation
             //Dictionary<DateTime, double> SoilN = Functions.dictMaker(simDates, new double[simDates.Length]);
 
             //Do initial nitorgen balance with no fertiliser or resets
-            SoilNitrogen.UpdateBalance(config.Prior.HarvestDate, config.Field.InitialN, ref thisSim);
+            SoilNitrogen.UpdateBalance(config.StartDate, config.Field.InitialN, ref thisSim);
 
             //Add fertiliser that has already been applied to the N balance
-            DateTime StartApplicationDate = config.Prior.HarvestDate;
+            DateTime StartApplicationDate = config.StartDate;
             DateTime StartSchedullingDate = Fertiliser.startSchedullingDate(nAapplied, testResults, config);
             Fertiliser.ApplyExistingFertiliser(StartApplicationDate, StartSchedullingDate, nAapplied, ref thisSim);
 
@@ -132,6 +130,7 @@ namespace SVSModel.Simulation
         public Dictionary<DateTime, double> meanT;
         public Dictionary<DateTime, double> meanRain;
         public Dictionary<DateTime, double> meanPET;
+        public Dictionary<DateTime, double> TransPlantN;
         public Dictionary<DateTime, double> NUptake;
         public Dictionary<DateTime, double> CropN;
         public Dictionary<DateTime, double> ProductN;
@@ -144,6 +143,7 @@ namespace SVSModel.Simulation
         public Dictionary<DateTime, double> LostN;
         public Dictionary<DateTime, double> FertiliserN;
         public Dictionary<DateTime, double> SoilN;
+        public Dictionary<DateTime, double> ExportN;
 
         public SimulationType(DateTime[] _simDates, Config _config,
                               Dictionary<DateTime, double> _meanT,
@@ -155,6 +155,7 @@ namespace SVSModel.Simulation
             meanT = _meanT;
             meanRain = _meanRain;
             meanPET = _meanPET;
+            TransPlantN = Functions.dictMaker(simDates, new double[simDates.Length]);
             NUptake = Functions.dictMaker(simDates, new double[simDates.Length]);
             CropN = Functions.dictMaker(simDates, new double[simDates.Length]);
             ProductN = Functions.dictMaker(simDates, new double[simDates.Length]);
@@ -167,6 +168,7 @@ namespace SVSModel.Simulation
             LostN = Functions.dictMaker(simDates, new double[simDates.Length]);
             FertiliserN = Functions.dictMaker(simDates, new double[simDates.Length]);
             SoilN = Functions.dictMaker(simDates, new double[simDates.Length]);
+            ExportN = Functions.dictMaker(simDates, new double[simDates.Length]);
         }
 
     }
