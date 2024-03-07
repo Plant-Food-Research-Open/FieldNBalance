@@ -96,5 +96,21 @@ namespace SVSModel.Configuration
             { "0-15cm", 0.75 },
             { "0-30cm", 1 }
         };
+
+        public static readonly Dictionary<string, double> AWCpct = new Dictionary<string, double>
+        {
+            {"coarse sand", 5 },
+            {"fine sand", 15},
+            {"loamy sand", 18},
+            {"sandy loam", 23},
+            {"sandy clay loam", 16},
+            {"loam", 22},
+            {"silt loam", 22},
+            {"silty clay loam", 20},
+            {"clay loam", 18},
+            {"silty clay", 20},
+            {"clay", 18},
+            {"peat", 20}
+        };
     }
 }
