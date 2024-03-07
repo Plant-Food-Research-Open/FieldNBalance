@@ -41,7 +41,7 @@ namespace SVSModel.Configuration
             EstablishStage = c[pos + "EstablishStage"].ToString();
             HarvestStage = c[pos + "HarvestStage"].ToString();
             // UI sends yield in t/ha but model works in kg/ha so convert here
-            FieldYield = Functions.Num(c[pos + "SaleableYield"]) * Constants.UnitConversions["t/ha"];
+            FieldYield = SetYield(Functions.Num(c[pos + "SaleableYield"]), c[pos + "YieldUnits"].ToString(), Functions.Num(c[pos+"Population"]));
             FieldLoss = Functions.Num(c[pos + "FieldLoss"]);
             MoistureContent = Functions.Num(c[pos + "MoistureContent"]);
             EstablishDate = Functions.Date(c[pos + "EstablishDate"]);
@@ -58,17 +58,18 @@ namespace SVSModel.Configuration
         /// <param name="rawYield">The raw value from form</param>
         /// <param name="rawUnits">The raw units from form</param>
         /// <param name="population">The amount of crop when measuring in kg/head</param>
-        public void SetYield(double rawYield, string rawUnits, double? population)
+        public double SetYield(double rawYield, string rawUnits, double? population)
         {
+            
             var toKGperHA = Constants.UnitConversions[rawUnits];
 
             if (rawUnits == "kg/head")
             {
-                FieldYield = rawYield * population.GetValueOrDefault();
+                return rawYield * population.GetValueOrDefault();
             }
             else
             {
-                FieldYield = rawYield * toKGperHA;
+                return rawYield * toKGperHA;
             }
         }
     }
