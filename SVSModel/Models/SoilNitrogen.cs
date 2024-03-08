@@ -63,7 +63,7 @@ namespace SVSModel.Models
                 {
                     thisSim.SoilN[d] = thisSim.SoilN[d.AddDays(-1)];
                     todayCheck = new CheckNBalance(thisSim.SoilN[d.AddDays(-1)], thisSim.CropN[d.AddDays(-1)], 
-                                                    thisSim.FertiliserN[d], thisSim.TransPlantN[d], thisSim.ExportN[d]);
+                                                    thisSim.NFertiliser[d], thisSim.NTransPlant[d], thisSim.ExportN[d]);
                 }
 
                 thisSim.SoilN[d] += thisSim.NResidues[d];
@@ -76,9 +76,9 @@ namespace SVSModel.Models
                 //    Crop.ConstrainNUptake(ref thisSim, Nshortage,d);
                 todayCheck.CropN = thisSim.CropN[d];
                 thisSim.SoilN[d] -= actualUptake;
-                thisSim.LostN[d] = Losses.DailyLoss(d, thisSim);
-                todayCheck.LostN = thisSim.LostN[d];
-                thisSim.SoilN[d] -= thisSim.LostN[d];
+                thisSim.NLost[d] = Losses.DailyLoss(d, thisSim);
+                todayCheck.LostN = thisSim.NLost[d];
+                thisSim.SoilN[d] -= thisSim.NLost[d];
                 todayCheck.FinalMinearlN = thisSim.SoilN[d];
                 if (d != updateDate)
                     todayCheck.DoCheck();

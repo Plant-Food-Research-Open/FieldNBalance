@@ -76,12 +76,12 @@ namespace SVSModel.Models
                             NAppn = remainingReqN / remainingSplits;
                             double newSoiN = initialN + NAppn;
                             SoilNitrogen.UpdateBalance(d, newSoiN, ref thisSim);
-                            losses = anticipatedLosses(d, endScheduleDate, thisSim.LostN);
+                            losses = anticipatedLosses(d, endScheduleDate, thisSim.NLost);
                             double lossChange = losses - lastPassLossEst;
                             if (lossChange < 0.5)
                                 break;
                         }
-                        thisSim.FertiliserN[d] += NAppn;
+                        thisSim.NFertiliser[d] += NAppn;
                         remainingSplits -= 1;
                     }
                     else
@@ -137,7 +137,7 @@ namespace SVSModel.Models
                 if (appliedN.ContainsKey(d))
                 {
                     //AddFertiliser(ref soilN, appliedN[d], d, config);
-                    thisSim.FertiliserN[d] = appliedN[d];
+                    thisSim.NFertiliser[d] = appliedN[d];
                     //Losses.UpdateLosses(d, config.Following.HarvestDate, ref soilN, ref lostN, drainage, config);
                     double todaySoilN = thisSim.SoilN[d] + appliedN[d];
                     SoilNitrogen.UpdateBalance(d, todaySoilN, ref thisSim); 
