@@ -65,6 +65,7 @@ namespace SVSModel.Models
                 if (thisSim.SoilN[d] < trigger)
                 {
                     double initialN = thisSim.SoilN[d];
+                    double initialLossEst = thisSim.NLost[d];
                     double losses = 0;
                     double NAppn = 0;
                     if (remainingSplits > 0)
@@ -74,22 +75,14 @@ namespace SVSModel.Models
                             double lastPassLossEst = losses;
                             double remainingReqN = remainingRequirement(d, endScheduleDate, thisSim) + losses;
                             NAppn = remainingReqN / remainingSplits;
-                            double newSoiN = initialN + NAppn;
-                            SoilNitrogen.UpdateBalance(d, newSoiN, ref thisSim);
+                            SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true);
                             losses = anticipatedLosses(d, endScheduleDate, thisSim.NLost);
                             double lossChange = losses - lastPassLossEst;
-                            if (lossChange < 0.5)
+                            if (lossChange < 0.1)
                                 break;
                         }
                         thisSim.NFertiliser[d] += NAppn;
                         remainingSplits -= 1;
-                    }
-                    else
-                    {
-                    //    NAppn = remainingRequirement(d, endScheduleDate, thisSim); 
-                    //    double newSoiN = thisSim.SoilN[d] + NAppn;
-                    //    SoilNitrogen.UpdateBalance(d, newSoiN, ref thisSim);
-                    //    thisSim.FertiliserN[d] += NAppn;
                     }
                 }
             }
@@ -136,11 +129,8 @@ namespace SVSModel.Models
             {
                 if (appliedN.ContainsKey(d))
                 {
-                    //AddFertiliser(ref soilN, appliedN[d], d, config);
                     thisSim.NFertiliser[d] = appliedN[d];
-                    //Losses.UpdateLosses(d, config.Following.HarvestDate, ref soilN, ref lostN, drainage, config);
-                    double todaySoilN = thisSim.SoilN[d] + appliedN[d];
-                    SoilNitrogen.UpdateBalance(d, todaySoilN, ref thisSim); 
+                    SoilNitrogen.UpdateBalance(d, appliedN[d], thisSim.SoilN[d], thisSim.NLost[d],ref thisSim, true); 
                 }
             }
         }

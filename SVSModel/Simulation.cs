@@ -28,7 +28,7 @@ namespace SVSModel.Simulation
         {
 
 
-            DateTime[] simDates = Functions.DateSeries(config.StartDate, config.EndDate);
+            DateTime[] simDates = Functions.DateSeries(config.StartDate.AddDays(-1), config.EndDate);
 
             thisSim = new SimulationType(simDates, config, meanT, meanRain, meanPET);
 
@@ -76,7 +76,7 @@ namespace SVSModel.Simulation
             SoilOrganic.Mineralisation(ref thisSim);
 
             //Do initial nitorgen balance with no fertiliser or resets
-            SoilNitrogen.UpdateBalance(config.StartDate, config.Field.InitialN, ref thisSim);
+            SoilNitrogen.UpdateBalance(config.StartDate, config.Field.InitialN, 0, 0, ref thisSim, false);
 
             //Add fertiliser that has already been applied to the N balance
             DateTime StartApplicationDate = config.StartDate;

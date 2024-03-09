@@ -49,40 +49,51 @@ namespace SVSModel.Models
         /// <param name="residue">series of mineral N released daily to the soil from residue mineralisation</param>
         /// <param name="som">series of mineral N released daily to the soil from organic matter</param>
         /// <returns>date indexed series of estimated soil mineral N content</returns>
-        public static void UpdateBalance(DateTime updateDate, double StartDayN, ref SimulationType thisSim)
+        public static void UpdateBalance(DateTime updateDate, double dResetN, double preSetSoilN, double lossAlreadyCountedPriorToSet, ref SimulationType thisSim, bool IsSet)
         {
+
+            thisSim.SoilN[updateDate] = preSetSoilN; //Fertiliser iterates through this multiple times so need to set start soil N back to value at start of itterations
             DateTime[] updateDates = Functions.DateSeries(updateDate, thisSim.config.Following.HarvestDate);
             foreach (DateTime d in updateDates)
             {
-                CheckNBalance todayCheck = new CheckNBalance();
                 if (d == updateDate)
                 {
-                    thisSim.SoilN[d] = StartDayN;
+                    thisSim.SoilN[d] += dResetN;
                 }
                 else
                 {
                     thisSim.SoilN[d] = thisSim.SoilN[d.AddDays(-1)];
-                    todayCheck = new CheckNBalance(thisSim.SoilN[d.AddDays(-1)], thisSim.CropN[d.AddDays(-1)], 
-                                                    thisSim.NFertiliser[d], thisSim.NTransPlant[d], thisSim.ExportN[d]);
                 }
 
-                thisSim.SoilN[d] += thisSim.NResidues[d];
-                todayCheck.dResidueN = thisSim.NResidues[d];
-                thisSim.SoilN[d] += thisSim.NSoilOM[d];
-                todayCheck.dSOMN += thisSim.NSoilOM[d];
-                double actualUptake = thisSim.NUptake[d];//Math.Min(thisSim.NUptake[d], thisSim.SoilN[d]*.1);
-                //double Nshortage = thisSim.NUptake[d] - actualUptake;
-                //if (Nshortage < 0)
-                //    Crop.ConstrainNUptake(ref thisSim, Nshortage,d);
-                todayCheck.CropN = thisSim.CropN[d];
-                thisSim.SoilN[d] -= actualUptake;
-                thisSim.NLost[d] = Losses.DailyLoss(d, thisSim);
-                todayCheck.LostN = thisSim.NLost[d];
-                thisSim.SoilN[d] -= thisSim.NLost[d];
-                todayCheck.FinalMinearlN = thisSim.SoilN[d];
-                if (d != updateDate)
-                    todayCheck.DoCheck();
+                if (IsSet == false)
+                {
+                    thisSim.SoilN[d] += thisSim.NResidues[d];
+                    thisSim.SoilN[d] += thisSim.NSoilOM[d];
+                    double actualUptake = thisSim.NUptake[d];//Math.Min(thisSim.NUptake[d], thisSim.SoilN[d]*.1);
+                                                             //double Nshortage = thisSim.NUptake[d] - actualUptake;
+                                                             //if (Nshortage < 0)
+                                                             //    Crop.ConstrainNUptake(ref thisSim, Nshortage,d);
+                    thisSim.SoilN[d] -= actualUptake;
+                }
 
+                double newLossEstimate = Losses.DailyLoss(d, thisSim);
+                thisSim.NLost[d] = newLossEstimate;
+                thisSim.SoilN[d] -= (newLossEstimate - lossAlreadyCountedPriorToSet);
+                //resetN -= lossAlreadyCountedPriorToSet;
+
+                CheckNBalance todayCheck = new CheckNBalance(initSoilN: thisSim.SoilN[d.AddDays(-1)],
+                                               initStandingCropN: thisSim.CropN[d.AddDays(-1)],
+                                               dtransPlantN: thisSim.NTransPlant[d],
+                                               dResidueN: thisSim.NResidues[d],
+                                               dSOMN: thisSim.NSoilOM[d],
+                                               dResetN: dResetN,
+                                               finalMinearlN: thisSim.SoilN[d],
+                                               standingCropN: thisSim.CropN[d],
+                                               dExportN: thisSim.ExportN[d],
+                                               dLostN: thisSim.NLost[d]);
+                lossAlreadyCountedPriorToSet = 0; //Only discount losses already counted on day of reset
+                dResetN = 0; // Reset N only a non zero number on the set day otherwise zero
+                IsSet = false; // IsSet only true on the day the set is actioned, needs to be false so full balance is done every other day
             }
 
         }
@@ -97,7 +108,8 @@ namespace SVSModel.Models
         {
             foreach (DateTime d in testResults.Keys)
             {
-                SoilNitrogen.UpdateBalance(d, testResults[d], ref thisSim);
+                double dCorrection = testResults[d] - thisSim.SoilN[d];
+                SoilNitrogen.UpdateBalance(d, testResults[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true);
             }
         }
     }
@@ -109,15 +121,15 @@ namespace SVSModel.Models
         {
             get
             {
-                return InitialN + TransplantN + InitialCropN + dResidueN + dSOMN + dFertN;
+                return initialN + initialStandingCropN + dTransplantN + dResidueN + dSOMN + dResetN;
             }
         }
-        public double InitialN { get; set; }
-        public double TransplantN { get; set; }
-        public double InitialCropN { get; set; }
-        public double dResidueN { get; set; }
-        public double dSOMN { get; set; }
-        public double dFertN { get; set; }
+        private double initialN { get; set; }
+        private double initialStandingCropN { get; set; }
+        private double dTransplantN { get; set; }
+        private double dResidueN { get; set; }
+        private double dSOMN { get; set; }
+        private double dResetN { get; set; }
 
 
         /// Out
@@ -125,28 +137,38 @@ namespace SVSModel.Models
         {
             get
             {
-                return FinalMinearlN + CropN + LostN + ExportN;
+                return finalMinearlN + standingCropN + dLostN + dExportN;
             }
         }
-        public double FinalMinearlN { get; set; }
-        public double CropN { get; set; }
-        public double LostN { get; set; }
-        public double ExportN { get; set; }
+        private double finalMinearlN { get; set; }
+        private double standingCropN { get; set; }
+        private double dExportN { get; set; }
+        private double dLostN { get; set; }
+    
 
-        public void DoCheck()
+        private void doCheck()
         {
-            if (Math.Abs(INs - OUTs) > 0.000001)
+            double balanceError = INs - OUTs;
+            if (Math.Abs(balanceError) > 0.000001)
                 throw new Exception("Mass balance violated");
         }
-
+        
         public CheckNBalance() { }
-        public CheckNBalance(double initialN, double cropN, double fertN, double transN, double exportN)
+        public CheckNBalance(double initSoilN, double initStandingCropN, double dtransPlantN, double dResidueN, double dSOMN, double dResetN,
+                             double finalMinearlN, double standingCropN, double dExportN,  double dLostN)
         {
-            InitialN = initialN;
-            InitialCropN = cropN;
-            dFertN = fertN;
-            TransplantN = transN;
-            ExportN = exportN;
+            this.initialN = initSoilN;
+            this.initialStandingCropN = initStandingCropN;
+            this.dTransplantN = dtransPlantN;
+            this.dResidueN = dResidueN;
+            this.dSOMN = dSOMN;
+            this.dResetN = dResetN;
+            this.finalMinearlN = finalMinearlN;
+            this.standingCropN = standingCropN; 
+            this.dExportN = dExportN;
+            this.dLostN = dLostN;
+
+            doCheck();
         }
     }
 
