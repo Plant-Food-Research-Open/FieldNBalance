@@ -109,7 +109,7 @@ namespace SVSModel.Models
             foreach (DateTime d in testResults.Keys)
             {
                 double dCorrection = testResults[d] - thisSim.SoilN[d];
-                SoilNitrogen.UpdateBalance(d, testResults[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true);
+                SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true);
             }
         }
     }
