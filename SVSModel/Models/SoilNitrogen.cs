@@ -109,7 +109,7 @@ namespace SVSModel.Models
             foreach (DateTime d in testResults.Keys)
             {
                 double dCorrection = testResults[d] - thisSim.SoilN[d];
-                SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true);
+                SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d] - thisSim.NFertiliser[d], thisSim.NLost[d], ref thisSim, true); //need to take out fertiliser if fert applied on same day as test so it doesn't break balance check test
             }
         }
     }
