@@ -19,7 +19,6 @@ namespace SVSModel.Configuration
         public double FieldYield { get; private set; }
 
         public double FieldLoss { get; set; }
-        public double DressingLoss { get; set; }
         public double MoistureContent { get; set; }
         public DateTime EstablishDate { get; set; }
         public DateTime HarvestDate { get; set; }
@@ -41,7 +40,7 @@ namespace SVSModel.Configuration
             EstablishStage = c[pos + "EstablishStage"].ToString();
             HarvestStage = c[pos + "HarvestStage"].ToString();
             // UI sends yield in t/ha but model works in kg/ha so convert here
-            FieldYield = SetYield(Functions.Num(c[pos + "SaleableYield"]), c[pos + "YieldUnits"].ToString(), Functions.Num(c[pos+"Population"]));
+            FieldYield = SetYield(Functions.Num(c[pos + "FieldYield"]), c[pos + "YieldUnits"].ToString(), Functions.Num(c[pos+"Population"]));
             FieldLoss = Functions.Num(c[pos + "FieldLoss"]);
             MoistureContent = Functions.Num(c[pos + "MoistureContent"]);
             EstablishDate = Functions.Date(c[pos + "EstablishDate"]);
