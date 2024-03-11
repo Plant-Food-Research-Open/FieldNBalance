@@ -144,8 +144,8 @@ namespace TestModel
             string progToRun = Path.Join(path,pyProg);
 
             Process proc = new Process();
-            proc.StartInfo.FileName = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python39_64\\python.exe";
-            //proc.StartInfo.FileName = "python";
+            //proc.StartInfo.FileName = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python39_64\\python.exe";
+            proc.StartInfo.FileName = "python";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.Arguments = progToRun;
