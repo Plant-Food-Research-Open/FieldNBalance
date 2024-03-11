@@ -17,9 +17,17 @@ namespace TestModel
     {
         public static void RunAllTests()
         {
-            //string root = "C:\\GitHubRepos\\FieldNBalance";
-            //string path = Path.Join(root, "TestComponents", "TestSets");
-            string path = Path.Join("TestComponents", "TestSets");
+            string fullroot = AppDomain.CurrentDomain.BaseDirectory;
+            List<string> rootFrags = fullroot.Split('\\').ToList();
+            string root = "";
+            foreach (string d in rootFrags) 
+            {
+                if (d == "FieldNBalance")
+                    break;
+                else
+                    root += d + "\\";
+            }
+            string path = Path.Join(root, "FieldNBalance", "TestComponents", "TestSets");
             List<string> sets = new List<string> { "WS2", "Residues", "Location", "Moisture" };
 
             //Delete graphs from previous test run
@@ -33,15 +41,14 @@ namespace TestModel
             foreach (string graphPath in graphPaths)
                 File.Delete(graphPath);
 
-            string basePath = Directory.GetCurrentDirectory();
             foreach (string s in sets)
             {
                 //Make config file in format that .NET DataTable is able to import
-                runPythonScript(basePath, Path.Join("TestGraphs", "MakeConfigs", $"{s}.py"));
+                runPythonScript(root, Path.Join("FieldNBalance","TestGraphs", "MakeConfigs", $"{s}.py"));
                 //Run each test
                 runTestSet(path, s);
                 //Make graphs associated with each test
-                runPythonScript(basePath, Path.Join("TestGraphs", "MakeGraphs", $"{s}.py"));
+                runPythonScript(root, Path.Join("FieldNBalance", "TestGraphs", "MakeGraphs", $"{s}.py"));
             }
         }
 
@@ -134,11 +141,11 @@ namespace TestModel
 
         private static void runPythonScript(string path, string pyProg)
         {
-            string newPath = Path.GetFullPath(Path.Combine(path, @"..\..\"));
-            string progToRun = pyProg;
+            string progToRun = Path.Join(path,pyProg);
 
             Process proc = new Process();
-            proc.StartInfo.FileName = "python";
+            proc.StartInfo.FileName = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python39_64\\python.exe";
+            //proc.StartInfo.FileName = "python";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.Arguments = progToRun;

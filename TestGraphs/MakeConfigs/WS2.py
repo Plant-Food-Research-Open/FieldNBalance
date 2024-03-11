@@ -28,9 +28,14 @@ Sites = {
  9: 'Oakley'
 }
 
-root = os.split(os.abspath('WS2.ipynb'))[0][:-23]
-path = os.join(root,"TestComponents", "TestSets", "WS2")
-#path = join("TestComponents", "TestSets", "WS2")
+rootfrags = os.abspath('WS2.ipynb').split("\\")
+root = ""
+for d in rootfrags:
+    if d == "FieldNBalance":
+        break
+    else:
+        root += d + "\\"
+path = os.join(root,"FieldNBalance","TestComponents", "TestSets", "WS2")
 
 Configs = pd.read_excel(os.join(path, "FieldConfigs.xlsx"),sheet_name=Sites[1],nrows=48,usecols=lambda x: 'Unnamed' not in x,keep_default_na=False)
 Configs.set_index('Name',inplace=True)
