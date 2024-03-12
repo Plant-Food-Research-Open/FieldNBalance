@@ -25,7 +25,6 @@ namespace SVSModel.Models
         public static readonly string Units = "t/ha";
 
         public static readonly double FieldLoss = 0;
-        public static readonly double DressingLoss = 0;
         public static readonly double MoistureContent = 0;
 
         public static readonly int GrowingDays = 125;
@@ -35,21 +34,14 @@ namespace SVSModel.Models
         public static readonly string ResidueRemoval = "None removed";
         public static readonly string ResidueIncorporation = "Full (Plough)";
 
-        public static readonly string SoilOrder = "Brown";
-        public static readonly string SoilTexture = "Clay";
+        public static readonly string SoilCategory = "Sedementry";
+        public static readonly string SoilTexture = "SiltLoam";
         public static readonly string SampleDepth = "0-30cm";
-        public static readonly double BulkDensity = 1.22;
-        public static readonly string PMNtype = "HWEON";
         public static readonly double PMN = 55;
         public static readonly int Splits = 3;
         public static readonly string RainPrior = "Typical";
         public static readonly string RainDuring = "Typical";
         public static readonly string IrrigationApplied = "None";
 
-        public static readonly double InitialN = 50;
-        public static readonly double Trigger = 30;
-        public static readonly double Efficiency = 0.8;
-
-        public static readonly int AWC = 120;
     }
 }

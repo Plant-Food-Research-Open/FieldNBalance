@@ -40,28 +40,19 @@ namespace SVSModel
             double stageCorrection = 1 / Constants.PropnMaxDM[cf.HarvestStage];
 
             // derive crop Harvest State Variables 
-            double fSaleableYieldFwt = cf.SaleableYield;
             double fFieldLossPct = cf.FieldLoss;
-            double fTotalProductFwt = fSaleableYieldFwt * (1 / (1 - fFieldLossPct / 100)) * (1 / (1 - cf.DressingLoss / 100));
-            // Crop Failure.  If yield is very low or field loss is very high assume complete crop failure.  Uptake equation are too sensitive saleable yields close to zero and field losses close to 100
-            if ((cf.SaleableYield < (typicalYield * 0.05)) || (cf.FieldLoss > 95))
-            {
-                fFieldLossPct = 100;
-                fTotalProductFwt = typicalYield * (1 / (1 - cropParams.TypicalDressingLoss / 100));
-            }
+            double fTotalProductFwt = cf.FieldYield;
             double fTotalProductDwt = fTotalProductFwt * (1 - cf.MoistureContent / 100);
             double fFieldLossDwt = fTotalProductDwt * fFieldLossPct / 100;
             double fFieldLossN = fFieldLossDwt * cropParams.ProductN / 100;
-            double fDressingLossDwt = fTotalProductDwt * cf.DressingLoss / 100;
-            double fDressingLossN = fDressingLossDwt * cropParams.ProductN / 100;
-            double fSaleableProductDwt = fTotalProductDwt - fFieldLossDwt - fDressingLossDwt;
+            double fSaleableProductDwt = fTotalProductDwt - fFieldLossDwt;
             double fSaleableProductN = fSaleableProductDwt * cropParams.ProductN / 100;
             double HI = a_harvestIndex + fTotalProductFwt * b_harvestIndex;
             double fStoverDwt = fTotalProductDwt * 1 / HI - fTotalProductDwt;
             double fStoverN = fStoverDwt * cropParams.StoverN / 100;
             double fRootDwt = (fStoverDwt + fTotalProductDwt) * cropParams.PRoot;
             double fRootN = fRootDwt * cropParams.RootN / 100;
-            double fCropN = fRootN + fStoverN + fFieldLossN + fDressingLossN + fSaleableProductN;
+            double fCropN = fRootN + fStoverN + fFieldLossN + fSaleableProductN;
 
 
             //Daily time-step, calculate Daily Scallers to give in-crop patterns
@@ -87,24 +78,22 @@ namespace SVSModel
             Dictionary<DateTime, double> StoverN = Functions.scaledValues(biomassScaller, fStoverN, stageCorrection);
             Dictionary<DateTime, double> SaleableProductN = Functions.scaledValues(biomassScaller, fSaleableProductN, stageCorrection);
             Dictionary<DateTime, double> FieldLossN = Functions.scaledValues(biomassScaller, fFieldLossN, stageCorrection);
-            Dictionary<DateTime, double> DressingLossN = Functions.scaledValues(biomassScaller, fDressingLossN, stageCorrection);
             Dictionary<DateTime, double> TotalCropN = Functions.scaledValues(biomassScaller, fCropN, stageCorrection);
             Dictionary<DateTime, double> CropUptakeN = Functions.dictMaker(cropDates, Functions.calcDelta(TotalCropN.Values.ToArray()));
             Dictionary<DateTime, double> Cover = Functions.scaledValues(coverScaller, cropParams.Acover, 1.0);
             Dictionary<DateTime, double> RootDepth = Functions.scaledValues(rootDepthScaller, cropParams.MaxRD, 1.0);
 
             // Pack Daily State Variables into a 2D array so they can be output
-            object[,] ret = new object[cropDates.Length + 1, 10];
+            object[,] ret = new object[cropDates.Length + 1, 9];
             ret[0, 0] = "Date"; Functions.packRows(0, cropDates, ref ret);
             ret[0, 1] = "RootN"; Functions.packRows(1, RootN, ref ret);
             ret[0, 2] = "StoverN"; Functions.packRows(2, StoverN, ref ret);
             ret[0, 3] = "SaleableProductN"; Functions.packRows(3, SaleableProductN, ref ret);
             ret[0, 4] = "FieldLossN"; Functions.packRows(4, FieldLossN, ref ret);
-            ret[0, 5] = "DressingLossN"; Functions.packRows(5, DressingLossN, ref ret);
-            ret[0, 6] = "TotalCropN"; Functions.packRows(6, TotalCropN, ref ret);
-            ret[0, 7] = "CropUptakeN"; Functions.packRows(7, CropUptakeN, ref ret);
-            ret[0, 8] = "Cover"; Functions.packRows(8, Cover, ref ret);
-            ret[0, 9] = "RootDepth"; Functions.packRows(9, RootDepth, ref ret);
+            ret[0, 5] = "TotalCropN"; Functions.packRows(5, TotalCropN, ref ret);
+            ret[0, 6] = "CropUptakeN"; Functions.packRows(6, CropUptakeN, ref ret);
+            ret[0, 7] = "Cover"; Functions.packRows(7, Cover, ref ret);
+            ret[0, 8] = "RootDepth"; Functions.packRows(8, RootDepth, ref ret);
             return ret;
         }
 

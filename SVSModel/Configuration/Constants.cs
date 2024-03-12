@@ -96,5 +96,46 @@ namespace SVSModel.Configuration
             { "0-15cm", 0.75 },
             { "0-30cm", 1 }
         };
+
+        /// <summary>Available water capacity %</summary>
+        public static readonly Dictionary<string, double> AWCpct = new Dictionary<string, double>
+        {
+            {"coarse sand", 5 },
+            {"fine sand", 15},
+            {"loamy sand", 18},
+            {"sandy loam", 23},
+            {"sandy clay loam", 16},
+            {"loam", 22},
+            {"silt loam", 22},
+            {"silty clay loam", 20},
+            {"clay loam", 18},
+            {"silty clay", 20},
+            {"clay", 18},
+            {"peat", 20}
+        };
+
+        /// <summary>The porocity (mm3 pores/mm3 soil volume) of different soil texture classes</summary>
+        public static readonly Dictionary<string, double> Porosity = new Dictionary<string, double>
+        {
+            {"coarse sand", 0.20 },
+            {"fine sand", 0.25},
+            {"loamy sand", 0.30},
+            {"sandy loam", 0.30},
+            {"sandy clay loam", 0.16},
+            {"loam", 0.40},
+            {"silt loam", 0.40},
+            {"silty clay loam", 0.43},
+            {"clay loam",0.46},
+            {"silty clay", 0.45},
+            {"clay", 0.50},
+            {"peat", 0.50}
+        };
+
+        /// <summary>particle bulk density (g/mm3)</summary>
+        public static readonly Dictionary<string, double> ParticleDensity = new Dictionary<string, double>
+        {
+            {"Sedementary", 2.65 },
+            {"Volcanic", 1.9 }
+        };
     }
 }
