@@ -30,8 +30,8 @@ for d in rootfrags:
         break
     else:
         root += d + "\\"
-inPath = osp.join(root,"FieldNBalance","TestComponents", "TestSets", "Residues","Outputs")
-outPath = osp.join(root,"FieldNBalance","TestGraphs", "Outputs")  
+inPath = osp.join("TestComponents", "TestSets", "Residues","Outputs")
+outPath = osp.join("TestGraphs", "Outputs")  
 
 # Get names and results from each test
 

@@ -20,7 +20,7 @@ namespace TestModel
             string fullroot = AppDomain.CurrentDomain.BaseDirectory;
             List<string> rootFrags = fullroot.Split('\\').ToList();
             string root = "";
-            foreach (string d in rootFrags) 
+            foreach (string d in rootFrags)
             {
                 if (d == "FieldNBalance")
                     break;
@@ -44,11 +44,11 @@ namespace TestModel
             foreach (string s in sets)
             {
                 //Make config file in format that .NET DataTable is able to import
-                runPythonScript(root, Path.Join("FieldNBalance","TestGraphs", "MakeConfigs", $"{s}.py"));
+                runPythonScript(root, Path.Join("TestGraphs", "MakeConfigs", $"{s}.py"));
                 //Run each test
                 runTestSet(path, s);
                 //Make graphs associated with each test
-                runPythonScript(root, Path.Join("FieldNBalance", "TestGraphs", "MakeGraphs", $"{s}.py"));
+                runPythonScript(root, Path.Join("TestGraphs", "MakeGraphs", $"{s}.py"));
             }
         }
 
@@ -141,14 +141,14 @@ namespace TestModel
 
         private static void runPythonScript(string path, string pyProg)
         {
-            string progToRun = Path.Join(path,pyProg);
+            string progToRun = Path.Join(path, pyProg);
 
             Process proc = new Process();
             //proc.StartInfo.FileName = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python39_64\\python.exe";
             proc.StartInfo.FileName = "python";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.Arguments = progToRun;
+            proc.StartInfo.Arguments = pyProg;
             proc.Start();
             proc.WaitForExit();
         }
@@ -245,7 +245,7 @@ namespace TestModel
                     //DateTime date = DateTime.ParseExact(
                     //    row[1].ToString(), "d/M/yyyy", CultureInfo.InvariantCulture);
                     DateTime date = (DateTime)row[1];
-                    
+
                     DateTime last = new DateTime();
                     if (fert.Keys.Count > 0)
                     {

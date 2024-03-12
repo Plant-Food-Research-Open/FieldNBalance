@@ -41,8 +41,8 @@ for d in rootfrags:
         break
     else:
         root += d + "\\"
-inPath = osp.join(root,"FieldNBalance","TestComponents", "TestSets", "WS2")
-outPath = osp.join(root,"FieldNBalance","TestGraphs", "Outputs")  
+inPath = osp.join("TestComponents", "TestSets", "WS2")
+outPath = osp.join("TestGraphs", "Outputs")  
 
 Configs = pd.read_pickle(osp.join(inPath, "FieldConfigs.pkl"))
 

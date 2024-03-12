@@ -23,7 +23,7 @@ for d in rootfrags:
         break
     else:
         root += d + "\\"
-path = os.join(root,"FieldNBalance","TestComponents", "TestSets", "Location")
+path = os.join("TestComponents", "TestSets", "Location")
 
 Configs = pd.read_excel(os.join(path, "FieldConfigs.xlsx"),nrows=48,usecols=lambda x: 'Unnamed' not in x)
 
