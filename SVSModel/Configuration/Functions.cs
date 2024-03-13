@@ -255,7 +255,7 @@ namespace SVSModel.Configuration
         }
         public static double Num(object configDouble)
         {
-            var doubleString = configDouble.ToString();
+            var doubleString = configDouble?.ToString() ?? string.Empty;
             if (string.IsNullOrWhiteSpace(doubleString)) return 0;
             return double.Parse(doubleString);
         }
