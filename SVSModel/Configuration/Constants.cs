@@ -134,7 +134,7 @@ namespace SVSModel.Configuration
         /// <summary>particle bulk density (g/mm3)</summary>
         public static readonly Dictionary<string, double> ParticleDensity = new Dictionary<string, double>
         {
-            {"Sedementary", 2.65 },
+            {"Sedimentary", 2.65 },
             {"Volcanic", 1.9 }
         };
     }

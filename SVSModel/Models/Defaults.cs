@@ -34,8 +34,8 @@ namespace SVSModel.Models
         public static readonly string ResidueRemoval = "None removed";
         public static readonly string ResidueIncorporation = "Full (Plough)";
 
-        public static readonly string SoilCategory = "Sedementry";
-        public static readonly string SoilTexture = "SiltLoam";
+        public static readonly string SoilCategory = "Sedimentary";
+        public static readonly string SoilTexture = "silt loam";
         public static readonly string SampleDepth = "0-30cm";
         public static readonly double PMN = 55;
         public static readonly int Splits = 3;
