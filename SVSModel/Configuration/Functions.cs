@@ -255,8 +255,9 @@ namespace SVSModel.Configuration
         }
         public static double Num(object configDouble)
         {
-
-            return Double.Parse(configDouble.ToString());
+            var doubleString = configDouble.ToString();
+            if (string.IsNullOrWhiteSpace(doubleString)) return 0;
+            return double.Parse(doubleString);
         }
 
         public static Dictionary<DateTime, double> ApplyRainfallFactor(Dictionary<DateTime, double> meanRain, Config config)
