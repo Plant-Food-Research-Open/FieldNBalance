@@ -5,7 +5,7 @@ using Microsoft.Data.Analysis;
 
 namespace SVSModel.Configuration
 {
-    public class Functions
+    public static class Functions
     {
         /// <summary>
         /// calculates the difference between daily values in an array
@@ -253,6 +253,7 @@ namespace SVSModel.Configuration
                 return (DateTime)configDate;
             }
         }
+        
         public static double Num(object configDouble)
         {
             var doubleString = configDouble?.ToString() ?? string.Empty;

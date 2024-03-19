@@ -10,13 +10,21 @@ namespace SVSModel.Configuration;
 /// </summary>
 public class CropConfig
 {
-    public string CropNameFull { get; set; }
-    public string EstablishStage { get; set; }
-    public string HarvestStage { get; set; }
-
+    // Inputs
+    public string CropNameFull { get; init; }
+    public string EstablishStage { get; init; }
+    public string HarvestStage { get; init; }
+    public double FieldLoss { get; init; }
+    public double MoistureContent { get; init; }
+    public DateTime EstablishDate { get; init; }
+    public DateTime HarvestDate { get; init; }
     public double _rawYield { private get; init; }
     public string _yieldUnits { private get; init; }
     public double? _population { private get; init; }
+    public string _residueRemoval { private get; init; }
+    public string _residueIncorporation { private get; init; }
+
+    // Calculated fields
     public double FieldYield
     {
         get
@@ -31,18 +39,10 @@ public class CropConfig
             return _rawYield * toKGperHA;
         }
     }
-
-    public double FieldLoss { get; set; }
-    public double MoistureContent { get; set; }
-    public DateTime EstablishDate { get; set; }
-    public DateTime HarvestDate { get; set; }
-
-    public string _residueRemoval { private get; init; }
     public double ResidueFactRetained => Constants.ResidueFactRetained[_residueRemoval];
-
-    public string _residueIncorporation { private get; init; }
     public double ResidueFactIncorporated => Constants.ResidueIncorporation[_residueIncorporation];
 
+    // Used by model
     public double ResRoot { get; set; }
     public double ResStover { get; set; }
     public double ResFieldLoss { get; set; }
@@ -58,6 +58,8 @@ public class CropConfig
     /// </summary>
     public CropConfig(Dictionary<string, object> c, string pos)
     {
+        // Only raw input values should be set in here
+        
         CropNameFull = c[pos + "CropNameFull"].ToString();
         EstablishStage = c[pos + "EstablishStage"].ToString();
         HarvestStage = c[pos + "HarvestStage"].ToString();

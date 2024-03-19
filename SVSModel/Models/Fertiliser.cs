@@ -57,8 +57,8 @@ namespace SVSModel.Models
 
             // Set other variables needed to derive fertiliser requirement
             double CropN = cropN[config.Current.HarvestDate] - cropN[startSchedulleDate];
-            double trigger = config.Field.Trigger;
-            double efficiency = config.Field.Efficiency;
+            double trigger = FieldConfig.Trigger;
+            double efficiency = FieldConfig.Efficiency;
 
             // Calculate total fertiliser requirement and ammount to be applied at each application
             double NFertReq = (CropN + trigger) - soilN[startSchedulleDate] - mineralisation - fertToDate;
@@ -95,7 +95,7 @@ namespace SVSModel.Models
             DateTime endApplicationDate = config.Following.HarvestDate;
             //if (testResults.Keys.Count > 0)
             //    startApplicationDate = testResults.Keys.Last().AddDays(1); //If test results specified after establishment that becomes start of schedulling date
-            double efficiency = config.Field.Efficiency;
+            double efficiency = FieldConfig.Efficiency;
             foreach (DateTime d in appliedN.Keys)
             {
                 if ((d >= startApplicationDate)&&(d <= endApplicationDate))

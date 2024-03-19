@@ -11,7 +11,7 @@ namespace SVSModel.Configuration
         public CropConfig Current { get; set; }
         public CropConfig Following { get; set; }
 
-        public List<CropConfig> Rotation = new List<CropConfig>();
+        public readonly List<CropConfig> Rotation = [];
 
         public FieldConfig Field { get; set; }
 
@@ -22,7 +22,7 @@ namespace SVSModel.Configuration
             Prior = new CropConfig(c, "Prior");
             Current = new CropConfig(c, "Current");
             Following = new CropConfig(c, "Following");
-            Rotation = new List<CropConfig> { Prior, Current, Following };
+            Rotation = [Prior, Current, Following];
             Field = new FieldConfig(c);
         }
     }
