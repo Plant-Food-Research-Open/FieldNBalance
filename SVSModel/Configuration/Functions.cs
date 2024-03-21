@@ -254,6 +254,10 @@ namespace SVSModel.Configuration
             }
         }
         
+        /// <summary>
+        /// Parses a double out of a generic `object` input
+        /// </summary>
+        /// <returns>Parsed double, or zero</returns>
         public static double Num(object configDouble)
         {
             var doubleString = configDouble?.ToString() ?? string.Empty;
