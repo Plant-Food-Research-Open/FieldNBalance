@@ -21,7 +21,7 @@ public static class Defaults
 
     public static readonly string EstablishStage = "Seed";
     public static readonly string HarvestStage = "EarlyReproductive";
-    public static readonly double SaleableYield = 10;
+    public static readonly double FieldYield = 10;
     public static readonly string Units = "t/ha";
 
     public static readonly double FieldLoss = 0;

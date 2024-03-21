@@ -17,7 +17,7 @@ public class CropConfigTests
     private static readonly DateTime HarvestDate = Defaults.HarvestDate;
     private static readonly string ResidueRemoval = Defaults.ResidueRemoval;
     private static readonly string ResidueIncorporation = Defaults.ResidueIncorporation;
-    private static readonly double SaleableYield = Defaults.SaleableYield;
+    private static readonly double FieldYield = Defaults.FieldYield;
     private static readonly string YieldUnits = Defaults.Units;
     private static readonly double? Population = null;
 
@@ -32,7 +32,7 @@ public class CropConfigTests
         { "CurrentHarvestDate", HarvestDate },
         { "CurrentResidueRemoval", ResidueRemoval },
         { "CurrentResidueIncorporation", ResidueIncorporation },
-        { "CurrentSaleableYield", SaleableYield },
+        { "CurrentSaleableYield", FieldYield },
         { "CurrentYieldUnits", YieldUnits },
         { "CurrentPopulation", Population }
     };
