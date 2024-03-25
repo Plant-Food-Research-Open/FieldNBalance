@@ -1,76 +1,78 @@
 ﻿using System;
 using System.Collections.Generic;
+using SVSModel.Models;
 
-namespace SVSModel.Configuration
+namespace SVSModel.Configuration;
+
+/// <summary>
+/// Class that stores the configuration information in the correct type for a specific crop .  
+/// I.e constructor takes all config settings as objects and converts them to appropriates types
+/// </summary>
+public class CropConfig
 {
-    /// <summary>
-    /// Class that stores the configuration information in the correct type for a specific crop .  
-    /// I.e constructor takes all config settings as objects and converts them to appropriates types
-    /// </summary>
-    public class CropConfig
+    // Inputs
+    public string CropNameFull { get; init; }
+    public string EstablishStage { get; init; }
+    public string HarvestStage { get; init; }
+    public double FieldLoss { get; init; }
+    public double MoistureContent { get; init; }
+    public DateTime EstablishDate { get; init; }
+    public DateTime HarvestDate { get; init; }
+    public double _rawYield { private get; init; }
+    public string _yieldUnits { private get; init; }
+    public double? _population { private get; init; }
+    public string _residueRemoval { private get; init; }
+    public string _residueIncorporation { private get; init; }
+
+    // Calculated fields
+    public double FieldYield
     {
-        public string CropNameFull { get; set; }
-        public string EstablishStage { get; set; }
-        public string HarvestStage { get; set; }
-
-        /// <summary>
-        /// Model code is expecting kg/ha, so this field _must_ be in those units
-        /// </summary>
-        public double FieldYield { get; private set; }
-
-        public double FieldLoss { get; set; }
-        public double DressingLoss { get; set; }
-        public double MoistureContent { get; set; }
-        public DateTime EstablishDate { get; set; }
-        public DateTime HarvestDate { get; set; }
-        public double ResidueFactRetained { get; set; }
-        public double ResidueFactIncorporated { get; set; }
-        public double ResRoot { get; set; }
-        public double ResStover { get; set; }
-        public double ResFieldLoss { get; set; }
-        public double NUptake { get; set; }
-
-        public CropConfig() { }
-
-        /// <summary>
-        /// Constructor used only by the Excel model
-        /// </summary>
-        public CropConfig(Dictionary<string, object> c, string pos)
+        get
         {
-            CropNameFull = c[pos + "CropNameFull"].ToString();
-            EstablishStage = c[pos + "EstablishStage"].ToString();
-            HarvestStage = c[pos + "HarvestStage"].ToString();
-            // UI sends yield in t/ha but model works in kg/ha so convert here
-            FieldYield = SetYield(Functions.Num(c[pos + "SaleableYield"]), c[pos + "YieldUnits"].ToString(), Functions.Num(c[pos+"Population"]));
-            FieldLoss = Functions.Num(c[pos + "FieldLoss"]);
-            MoistureContent = Functions.Num(c[pos + "MoistureContent"]);
-            EstablishDate = Functions.Date(c[pos + "EstablishDate"]);
-            HarvestDate = Functions.Date(c[pos + "HarvestDate"]);
-            ResidueFactRetained = Constants.ResidueFactRetained[c[pos + "ResidueRemoval"].ToString()];
-            ResidueFactIncorporated = Constants.ResidueIncorporation[c[pos + "ResidueIncorporation"].ToString()];
-        }
-
-        /// <summary>
-        /// Call this after initializing Units
-        /// Converts the raw value to kg/ha for the model code
-        /// To be used by interfaces outside of the excel sheet
-        /// </summary>
-        /// <param name="rawYield">The raw value from form</param>
-        /// <param name="rawUnits">The raw units from form</param>
-        /// <param name="population">The amount of crop when measuring in kg/head</param>
-        public double SetYield(double rawYield, string rawUnits, double? population)
-        {
-            
-            var toKGperHA = Constants.UnitConversions[rawUnits];
-
-            if (rawUnits == "kg/head")
+            if (_yieldUnits == "kg/head")
             {
-                return rawYield * population.GetValueOrDefault();
+                return _rawYield * _population.GetValueOrDefault();
             }
-            else
-            {
-                return rawYield * toKGperHA;
-            }
+
+            var toKGperHA = Constants.UnitConversions[_yieldUnits ?? Defaults.Units];
+
+            return _rawYield * toKGperHA;
         }
+    }
+    public double ResidueFactRetained => Constants.ResidueFactRetained[_residueRemoval];
+    public double ResidueFactIncorporated => Constants.ResidueIncorporation[_residueIncorporation];
+
+    // Used by model
+    public double ResRoot { get; set; }
+    public double ResStover { get; set; }
+    public double ResFieldLoss { get; set; }
+    public double NUptake { get; set; }
+
+    /// <summary>
+    /// Constructor used only by external webapp
+    /// </summary>
+    public CropConfig() { }
+
+    /// <summary>
+    /// Constructor used only by the Excel model
+    /// </summary>
+    public CropConfig(Dictionary<string, object> c, string pos)
+    {
+        // Only raw input values should be set in here
+        
+        CropNameFull = c[pos + "CropNameFull"].ToString();
+        EstablishStage = c[pos + "EstablishStage"].ToString();
+        HarvestStage = c[pos + "HarvestStage"].ToString();
+        FieldLoss = Functions.Num(c[pos + "FieldLoss"]);
+        MoistureContent = Functions.Num(c[pos + "MoistureContent"]);
+        EstablishDate = Functions.Date(c[pos + "EstablishDate"]);
+        HarvestDate = Functions.Date(c[pos + "HarvestDate"]);
+
+        _residueRemoval = c[pos + "ResidueRemoval"].ToString();
+        _residueIncorporation = c[pos + "ResidueIncorporation"].ToString();
+
+        _rawYield = Functions.Num(c[pos + "SaleableYield"]);
+        _yieldUnits = c[pos + "YieldUnits"].ToString();
+        _population = Functions.Num(c[pos + "Population"]);
     }
 }

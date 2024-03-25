@@ -80,7 +80,7 @@ namespace SVSModel
             Dictionary<DateTime, double> NSoilOM = SoilOrganic.Mineralisation(RSWC, meanT, config);
 
             //Calculate soil N estimated without fertiliser or soil test results
-            Dictionary<DateTime, double> SoilN = SoilNitrogen.InitialBalance(NUptake, NResidues, NSoilOM, config);
+            Dictionary<DateTime, double> SoilN = SoilNitrogen.InitialBalance(NUptake, NResidues, NSoilOM);
 
             //Add fertiliser that has already been applied to the N balance
             Dictionary<DateTime, double> LostN = Functions.dictMaker(simDates, new double[simDates.Length]);
