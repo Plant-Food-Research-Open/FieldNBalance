@@ -37,15 +37,20 @@ CBcolors = {
 
 # Path for current Tests
 
-rootfrags = osp.abspath('Moisture.ipynb').split("\\")
-root = ""
-for d in rootfrags:
-    if d == "FieldNBalance":
-        break
-    else:
-        root += d + "\\"
-inPath = osp.join(root, "FieldNBalance","TestComponents", "TestSets", "Moisture", "Outputs")
-outPath = osp.join(root, "FieldNBalance","TestGraphs", "Outputs")  
+if os.environ["USERNAME"] != 'cflhxb':
+    root = os.environ["GITHUB_WORKSPACE"]
+    inPath = osp.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
+    outPath = osp.join(root, "TestGraphs", "Outputs")  
+else: 
+    rootfrags = osp.abspath('Moisture.ipynb').split("\\")
+    root = ""
+    for d in rootfrags:
+        if d == "FieldNBalance":
+            break
+        else:
+            root += d + "\\"
+    inPath = osp.join(root,"FieldNBalance", "TestComponents", "TestSets", "Moisture", "Outputs")
+    outPath = osp.join(root, "FieldNBalance","TestGraphs", "Outputs")  
 
 
 # Get names and results from each test
