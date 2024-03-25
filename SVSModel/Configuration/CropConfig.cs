@@ -71,7 +71,7 @@ public class CropConfig
         _residueRemoval = c[pos + "ResidueRemoval"].ToString();
         _residueIncorporation = c[pos + "ResidueIncorporation"].ToString();
 
-        _rawYield = Functions.Num(c[pos + "SaleableYield"]);
+        _rawYield = Functions.Num(c[pos + "FieldYield"]);
         _yieldUnits = c[pos + "YieldUnits"].ToString();
         _population = Functions.Num(c[pos + "Population"]);
     }
