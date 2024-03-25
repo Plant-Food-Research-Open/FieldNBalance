@@ -32,7 +32,7 @@ public class CropConfigTests
         { "CurrentHarvestDate", HarvestDate },
         { "CurrentResidueRemoval", ResidueRemoval },
         { "CurrentResidueIncorporation", ResidueIncorporation },
-        { "CurrentSaleableYield", FieldYield },
+        { "CurrentFieldYield", FieldYield },
         { "CurrentYieldUnits", YieldUnits },
         { "CurrentPopulation", Population }
     };
