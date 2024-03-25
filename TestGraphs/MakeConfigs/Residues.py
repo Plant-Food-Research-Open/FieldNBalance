@@ -13,16 +13,23 @@
 #     name: python3
 # ---
 
-from os.path import join
+import os.path as os
 import pandas as pd
 
-path = join("TestComponents", "TestSets", "Residues")
+rootfrags = os.abspath('Residues.ipynb').split("\\")
+root = ""
+for d in rootfrags:
+    if d == "FieldNBalance":
+        break
+    else:
+        root += d + "\\"
+path = os.join(root,"FieldNBalance","TestComponents", "TestSets", "Residues")
 
-Configs = pd.read_excel(join(path, "FieldConfigs.xlsx"),nrows=48,usecols=lambda x: 'Unnamed' not in x)
+Configs = pd.read_excel(os.join(path, "FieldConfigs.xlsx"),nrows=45,usecols=lambda x: 'Unnamed' not in x)
 
 Configs.set_index('Name',inplace=True)
 
 CSConfigs = Configs.transpose()
-CSConfigs.to_csv(join(path, "FieldConfigs.csv"),header=True)
+CSConfigs.to_csv(os.join(path, "FieldConfigs.csv"),header=True)
 
-Configs.to_pickle(join(path, "FieldConfigs.pkl"))
+Configs.to_pickle(os.join(path, "FieldConfigs.pkl"))

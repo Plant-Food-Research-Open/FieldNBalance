@@ -17,7 +17,17 @@ namespace TestModel
     {
         public static void RunAllTests()
         {
-            string path = Path.Join(Directory.GetCurrentDirectory(), "TestComponents", "TestSets");
+            string fullroot = AppDomain.CurrentDomain.BaseDirectory;
+            List<string> rootFrags = fullroot.Split('\\').ToList();
+            string root = "";
+            foreach (string d in rootFrags) 
+            {
+                if (d == "FieldNBalance")
+                    break;
+                else
+                    root += d + "\\";
+            }
+            string path = Path.Join(root, "FieldNBalance", "TestComponents", "TestSets");
             List<string> sets = new List<string> { "WS2", "Residues", "Location", "Moisture" };
 
             //Delete graphs from previous test run
@@ -31,15 +41,14 @@ namespace TestModel
             foreach (string graphPath in graphPaths)
                 File.Delete(graphPath);
 
-            string basePath = Directory.GetCurrentDirectory();
             foreach (string s in sets)
             {
                 //Make config file in format that .NET DataTable is able to import
-                runPythonScript(basePath, Path.Join("TestGraphs", "MakeConfigs", $"{s}.py"));
+                runPythonScript(root, Path.Join("FieldNBalance","TestGraphs", "MakeConfigs", $"{s}.py"));
                 //Run each test
                 runTestSet(path, s);
                 //Make graphs associated with each test
-                runPythonScript(basePath, Path.Join("TestGraphs", "MakeGraphs", $"{s}.py"));
+                runPythonScript(root, Path.Join("FieldNBalance", "TestGraphs", "MakeGraphs", $"{s}.py"));
             }
         }
 
@@ -132,8 +141,7 @@ namespace TestModel
 
         private static void runPythonScript(string path, string pyProg)
         {
-            string newPath = Path.GetFullPath(Path.Combine(path, @"..\..\"));
-            string progToRun = pyProg;
+            string progToRun = Path.Join(path,pyProg);
 
             Process proc = new Process();
             proc.StartInfo.FileName = "python";
@@ -149,15 +157,12 @@ namespace TestModel
             int testRow = getTestRow(test, allTests);
 
             List<string> coeffs = new List<string> { "InitialN",
-                                                    "SoilOrder",
+                                                    "SoilCategory",
+                                                    "Texture",
+                                                    "Rocks",
                                                     "SampleDepth",
-                                                    "BulkDensity",
-                                                    "PMNtype",
                                                     "PMN",
-                                                    "Trigger",
-                                                    "Efficiency",
                                                     "Splits",
-                                                    "AWC",
                                                     "PrePlantRain",
                                                     "InCropRain",
                                                     "Irrigation",
@@ -199,8 +204,16 @@ namespace TestModel
             Dictionary<string, object> testConfigDict = new Dictionary<string, object>();
             foreach (string c in coeffs)
             {
-                testConfigDict.Add(c, allTests[c][testRow]);
+                 testConfigDict.Add(c, allTests[c][testRow]);
             }
+
+            testConfigDict.Add("PriorYieldUnits", "t/ha");
+            testConfigDict.Add("CurrentYieldUnits", "t/ha");
+            testConfigDict.Add("FollowingYieldUnits", "t/ha");
+            testConfigDict.Add("PriorPopulation", "");
+            testConfigDict.Add("CurrentPopulation", "");
+            testConfigDict.Add("FollowingPopulation", "");
+
 
             List<string> datesNames = new List<string>() { "PriorEstablishDate", "PriorHarvestDate", "CurrentEstablishDate", "CurrentHarvestDate", "FollowingEstablishDate", "FollowingHarvestDate" };
 
@@ -232,9 +245,11 @@ namespace TestModel
             {
                 if (row[0].ToString() == site) //if this date row holds data for current site
                 {
-                    DateTime date = DateTime.ParseExact(
-                        row[1].ToString(), "d/M/yyyy", CultureInfo.InvariantCulture
-                    );
+
+                    //DateTime date = DateTime.ParseExact(
+                    //    row[1].ToString(), "d/M/yyyy", CultureInfo.InvariantCulture);
+                    DateTime date = (DateTime)row[1];
+                    
                     DateTime last = new DateTime();
                     if (fert.Keys.Count > 0)
                     {
