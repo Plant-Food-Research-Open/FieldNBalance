@@ -120,7 +120,7 @@ public class CropConfigTests
             _population = population
         };
         
-        ExcelInputDict["CurrentSaleableYield"] = yield;
+        ExcelInputDict["CurrentFieldYield"] = yield;
         ExcelInputDict["CurrentYieldUnits"] = units;
         if (population.HasValue) ExcelInputDict["CurrentPopulation"] = population;
         var cropConfigExcel = new CropConfig(ExcelInputDict, "Current");
