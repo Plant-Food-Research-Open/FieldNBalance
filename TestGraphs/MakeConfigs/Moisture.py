@@ -13,20 +13,25 @@
 #     name: python3
 # ---
 
-import os.path as os
+import os 
 import pandas as pd
 
-rootfrags = os.abspath('WS2.ipynb').split("\\")
-root = ""
-for d in rootfrags:
-    if d == "FieldNBalance":
-        break
-    else:
-        root += d + "\\"
-path = os.join(root,"FieldNBalance","TestComponents", "TestSets", "Moisture")
+if os.environ["USERNAME"] != 'cflhxb':
+    root = os.environ["GITHUB_WORKSPACE"]
+    inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
+    outPath = os.path.join(root, "TestGraphs", "Outputs")  
+else: 
+    rootfrags = os.path.abspath('WS2.ipynb').split("\\")
+    root = ""
+    for d in rootfrags:
+        if d == "FieldNBalance":
+            break
+        else:
+            root += d + "\\"
+    path = os.path.join(root,"FieldNBalance","TestComponents", "TestSets", "Moisture")
 
 Configs = pd.read_excel(
-    os.join(path, "FieldConfigs.xlsx"),
+    os.path.join(path, "FieldConfigs.xlsx"),
     nrows=45,
     usecols=lambda x: 'Unnamed' not in x,
     keep_default_na=False)
@@ -34,6 +39,6 @@ Configs = pd.read_excel(
 Configs.set_index('Name',inplace=True)
 
 CSConfigs = Configs.transpose()
-CSConfigs.to_csv(os.join(path, "FieldConfigs.csv"),header=True)
+CSConfigs.to_csv(os.path.join(path, "FieldConfigs.csv"),header=True)
 
-Configs.to_pickle(os.join(path, "FieldConfigs.pkl"))
+Configs.to_pickle(os.path.join(path, "FieldConfigs.pkl"))
