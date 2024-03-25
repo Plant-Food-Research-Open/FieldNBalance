@@ -15,10 +15,8 @@ permissions:
 
 jobs:
   build:  
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 16
-
+    runs-on: ubuntu-22.04
+    
     concurrency:
       group: "pages"
       cancel-in-progress: true      
