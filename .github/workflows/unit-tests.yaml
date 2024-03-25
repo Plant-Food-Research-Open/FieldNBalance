@@ -32,11 +32,3 @@ jobs:
       - name: .NET Test
         run: |
           dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=unit_results.xml"
-
-      - name: Test Report
-        uses: dorny/test-reporter@v1
-        if: success()
-        with:
-          name: Unit Tests
-          path: SVSModel.Tests/unit_results.xml
-          reporter: java-junit

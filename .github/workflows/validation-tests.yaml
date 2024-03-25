@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build:  
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     
     concurrency:
       group: "pages"
@@ -23,20 +23,24 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
+
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
-        python-version: '3.9'
-        
-    - name: Add conda to system path
-      run: |
-        # $CONDA is an environment variable pointing to the root of the miniconda directory
-        echo $CONDA/bin >> $GITHUB_PATH
-    
+        python-version: '3.10'
+
+    - name: Install and configure Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: 1.7.1
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
     - name: Install dependencies
       run: |
-        pip install --no-cache-dir -r requirements.txt
-
+        poetry install --no-interaction --no-root  
+        
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -48,11 +52,15 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       
-    - name: run
-      run: dotnet run --project TestConsole/TestsConsole.csproj
+    - name: Run Tests
+      run: |
+        source .venv/bin/activate
+        dotnet run --project TestConsole/TestsConsole.csproj
      
-    - name: run python 
-      run: python TestGraphs/report.py   
+    - name: Run Report Generator
+      run: |
+        source .venv/bin/activate
+        python TestGraphs/report.py   
                   
     - name: Deploy to GitHub pages 🚀
       uses: JamesIves/github-pages-deploy-action@v4.4.1
