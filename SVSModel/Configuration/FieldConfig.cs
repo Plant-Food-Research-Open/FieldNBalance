@@ -8,41 +8,54 @@ namespace SVSModel.Configuration
     /// </summary>
     public class FieldConfig
     {
-        public double InitialN { get; set; }
-        public string SoilCategory { get; set; }
-        public string SoilTexture { get; set; }
-        public double Rocks { get; set; }
-        public double SampleDepthFactor { get; set; }
-        public double BulkDensity { get; set; }
-        public double PMN { get; set; }
-        public double Trigger { get; set; }
-        public double Efficiency { get; set; }
-        public int Splits { get; set; }
-        public double AWC { get; set; }
-        public double PrePlantRainFactor { get; set; }
-        public double InCropRainFactor { get; set; }
-        public double IrrigationTrigger { get; set; }
-        public double IrrigationRefill { get; set; }
+        // Constants
+        public const double InitialN = 50;
+        public const double Trigger = 30;
+        public const double Efficiency = 1.0;
+        
+        // Inputs
+        public string SoilCategory { get; init; }
+        public string SoilTexture { get; init; }
+        public double PMN { get; init; }
+        public int Splits { get; init; }
+        public double _rawRocks { internal get; init; }
+        public string _sampleDepth { internal get; init; }
+        public string _prePlantRain { internal get; init; }
+        public string _inCropRain { internal get; init; }
+        public string _irrigation { internal get; init; }
 
+        // Calculated fields
+        public double Rocks => _rawRocks / 100;
+        public double SampleDepthFactor => Constants.SampleDepthFactor[_sampleDepth];
+        public double BulkDensity => Constants.ParticleDensity[SoilCategory] * Constants.Porosity[SoilTexture];
+        public double AWC => 3 * Constants.AWCpct[SoilTexture] * (1 - Rocks);
+        public double PrePlantRainFactor => Constants.PPRainFactors[_prePlantRain];
+        public double InCropRainFactor => Constants.ICRainFactors[_inCropRain];
+        public double IrrigationTrigger => Constants.IrrigationTriggers[_irrigation];
+        public double IrrigationRefill => Constants.IrrigationRefill[_irrigation];
+
+        /// <summary>
+        /// Constructor used only by external webapp
+        /// </summary>
         public FieldConfig() { }
 
+        /// <summary>
+        /// Constructor used only by the Excel model
+        /// </summary>
         public FieldConfig(Dictionary<string, object> c)
         {
-            InitialN = 50;
+            // Only raw input values should be set in here
+            
             SoilCategory = c["SoilCategory"].ToString();
             SoilTexture = c["Texture"].ToString();
-            Rocks = Functions.Num(c["Rocks"])/100;
-            SampleDepthFactor = Constants.SampleDepthFactor[c["SampleDepth"].ToString()];
-            BulkDensity = Constants.ParticleDensity[c["SoilCategory"].ToString()] * Constants.Porosity[c["Texture"].ToString()];
             PMN = Functions.Num(c["PMN"]);
-            Trigger = 30;
-            Efficiency = 1.0;
             Splits = int.Parse(c["Splits"].ToString());
-            AWC = 3 * Constants.AWCpct[SoilTexture] * (1-Rocks);
-            PrePlantRainFactor = Constants.PPRainFactors[c["PrePlantRain"].ToString()];
-            InCropRainFactor = Constants.ICRainFactors[c["InCropRain"].ToString()];
-            IrrigationRefill = Constants.IrrigationRefill[c["Irrigation"].ToString()];
-            IrrigationTrigger = Constants.IrrigationTriggers[c["Irrigation"].ToString()];
+            
+            _rawRocks = Functions.Num(c["Rocks"]);
+            _sampleDepth = c["SampleDepth"].ToString();
+            _prePlantRain = c["PrePlantRain"].ToString();
+            _inCropRain = c["InCropRain"].ToString();
+            _irrigation = c["Irrigation"].ToString();
         }
     }
 }
