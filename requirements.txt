@@ -1,5 +1,5 @@
 altgraph==0.17.4
-aspose-words==24.1.0
+aspose-words
 contourpy==1.2.0
 cycler==0.12.1
 DateTime==5.4
