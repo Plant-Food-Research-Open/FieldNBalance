@@ -52,11 +52,15 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       
-    - name: run
-      run: dotnet run --project TestConsole/TestsConsole.csproj
+    - name: Run Tests
+      run: |
+        source .venv/bin/activate
+        dotnet run --project TestConsole/TestsConsole.csproj
      
-    - name: run python 
-      run: python TestGraphs/report.py   
+    - name: Run Report Generator
+      run: |
+        source .venv/bin/activate
+        python TestGraphs/report.py   
                   
     - name: Deploy to GitHub pages 🚀
       uses: JamesIves/github-pages-deploy-action@v4.4.1
