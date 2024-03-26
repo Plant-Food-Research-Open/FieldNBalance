@@ -28,9 +28,7 @@ Sites = {
  9: 'Oakley'
 }
 
-os.getenv("GITHUB_ACTIONS") != None
-
-if os.getenv("GITHUB_ACTIONS") == "true":
+if os.getenv("GITHUB_WORKSPACE") != None:
     root = os.environ["GITHUB_WORKSPACE"]
     inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
     outPath = os.path.join(root, "TestGraphs", "Outputs")  
