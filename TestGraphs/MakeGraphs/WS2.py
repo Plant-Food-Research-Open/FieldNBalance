@@ -81,19 +81,26 @@ AllData.index = pd.to_datetime(AllData.index)
 TestsFrame = pd.DataFrame(index = [int(x[0]) for x in tests],data=tests,columns = ['crop'])
 TestsFrame.index.name = 'Site'
 
+ObsPredIndex = pd.MultiIndex.from_product([tests,AllData.index],names=['Treatment','Date'])
+ObsPredCropN = pd.DataFrame(index = ObsPredIndex, columns = ['obs','pred'])
+ObsPredCropN.loc[:,'Site'] =  [int(ObsPredIndex[x][0][0]) for x in range(ObsPredIndex.size)]
+ObsPredCropN.set_index('Site',append=True,inplace=True)
+ObsPredCropN = ObsPredCropN.reorder_levels(['Site','Treatment','Date'],axis=0)
+ObsPredCropN = ObsPredCropN.sort_index()
+
 ObsCropN = observedCrop.loc[:,['Date','CropN']]
 ObsCropN.loc[:,'Date'] = [(ObsCropN.iloc[x,0] + dt.timedelta(hours=12)) for x in range(ObsCropN.index.size)]
 ObsCropN.set_index('Date',append=True,inplace=True)
 ObsCropN.columns = ['obs']
 ObsCropN = ObsCropN.groupby(['Site','Date']).mean()
-blankIndex = pd.MultiIndex.from_product([[],[],[]], names = ['site','test','date'])
-ObsPredCropN = pd.DataFrame(index = blankIndex, columns = ['obs','pred'])
 for t in tests:
     s = int(t[0])
     obs = ObsCropN.loc[s,:]
+    obs.sort_index(inplace=True)
     dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
     Pred = AllData.loc[dates,(t,'CropN')]
     pred = Pred.reindex(obs.index.values)
+    pred.sort_index(axis=0, inplace=True)
     for d in obs.index.values:
         ObsPredCropN.loc[(s,t,d),'pred'] = pred[d]
         ObsPredCropN.loc[(s,t,d), 'obs'] = obs.loc[d,'obs']
