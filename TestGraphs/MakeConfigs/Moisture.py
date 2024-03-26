@@ -13,20 +13,32 @@
 #     name: python3
 # ---
 
-from os.path import join
+import os 
 import pandas as pd
 
-path = join("TestComponents", "TestSets", "Moisture")
+try: 
+    if os.environ["GITHUB_WORKSPACE"] != None:
+        root = os.environ["GITHUB_WORKSPACE"]
+        path = os.path.join(root,"TestComponents", "TestSets", "Moisture")
+except:
+    rootfrags = os.path.abspath('Moisture.py').split("\\")
+    root = ""
+    for d in rootfrags:
+        if d == "FieldNBalance":
+            break
+        else:
+            root += d + "\\"
+    path = os.path.join(root,"FieldNBalance","TestComponents", "TestSets", "Moisture")
 
 Configs = pd.read_excel(
-    join(path, "FieldConfigs.xlsx"),
-    nrows=48,
+    os.path.join(path, "FieldConfigs.xlsx"),
+    nrows=45,
     usecols=lambda x: 'Unnamed' not in x,
     keep_default_na=False)
 
 Configs.set_index('Name',inplace=True)
 
 CSConfigs = Configs.transpose()
-CSConfigs.to_csv(join(path, "FieldConfigs.csv"),header=True)
+CSConfigs.to_csv(os.path.join(path, "FieldConfigs.csv"),header=True)
 
-Configs.to_pickle(join(path, "FieldConfigs.pkl"))
+Configs.to_pickle(os.path.join(path, "FieldConfigs.pkl"))

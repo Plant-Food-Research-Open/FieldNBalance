@@ -32,7 +32,7 @@ public class CropConfigTests
         { "CurrentHarvestDate", HarvestDate },
         { "CurrentResidueRemoval", ResidueRemoval },
         { "CurrentResidueIncorporation", ResidueIncorporation },
-        { "CurrentSaleableYield", FieldYield },
+        { "CurrentFieldYield", FieldYield },
         { "CurrentYieldUnits", YieldUnits },
         { "CurrentPopulation", Population }
     };
@@ -44,7 +44,7 @@ public class CropConfigTests
     public void Test_CropConfig_Excel_Sets_Yield_Correctly(double yield, string units, double? population = null)
     {
         // Update values in the base dictionary
-        ExcelInputDict["CurrentSaleableYield"] = yield;
+        ExcelInputDict["CurrentFieldYield"] = yield;
         ExcelInputDict["CurrentYieldUnits"] = units;
         if (population.HasValue) ExcelInputDict["CurrentPopulation"] = population;
         
@@ -120,7 +120,7 @@ public class CropConfigTests
             _population = population
         };
         
-        ExcelInputDict["CurrentSaleableYield"] = yield;
+        ExcelInputDict["CurrentFieldYield"] = yield;
         ExcelInputDict["CurrentYieldUnits"] = units;
         if (population.HasValue) ExcelInputDict["CurrentPopulation"] = population;
         var cropConfigExcel = new CropConfig(ExcelInputDict, "Current");

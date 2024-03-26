@@ -14,8 +14,7 @@
 # ---
 
 # +
-import os
-from os.path import join
+import os 
 import datetime as dt
 import pandas as pd
 import numpy as np
@@ -37,8 +36,21 @@ CBcolors = {
 
 # Path for current Tests
 
-inPath = join("TestComponents", "TestSets", "Location", "Outputs")
-outPath = join("TestGraphs", "Outputs")  
+try: 
+    if os.environ["GITHUB_WORKSPACE"] != None:
+        root = os.environ["GITHUB_WORKSPACE"]
+        inPath = os.path.join(root, "TestComponents", "TestSets", "Location", "Outputs")
+        outPath = os.path.join(root, "TestGraphs", "Outputs")  
+except:
+    rootfrags = os.path.abspath('Location.py').split("\\")
+    root = ""
+    for d in rootfrags:
+        if d == "FieldNBalance":
+            break
+        else:
+            root += d + "\\"
+    inPath = os.path.join(root,"FieldNBalance","TestComponents", "TestSets", "Location", "Outputs")
+    outPath = os.path.join(root,"FieldNBalance","TestGraphs", "Outputs")  
 
 # Get names and results from each test
 
@@ -54,7 +66,7 @@ for file in os.listdir(inPath):
 # +
 Alltests =[]
 for t in testFiles[:]:  
-    testframe = pd.read_csv(join(inPath, t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
+    testframe = pd.read_csv(os.path.join(inPath, t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
     Alltests.append(testframe)   
 
 AllData = pd.concat(Alltests,axis=1,keys=tests)
@@ -79,7 +91,7 @@ plt.xticks(rotation=60)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
 plt.text(0.05,0.9,"Locational residue mineralisation tests",fontsize = 16,transform=ax.transAxes)
 Graph.tight_layout(pad=1.5)
-plt.savefig(join(outPath,'Location_Residues.png'))
+plt.savefig(os.path.join(outPath,'Location_Residues.png'))
 
 Graph = plt.figure()
 ax = Graph.add_subplot(1,1,1)
@@ -93,7 +105,7 @@ plt.xticks(rotation=60)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
 plt.text(0.05,0.9,"Locational SOM mineralisation tests",fontsize = 16,transform=ax.transAxes)
 Graph.tight_layout(pad=1.5)
-plt.savefig(join(outPath,'Location_SOM.png'))
+plt.savefig(os.path.join(outPath,'Location_SOM.png'))
 
 Graph = plt.figure()
 ax = Graph.add_subplot(1,1,1)
@@ -107,7 +119,7 @@ plt.xticks(rotation=60)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
 plt.text(0.05,0.9,"Locational cover tests",fontsize = 16,transform=ax.transAxes)
 Graph.tight_layout(pad=1.5)
-plt.savefig(join(outPath,'Location_Cover.png'))
+plt.savefig(os.path.join(outPath,'Location_Cover.png'))
 
 Graph = plt.figure()
 ax = Graph.add_subplot(1,1,1)
@@ -121,4 +133,4 @@ plt.xticks(rotation=60)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
 plt.text(0.05,0.9,"Locational CropN tests",fontsize = 16,transform=ax.transAxes)
 Graph.tight_layout(pad=1.5)
-plt.savefig(join(outPath,'Location_CropN.png'))
+plt.savefig(os.path.join(outPath,'Location_CropN.png'))
