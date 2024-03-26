@@ -17,17 +17,29 @@ namespace TestModel
     {
         public static void RunAllTests()
         {
-            string fullroot = AppDomain.CurrentDomain.BaseDirectory;
-            List<string> rootFrags = fullroot.Split('\\').ToList();
+            string path = "";
             string root = "";
-            foreach (string d in rootFrags) 
+            if (Environment.GetEnvironmentVariable("GITHUB_WORKSPACE") == null)
             {
-                if (d == "FieldNBalance")
-                    break;
-                else
-                    root += d + "\\";
+                string fullroot = AppDomain.CurrentDomain.BaseDirectory;
+                List<string> rootFrags = fullroot.Split('\\').ToList();
+                
+                foreach (string d in rootFrags)
+                {
+                    if (d == "FieldNBalance")
+                        break;
+                    else
+                        root += d + "\\";
+                }
+                path = Path.Join(root, "FieldNBalance", "TestComponents", "TestSets");
             }
-            string path = Path.Join(root, "FieldNBalance", "TestComponents", "TestSets");
+            else
+            {
+                root = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
+                path = Path.Join(root, "TestComponents", "TestSets");
+            }
+
+
             List<string> sets = new List<string> { "WS2", "Residues", "Location", "Moisture" };
 
             //Delete graphs from previous test run
