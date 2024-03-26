@@ -60,8 +60,15 @@ jobs:
     - name: Run Report Generator
       run: |
         source .venv/bin/activate
-        python TestGraphs/report.py   
-                  
+        python TestGraphs/report.py 
+        
+    - name: Upload Log Artifacts
+      if: github.event_name == 'pull_request'
+      uses: actions/upload-artifact@v4
+      with:
+       name: visualisations-${{ env.LATEST_LOG_TIME }}
+       path: html
+          
     - name: Deploy to GitHub pages 🚀
       if: github.event_name != 'pull_request'
       uses: JamesIves/github-pages-deploy-action@v4.4.1
