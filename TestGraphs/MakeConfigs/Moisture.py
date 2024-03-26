@@ -16,7 +16,7 @@
 import os 
 import pandas as pd
 
-if os.environ["USERNAME"] != 'cflhxb':
+if os.getenv("GITHUB_ACTIONS") == True:
     root = os.environ["GITHUB_WORKSPACE"]
     inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
     outPath = os.path.join(root, "TestGraphs", "Outputs")  
