@@ -76,7 +76,7 @@ namespace SVSModel.Simulation
             SoilOrganic.Mineralisation(ref thisSim);
 
             //Do initial nitorgen balance with no fertiliser or resets
-            SoilNitrogen.UpdateBalance(config.StartDate, config.Field.InitialN, 0, 0, ref thisSim, false);
+            SoilNitrogen.UpdateBalance(config.StartDate, Constants.InitialN, 0, 0, ref thisSim, false);
 
             //Add fertiliser that has already been applied to the N balance
             DateTime StartApplicationDate = config.StartDate;

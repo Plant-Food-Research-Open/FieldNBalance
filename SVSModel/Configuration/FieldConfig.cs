@@ -8,11 +8,6 @@ namespace SVSModel.Configuration
     /// </summary>
     public class FieldConfig
     {
-        // Constants
-        public const double InitialN = 50;
-        public const double Trigger = 30;
-        public const double Efficiency = 1.0;
-        
         // Inputs
         public string SoilCategory { get; init; }
         public string SoilTexture { get; init; }

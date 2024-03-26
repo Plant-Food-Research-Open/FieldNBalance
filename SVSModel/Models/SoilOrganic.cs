@@ -19,7 +19,7 @@ namespace SVSModel.Models
             DateTime[] simDates = thisSim.simDates;
             Config config = thisSim.config;
             double depthfactor = 30 * config.Field.SampleDepthFactor * (1-config.Field.Rocks); //Assumes all mineralisation happens in the top 30 cm but has an adjustment if sample only taken to 15 cm
-            double pmn_mgPerg = config.Field.PMN * config.Field.PMNconversion;
+            double pmn_mgPerg = config.Field.PMN;
             double pmn_kgPerha = pmn_mgPerg * config.Field.BulkDensity * depthfactor * 0.1;
 
 

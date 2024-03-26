@@ -27,7 +27,7 @@ namespace SVSModel.Models
             {
                 if (d == simDates[0])
                 {
-                    soilN[simDates[0]] = FieldConfig.InitialN;
+                    soilN[simDates[0]] = Constants.InitialN;
                 }
                 else
                 {

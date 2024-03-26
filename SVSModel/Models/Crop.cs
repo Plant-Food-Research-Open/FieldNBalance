@@ -46,7 +46,7 @@ namespace SVSModel
 
             // derive crop Harvest State Variables 
             thisCrop.fFieldLossPct = cf.FieldLoss;
-            thisCrop.fTotalProductFwt = thisCrop.fSaleableYieldFwt * (1 / (1 - thisCrop.fFieldLossPct / 100)) * (1 / (1 - cf.DressingLoss / 100));
+            thisCrop.fTotalProductFwt = cf.FieldYield * (1 / (1 - thisCrop.fFieldLossPct / 100));
             thisCrop.fTotalProductDwt = thisCrop.fTotalProductFwt * (1 - cf.MoistureContent / 100);
             thisCrop.fFieldLossDwt = thisCrop.fTotalProductDwt * thisCrop.fFieldLossPct / 100;
             thisCrop.fFieldLossN = thisCrop.fFieldLossDwt * cropParams.ProductN / 100;
@@ -172,7 +172,6 @@ namespace SVSModel
         public double a_harvestIndex;
         public double b_harvestIndex;
         public double stageCorrection;
-        public double fSaleableYieldFwt;
         public double fFieldLossPct;
         public double fTotalProductFwt;
         public double fTotalProductDwt;

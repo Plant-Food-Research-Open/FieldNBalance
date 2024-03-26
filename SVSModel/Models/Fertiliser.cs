@@ -54,15 +54,12 @@ namespace SVSModel.Models
             DateTime[] schedullingDates = Functions.DateSeries(startSchedulleDate, endScheduleDate);
 
             // Set other variables needed to derive fertiliser requirement
-            //double CropN = cropN[config.Current.HarvestDate] - cropN[startSchedulleDate];
-            double trigger = thisSim.config.Field.Trigger;
-
             int remainingSplits = thisSim.config.Field.Splits;
 
             // Determine dates that each fertiliser application should be made
             foreach (DateTime d in schedullingDates)
             {
-                if (thisSim.SoilN[d] < trigger)
+                if (thisSim.SoilN[d] < Constants.Trigger)
                 {
                     double initialN = thisSim.SoilN[d];
                     double initialLossEst = thisSim.NLost[d];
