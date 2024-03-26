@@ -45,20 +45,11 @@ namespace SVSModel
             thisCrop.stageCorrection = 1 / Constants.PropnMaxDM[cf.HarvestStage];
 
             // derive crop Harvest State Variables 
-            thisCrop.fSaleableYieldFwt = cf.SaleableYield;
             thisCrop.fFieldLossPct = cf.FieldLoss;
             thisCrop.fTotalProductFwt = thisCrop.fSaleableYieldFwt * (1 / (1 - thisCrop.fFieldLossPct / 100)) * (1 / (1 - cf.DressingLoss / 100));
-            // Crop Failure.  If yield is very low or field loss is very high assume complete crop failure.  Uptake equation are too sensitive saleable yields close to zero and field losses close to 100
-            if ((cf.SaleableYield < (thisCrop.typicalYield * 0.05)) || (cf.FieldLoss > 95))
-            {
-                thisCrop.fFieldLossPct = 100;
-                thisCrop.fTotalProductFwt = thisCrop.typicalYield * (1 / (1 - cropParams.TypicalDressingLoss / 100));
-            }
             thisCrop.fTotalProductDwt = thisCrop.fTotalProductFwt * (1 - cf.MoistureContent / 100);
             thisCrop.fFieldLossDwt = thisCrop.fTotalProductDwt * thisCrop.fFieldLossPct / 100;
             thisCrop.fFieldLossN = thisCrop.fFieldLossDwt * cropParams.ProductN / 100;
-            thisCrop.fDressingLossDwt = thisCrop.fTotalProductDwt * cf.DressingLoss / 100;
-            thisCrop.fDressingLossN = thisCrop.fDressingLossDwt * cropParams.ProductN / 100;
             thisCrop.fSaleableProductDwt = thisCrop.fTotalProductDwt - thisCrop.fFieldLossDwt - thisCrop.fDressingLossDwt;
             thisCrop.fSaleableProductN = thisCrop.fSaleableProductDwt * cropParams.ProductN / 100;
             thisCrop.HI = thisCrop.a_harvestIndex + thisCrop.fTotalProductFwt * thisCrop.b_harvestIndex;
@@ -70,6 +61,7 @@ namespace SVSModel
             thisCrop.nHIRoot = thisCrop.fRootN / thisCrop.fCropN;
             thisCrop.nHIStover = thisCrop.fStoverN / thisCrop.fCropN;
             thisCrop.nHIFieldLoss = thisCrop.fFieldLossN  / thisCrop.fCropN;
+
 
 
             //Daily time-step, calculate Daily Scallers to give in-crop patterns

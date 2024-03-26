@@ -19,8 +19,7 @@ namespace SVSModel.Models
         public static Dictionary<DateTime, double> InitialBalance(
             Dictionary<DateTime, double> uptake,
             Dictionary<DateTime, double> residue,
-            Dictionary<DateTime, double> som,
-            Config config)
+            Dictionary<DateTime, double> som)
         {
             DateTime[] simDates = uptake.Keys.ToArray();
             Dictionary<DateTime, double> soilN = Functions.dictMaker(simDates, new double[simDates.Length]);
@@ -28,7 +27,7 @@ namespace SVSModel.Models
             {
                 if (d == simDates[0])
                 {
-                    soilN[simDates[0]] = config.Field.InitialN;
+                    soilN[simDates[0]] = FieldConfig.InitialN;
                 }
                 else
                 {

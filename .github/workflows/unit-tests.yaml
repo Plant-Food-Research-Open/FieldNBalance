@@ -1,4 +1,4 @@
-name: Unit Tests 
+name: Unit Tests
 
 on:
   push:
@@ -7,41 +7,28 @@ on:
     branches: [ "main" ]
   release:
     types: [ published ]
-  workflow_dispatch: {}
-  
+  workflow_dispatch: { }
+
 permissions:
   contents: read
   actions: read
   checks: write
-  
+
 jobs:
-  build:  
+  build:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 16
     
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-                    
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
 
-    - name: Build
-      run: dotnet build --no-restore
-      
-    - name: run
-      run: |
-        dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=unit_results.xml"
+      - name: .NET Build
+        run: dotnet build
 
-    - name: Test Report
-      uses: dorny/test-reporter@v1
-      if: success()
-      with:
-        name: Unit Tests            
-        path: SVSModel.Tests/unit_results.xml
-        reporter: java-junit    
+      - name: .NET Test
+        run: |
+          dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=unit_results.xml"

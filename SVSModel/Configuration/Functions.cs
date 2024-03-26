@@ -5,7 +5,7 @@ using Microsoft.Data.Analysis;
 
 namespace SVSModel.Configuration
 {
-    public class Functions
+    public static class Functions
     {
         /// <summary>
         /// calculates the difference between daily values in an array
@@ -253,10 +253,16 @@ namespace SVSModel.Configuration
                 return (DateTime)configDate;
             }
         }
+        
+        /// <summary>
+        /// Parses a double out of a generic `object` input
+        /// </summary>
+        /// <returns>Parsed double, or zero</returns>
         public static double Num(object configDouble)
         {
-
-            return Double.Parse(configDouble.ToString());
+            var doubleString = configDouble?.ToString() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(doubleString)) return 0;
+            return double.Parse(doubleString);
         }
 
         public static Dictionary<DateTime, double> ApplyRainfallFactor(Dictionary<DateTime, double> meanRain, Config config)
