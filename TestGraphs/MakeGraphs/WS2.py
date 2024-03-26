@@ -36,7 +36,7 @@ CBcolors = {
 try: 
     if os.environ["GITHUB_WORKSPACE"] != None:
         root = os.environ["GITHUB_WORKSPACE"]
-        inPath = os.path.join(root, "TestComponents", "TestSets", "WS2", "Outputs")
+        inPath = os.path.join(root, "TestComponents", "TestSets", "WS2")
         outPath = os.path.join(root, "TestGraphs", "Outputs")  
 except: 
     rootfrags = os.path.abspath('WS2.py').split("\\")
