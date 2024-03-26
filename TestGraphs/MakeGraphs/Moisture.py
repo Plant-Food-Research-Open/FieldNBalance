@@ -14,7 +14,6 @@
 # ---
 
 # +
-import os.path as osp
 import os 
 import datetime as dt
 import pandas as pd
@@ -37,20 +36,20 @@ CBcolors = {
 
 # Path for current Tests
 
-if os.environ["USERNAME"] != 'cflhxb':
+if os.getenv("GITHUB_ACTIONS") == True:
     root = os.environ["GITHUB_WORKSPACE"]
-    inPath = osp.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
-    outPath = osp.join(root, "TestGraphs", "Outputs")  
+    inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
+    outPath = os.path.join(root, "TestGraphs", "Outputs")  
 else: 
-    rootfrags = osp.abspath('Moisture.ipynb').split("\\")
+    rootfrags = os.path.abspath('Moisture.ipynb').split("\\")
     root = ""
     for d in rootfrags:
         if d == "FieldNBalance":
             break
         else:
             root += d + "\\"
-    inPath = osp.join(root,"FieldNBalance", "TestComponents", "TestSets", "Moisture", "Outputs")
-    outPath = osp.join(root, "FieldNBalance","TestGraphs", "Outputs")  
+    inPath = os.path.join(root,"FieldNBalance", "TestComponents", "TestSets", "Moisture", "Outputs")
+    outPath = os.path.join(root, "FieldNBalance","TestGraphs", "Outputs")  
 
 
 # Get names and results from each test
@@ -67,7 +66,7 @@ for file in os.listdir(inPath):
 # +
 Alltests =[]
 for t in testFiles[:]:  
-    testframe = pd.read_csv(osp.join(inPath, t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
+    testframe = pd.read_csv(os.path.join(inPath, t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
     Alltests.append(testframe)   
 
 AllData = pd.concat(Alltests,axis=1,keys=tests)
@@ -94,7 +93,7 @@ plt.xticks(rotation=60)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
 plt.text(0.05,0.9,"Moisture SWC tests",fontsize = 16,transform=ax.transAxes)
 Graph.tight_layout(pad=1.5)
-plt.savefig(osp.join(outPath,'Moisture_SWC.png'))
+plt.savefig(os.path.join(outPath,'Moisture_SWC.png'))
 
 Graph = plt.figure()
 ax = Graph.add_subplot(1,1,1)
@@ -108,7 +107,7 @@ plt.xticks(rotation=60)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
 plt.text(0.05,0.9,"Moisture SOM mineralisation tests",fontsize = 16,transform=ax.transAxes)
 Graph.tight_layout(pad=1.5)
-plt.savefig(osp.join(outPath,'Moisture_SOM.png'))
+plt.savefig(os.path.join(outPath,'Moisture_SOM.png'))
 
 Graph = plt.figure()
 ax = Graph.add_subplot(1,1,1)
@@ -122,7 +121,7 @@ plt.xticks(rotation=60)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
 plt.text(0.05,0.9,"Moisture SOM mineralisation tests",fontsize = 16,transform=ax.transAxes)
 Graph.tight_layout(pad=1.5)
-plt.savefig(osp.join(outPath,'Moisture_redisue.png'))
+plt.savefig(os.path.join(outPath,'Moisture_redisue.png'))
 
 Graph = plt.figure()
 ax = Graph.add_subplot(1,1,1)
@@ -136,7 +135,7 @@ plt.xticks(rotation=60)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
 plt.text(0.05,0.9,"Moisture drainage tests",fontsize = 16,transform=ax.transAxes)
 Graph.tight_layout(pad=1.5)
-plt.savefig(osp.join(outPath,'Moisture_Drianage.png'))
+plt.savefig(os.path.join(outPath,'Moisture_Drianage.png'))
 
 Graph = plt.figure()
 ax = Graph.add_subplot(1,1,1)
@@ -150,4 +149,4 @@ plt.xticks(rotation=60)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
 plt.text(0.05,0.9,"Locational CropN tests",fontsize = 16,transform=ax.transAxes)
 Graph.tight_layout(pad=1.5)
-plt.savefig(osp.join(outPath,'Moisture_CropN.png'))
+plt.savefig(os.path.join(outPath,'Moisture_CropN.png'))

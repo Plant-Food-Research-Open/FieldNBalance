@@ -14,7 +14,6 @@
 # ---
 
 # +
-import os.path as osp
 import os 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -34,30 +33,35 @@ CBcolors = {
 } 
 # -
 
-rootfrags = osp.abspath('WS2.ipynb').split("\\")
-root = ""
-for d in rootfrags:
-    if d == "FieldNBalance":
-        break
-    else:
-        root += d + "\\"
-inPath = osp.join(root,"FieldNBalance","TestComponents", "TestSets", "WS2")
-outPath = osp.join(root,"FieldNBalance","TestGraphs", "Outputs")  
+if os.getenv("GITHUB_ACTIONS") == True:
+    root = os.environ["GITHUB_WORKSPACE"]
+    inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
+    outPath = os.path.join(root, "TestGraphs", "Outputs")  
+else: 
+    rootfrags = os.path.abspath('WS2.ipynb').split("\\")
+    root = ""
+    for d in rootfrags:
+        if d == "FieldNBalance":
+            break
+        else:
+            root += d + "\\"
+    inPath = os.path.join(root,"FieldNBalance","TestComponents", "TestSets", "WS2")
+    outPath = os.path.join(root,"FieldNBalance","TestGraphs", "Outputs")  
 
-Configs = pd.read_pickle(osp.join(inPath, "FieldConfigs.pkl"))
+Configs = pd.read_pickle(os.path.join(inPath, "FieldConfigs.pkl"))
 
-observedCrop = pd.read_csv(osp.join(inPath, "CropData.csv"), index_col=0)
+observedCrop = pd.read_csv(os.path.join(inPath, "CropData.csv"), index_col=0)
 observedCrop.sort_index(axis=0,inplace=True)
 observedCrop['Date'] = pd.to_datetime(observedCrop['Date'],dayfirst=True)
 
-observedSoil = pd.read_csv(osp.join(inPath, "SoilData.csv"),index_col=0)
+observedSoil = pd.read_csv(os.path.join(inPath, "SoilData.csv"),index_col=0)
 observedSoil.sort_index(axis=0,inplace=True)
 observedSoil['Date'] = pd.to_datetime(observedSoil['Date'],dayfirst=True)
 observedSoil['SoilMineralN'] = observedSoil.loc[:,['SoilN0_15', 'SoilN15_30']].sum(axis=1)
 
 testFiles = []
 tests = []
-for file in os.listdir(osp.join(inPath,"Outputs")):
+for file in os.listdir(os.path.join(inPath,"Outputs")):
     if file.endswith('.csv'):
         testFiles.append(file)
         tests.append(file.replace(".csv",""))
@@ -65,7 +69,7 @@ for file in os.listdir(osp.join(inPath,"Outputs")):
 # +
 Alltests =[]
 for t in testFiles[:]:  
-    testframe = pd.read_csv(osp.join(inPath, "Outputs", t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
+    testframe = pd.read_csv(os.path.join(inPath, "Outputs", t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
     Alltests.append(testframe)   
 
 AllData = pd.concat(Alltests,axis=1,keys=tests)
@@ -200,7 +204,7 @@ for s in range(1,10):
             pos+=1
             c+=1
 Graph.tight_layout(pad=1.5)
-plt.savefig(osp.join(outPath, "TimeCourse.png"))
+plt.savefig(os.path.join(outPath, "TimeCourse.png"))
 
 
 # +
