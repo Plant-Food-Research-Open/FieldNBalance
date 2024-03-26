@@ -31,7 +31,8 @@ namespace TestModel
                     else
                         root += d + "\\";
                 }
-                path = Path.Join(root, "FieldNBalance", "TestComponents", "TestSets");
+                root = Path.Join(root, "FieldNBalance");
+                path = Path.Join(root, "TestComponents", "TestSets");
             }
             else
             {
@@ -56,11 +57,11 @@ namespace TestModel
             foreach (string s in sets)
             {
                 //Make config file in format that .NET DataTable is able to import
-                runPythonScript(root, Path.Join("FieldNBalance","TestGraphs", "MakeConfigs", $"{s}.py"));
+                runPythonScript(root, Path.Join("TestGraphs", "MakeConfigs", $"{s}.py"));
                 //Run each test
                 runTestSet(path, s);
                 //Make graphs associated with each test
-                runPythonScript(root, Path.Join("FieldNBalance", "TestGraphs", "MakeGraphs", $"{s}.py"));
+                runPythonScript(root, Path.Join("TestGraphs", "MakeGraphs", $"{s}.py"));
             }
         }
 
