@@ -16,12 +16,12 @@
 import os 
 import pandas as pd
 
-if os.getenv("GITHUB_ACTIONS") == True:
-    root = os.environ["GITHUB_WORKSPACE"]
-    inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
-    outPath = os.path.join(root, "TestGraphs", "Outputs")  
-else: 
-    rootfrags = os.path.abspath('WS2.ipynb').split("\\")
+try: 
+    if os.environ["GITHUB_WORKSPACE"] != None:
+        root = os.environ["GITHUB_WORKSPACE"]
+        path = os.path.join(root,"TestComponents", "TestSets", "Moisture")
+except:
+    rootfrags = os.path.abspath('Moisture.py').split("\\")
     root = ""
     for d in rootfrags:
         if d == "FieldNBalance":

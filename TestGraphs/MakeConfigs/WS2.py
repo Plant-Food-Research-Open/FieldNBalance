@@ -33,7 +33,7 @@ try:
         root = os.environ["GITHUB_WORKSPACE"]
         path = os.path.join(root,"TestComponents", "TestSets", "WS2")
 except:
-    rootfrags = os.path.abspath('WS2.ipynb').split("\\")
+    rootfrags = os.path.abspath('WS2.py').split("\\")
     root = ""
     for d in rootfrags:
         if d == "FieldNBalance":

@@ -22,19 +22,20 @@ import matplotlib.dates as mdates
 
 # Path for current Tests
 
-if os.getenv("GITHUB_ACTIONS") == True:
-    root = os.environ["GITHUB_WORKSPACE"]
-    inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
-    outPath = os.path.join(root, "TestGraphs", "Outputs")  
-else: 
-    rootfrags = os.path.abspath('Residues.ipynb').split("\\")
+try: 
+    if os.environ["GITHUB_WORKSPACE"] != None:
+        root = os.environ["GITHUB_WORKSPACE"]
+        inPath = os.path.join(root, "TestComponents", "TestSets", "Residues", "Outputs")
+        outPath = os.path.join(root, "TestGraphs", "Outputs")  
+except:
+    rootfrags = os.path.abspath('Residues.py').split("\\")
     root = ""
     for d in rootfrags:
         if d == "FieldNBalance":
             break
         else:
             root += d + "\\"
-    inPath = os.path.join(root,"FieldNBalance","TestComponents", "TestSets", "Residues","Outputs")
+    inPath = os.path.join(root,"FieldNBalance","TestComponents", "TestSets", "Residues", "Outputs")
     outPath = os.path.join(root,"FieldNBalance","TestGraphs", "Outputs")  
 
 # Get names and results from each test

@@ -33,12 +33,13 @@ CBcolors = {
 } 
 # -
 
-if os.getenv("GITHUB_ACTIONS") == True:
-    root = os.environ["GITHUB_WORKSPACE"]
-    inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
-    outPath = os.path.join(root, "TestGraphs", "Outputs")  
-else: 
-    rootfrags = os.path.abspath('WS2.ipynb').split("\\")
+try: 
+    if os.environ["GITHUB_WORKSPACE"] != None:
+        root = os.environ["GITHUB_WORKSPACE"]
+        inPath = os.path.join(root, "TestComponents", "TestSets", "WS2", "Outputs")
+        outPath = os.path.join(root, "TestGraphs", "Outputs")  
+except: 
+    rootfrags = os.path.abspath('WS2.py').split("\\")
     root = ""
     for d in rootfrags:
         if d == "FieldNBalance":
@@ -46,7 +47,7 @@ else:
         else:
             root += d + "\\"
     inPath = os.path.join(root,"FieldNBalance","TestComponents", "TestSets", "WS2")
-    outPath = os.path.join(root,"FieldNBalance","TestGraphs", "Outputs")  
+    outPath = os.path.join(root,"FieldNBalance","TestGraphs", "Outputs")   
 
 Configs = pd.read_pickle(os.path.join(inPath, "FieldConfigs.pkl"))
 
