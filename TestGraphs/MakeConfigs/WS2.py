@@ -13,7 +13,7 @@
 #     name: python3
 # ---
 
-import os.path as os
+import os
 import pandas as pd
 
 Sites = {
@@ -28,23 +28,30 @@ Sites = {
  9: 'Oakley'
 }
 
-rootfrags = os.abspath('WS2.ipynb').split("\\")
-root = ""
-for d in rootfrags:
-    if d == "FieldNBalance":
-        break
-    else:
-        root += d + "\\"
-path = os.join(root,"FieldNBalance","TestComponents", "TestSets", "WS2")
+os.getenv("GITHUB_ACTIONS") != None
 
-Configs = pd.read_excel(os.join(path, "FieldConfigs.xlsx"),sheet_name=Sites[1],nrows=45,usecols=lambda x: 'Unnamed' not in x,keep_default_na=False)
+if os.getenv("GITHUB_ACTIONS") == "true":
+    root = os.environ["GITHUB_WORKSPACE"]
+    inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
+    outPath = os.path.join(root, "TestGraphs", "Outputs")  
+else:
+    rootfrags = os.path.abspath('WS2.ipynb').split("\\")
+    root = ""
+    for d in rootfrags:
+        if d == "FieldNBalance":
+            break
+        else:
+            root += d + "\\"
+    path = os.path.join(root,"FieldNBalance","TestComponents", "TestSets", "WS2")
+
+Configs = pd.read_excel(os.path.join(path, "FieldConfigs.xlsx"),sheet_name=Sites[1],nrows=45,usecols=lambda x: 'Unnamed' not in x,keep_default_na=False)
 Configs.set_index('Name',inplace=True)
 for s in range(2,10):
-    sites = pd.read_excel(os.join(path, "FieldConfigs.xlsx"),sheet_name=Sites[s],nrows=45,usecols=lambda x: 'Unnamed' not in x,keep_default_na=False)
+    sites = pd.read_excel(os.path.join(path, "FieldConfigs.xlsx"),sheet_name=Sites[s],nrows=45,usecols=lambda x: 'Unnamed' not in x,keep_default_na=False)
     sites.set_index('Name',inplace=True)
     Configs = pd.concat([Configs,sites],axis=1)
 
 CSConfigs = Configs.transpose()
-CSConfigs.to_csv(os.join(path, "FieldConfigs.csv"),header=True)
+CSConfigs.to_csv(os.path.join(path, "FieldConfigs.csv"),header=True)
 
-Configs.to_pickle(os.join(path, "FieldConfigs.pkl"))
+Configs.to_pickle(os.path.join(path, "FieldConfigs.pkl"))
