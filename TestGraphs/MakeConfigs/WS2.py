@@ -28,13 +28,11 @@ Sites = {
  9: 'Oakley'
 }
 
-print(os.environ)
-
-if os.environ["GITHUB_WORKSPACE"] != None:
-    root = os.environ["GITHUB_WORKSPACE"]
-    inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
-    outPath = os.path.join(root, "TestGraphs", "Outputs")  
-else:
+try: 
+    if os.environ["GITHUB_WORKSPACE"] != None:
+        root = os.environ["GITHUB_WORKSPACE"]
+        path = os.path.join(root,"TestComponents", "TestSets", "WS2")
+except:
     rootfrags = os.path.abspath('WS2.ipynb').split("\\")
     root = ""
     for d in rootfrags:
