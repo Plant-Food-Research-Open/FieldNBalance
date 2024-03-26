@@ -61,12 +61,17 @@ jobs:
       run: |
         source .venv/bin/activate
         python TestGraphs/report.py 
-        
+
+    - name: Get current date
+      id: date
+      run: |
+        echo "{date}={$(date +'%Y-%m-%d')}" >> $GITHUB_ENV
+          
     - name: Upload Log Artifacts
       if: github.event_name == 'pull_request'
       uses: actions/upload-artifact@v4
       with:
-       name: visualisations-${{ env.LATEST_LOG_TIME }}
+       name: visualisations-${{ env.date }}
        path: html
           
     - name: Deploy to GitHub pages 🚀
