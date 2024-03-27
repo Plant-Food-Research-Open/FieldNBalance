@@ -47,12 +47,16 @@ namespace SVSModel
             // derive crop Harvest State Variables 
             thisCrop.fFieldLossPct = cf.FieldLoss;
             thisCrop.fTotalProductFwt = cf.FieldYield * (1 / (1 - thisCrop.fFieldLossPct / 100));
+            thisCrop.HI = thisCrop.a_harvestIndex + thisCrop.fTotalProductFwt * thisCrop.b_harvestIndex;
+            if (cropParams.YieldType == "Standing DM")
+            {
+                thisCrop.fTotalProductFwt *= thisCrop.HI; // Yield is input at total standing DM but then partitioned to product and stover so need to adjust down her so it is only product
+            }
             thisCrop.fTotalProductDwt = thisCrop.fTotalProductFwt * (1 - cf.MoistureContent / 100);
             thisCrop.fFieldLossDwt = thisCrop.fTotalProductDwt * thisCrop.fFieldLossPct / 100;
             thisCrop.fFieldLossN = thisCrop.fFieldLossDwt * cropParams.ProductN / 100;
             thisCrop.fSaleableProductDwt = thisCrop.fTotalProductDwt - thisCrop.fFieldLossDwt - thisCrop.fDressingLossDwt;
             thisCrop.fSaleableProductN = thisCrop.fSaleableProductDwt * cropParams.ProductN / 100;
-            thisCrop.HI = thisCrop.a_harvestIndex + thisCrop.fTotalProductFwt * thisCrop.b_harvestIndex;
             thisCrop.fStoverDwt = thisCrop.fTotalProductDwt * 1 / thisCrop.HI - thisCrop.fTotalProductDwt;
             thisCrop.fStoverN = thisCrop.fStoverDwt * cropParams.StoverN / 100;
             thisCrop.fRootDwt = (thisCrop.fStoverDwt + thisCrop.fTotalProductDwt) * cropParams.PRoot;
@@ -94,6 +98,7 @@ namespace SVSModel
             thisCrop.RootDepth = Functions.scaledValues(rootDepthScaller, cropParams.MaxRD, 1.0);
 
 
+            
             return thisCrop;
         }
 
