@@ -69,6 +69,9 @@ public class CropConfig
         EstablishDate = Functions.Date(c[pos + "EstablishDate"]);
         HarvestDate = Functions.Date(c[pos + "HarvestDate"]);
 
+        if (HarvestDate <= EstablishDate)
+            throw new Exception("Specified Harvest Date is earlier than Establishment date for " + pos + " crop");
+
         _residueRemoval = c[pos + "ResidueRemoval"].ToString();
         _residueIncorporation = c[pos + "ResidueIncorporation"].ToString();
 

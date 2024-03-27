@@ -170,8 +170,7 @@ namespace TestModel
         {
             int testRow = getTestRow(test, allTests);
 
-            List<string> coeffs = new List<string> { "InitialN",
-                                                    "SoilCategory",
+            List<string> coeffs = new List<string> {"SoilCategory",
                                                     "Texture",
                                                     "Rocks",
                                                     "SampleDepth",

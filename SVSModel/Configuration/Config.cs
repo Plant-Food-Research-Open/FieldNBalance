@@ -34,6 +34,10 @@ namespace SVSModel.Configuration
             Following = new CropConfig(c, "Following");
             Rotation = [Prior, Current, Following];
             Field = new FieldConfig(c);
+            if (Current.EstablishDate <= Prior.HarvestDate)
+                throw new Exception("Current crop establishment date is before the prior crop is harvested");
+            if (Following.EstablishDate <= Current.HarvestDate)
+                throw new Exception("Following crop establishment date is before the current crop is harvested");
         }
     }
 }
