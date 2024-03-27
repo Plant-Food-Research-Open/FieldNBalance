@@ -118,7 +118,7 @@ namespace SVSModel.Simulation
             DateTime End = thisSim.config.Current.HarvestDate;
 
             CropNBalanceSummary CurrentNBalanceSummary = new CropNBalanceSummary(
-            mineralIn: thisSim.SoilN[Start],
+            mineralIn: Constants.InitialN,
             cropIn: Functions.sumOverDates(Start, End, thisSim.NTransPlant),
             residueIn: Functions.sumOverDates(Start, End, thisSim.NResidues),
             sOMIn: Functions.sumOverDates(Start, End, thisSim.NSoilOM),
