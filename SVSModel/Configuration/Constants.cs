@@ -4,6 +4,9 @@ namespace SVSModel.Configuration
 {
     public static class Constants
     {
+        public const double Trigger = 30;
+        public const double InitialN = 50;
+
         /// <summary>Dictionary containing values for the proportion of maximum DM that occurs at each predefined crop stage</summary>
         public static readonly Dictionary<string, double> PropnMaxDM = new()
         {

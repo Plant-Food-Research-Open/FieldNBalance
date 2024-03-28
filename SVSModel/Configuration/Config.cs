@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace SVSModel.Configuration
 {
@@ -7,6 +9,8 @@ namespace SVSModel.Configuration
     /// </summary>
     public class Config
     {
+        public DateTime StartDate { get { return Prior.HarvestDate.AddDays(1); } }
+        public DateTime EndDate { get { return Following.HarvestDate; } }
         public CropConfig Prior { get; set; }
         public CropConfig Current { get; set; }
         public CropConfig Following { get; set; }
@@ -30,6 +34,10 @@ namespace SVSModel.Configuration
             Following = new CropConfig(c, "Following");
             Rotation = [Prior, Current, Following];
             Field = new FieldConfig(c);
+            if (Current.EstablishDate <= Prior.HarvestDate)
+                throw new Exception("Current crop establishment date is before the prior crop is harvested");
+            if (Following.EstablishDate <= Current.HarvestDate)
+                throw new Exception("Following crop establishment date is before the current crop is harvested");
         }
     }
 }

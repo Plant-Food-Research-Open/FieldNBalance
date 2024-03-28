@@ -47,6 +47,7 @@ public class CropConfig
     public double ResStover { get; set; }
     public double ResFieldLoss { get; set; }
     public double NUptake { get; set; }
+    public CropType SimResults { get; set; }
 
     /// <summary>
     /// Constructor used only by external webapp
@@ -67,6 +68,9 @@ public class CropConfig
         MoistureContent = Functions.Num(c[pos + "MoistureContent"]);
         EstablishDate = Functions.Date(c[pos + "EstablishDate"]);
         HarvestDate = Functions.Date(c[pos + "HarvestDate"]);
+
+        if (HarvestDate <= EstablishDate)
+            throw new Exception("Specified Harvest Date is earlier than Establishment date for " + pos + " crop");
 
         _residueRemoval = c[pos + "ResidueRemoval"].ToString();
         _residueIncorporation = c[pos + "ResidueIncorporation"].ToString();

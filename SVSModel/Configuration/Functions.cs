@@ -278,5 +278,16 @@ namespace SVSModel.Configuration
             }
             return adjustedmeanRain;
         }
+
+        public static double sumOverDates(DateTime start, DateTime end, Dictionary<DateTime, double> var)
+        {
+            double ret = 0;
+            foreach (DateTime d in var.Keys)
+            {
+                if ((d >= start) && (d <= end))
+                    ret += var[d];
+            }
+            return ret;
+        }
     }
 }

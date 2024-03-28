@@ -9,6 +9,7 @@ using System.Text;
 using CsvHelper;
 using SVSModel.Configuration;
 using SVSModel.Models;
+using SVSModel.Simulation;
 
 namespace SVSModel
 {
@@ -30,7 +31,6 @@ namespace SVSModel
         /// <returns>List of <see cref="CropCoefficient"/>s directly from the data file</returns>
         IEnumerable<CropCoefficient> GetCropCoefficients();
 
-        object[,] GetDailyCropData(double[] Tt, object[,] Config);
     }
 
     public class ModelInterface : IModelInterface
@@ -41,7 +41,7 @@ namespace SVSModel
             var endDate = config.Following.HarvestDate.AddDays(2);
             var metData = BuildMetDataDictionaries(startDate, endDate, weatherStation);
 
-            var rawResult = Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, config);
+            var rawResult = Simulation.Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, config);
 
             var result = new List<DailyNBalance>();
 
@@ -131,23 +131,6 @@ namespace SVSModel
             }
             
             return new MetDataDictionaries { MeanT = meanT, Rain = rain, MeanPET = meanPET };
-        }
-
-        /// <summary>
-        /// Takes daily mean temperature 2D array format with date in the first column, calculates variables for a single crop and returns them in a 2D array)
-        /// </summary>
-        /// <param name="Tt">Array of daily thermal time over the duration of the crop</param>
-        /// <param name="Config">2D aray with parameter names and values for crop configuration parameters</param>
-        /// <returns>Dictionary with parameter names as keys and parameter values as values</returns>
-        public object[,] GetDailyCropData(double[] Tt, object[,] Config)
-        {
-            Dictionary<string, object> c = Functions.dictMaker(Config);
-            CropConfig config = new CropConfig(c, "Current");
-            DateTime[] cropDates = Functions.DateSeries(config.EstablishDate, config.HarvestDate);
-            Dictionary<DateTime, double> tt = Functions.dictMaker(cropDates, Tt);
-            Dictionary<DateTime, double> AccTt = Functions.AccumulateTt(cropDates, tt);
-            Trace.WriteLine("I have made it ");
-            return Crop.Grow(AccTt, config);
         }
     }
 }
