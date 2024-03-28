@@ -137,7 +137,6 @@ namespace SVSModel.Configuration
         {
             { "Sedimentary", 2.65 },
             { "Volcanic", 1.9 },
-            { "Organic", 1.6 }
         };
     }
 }
