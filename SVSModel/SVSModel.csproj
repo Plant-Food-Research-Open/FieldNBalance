@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 		<None Remove="Data\CropCoefficientTableFull.csv" />
+		<None Remove="Data\LossCoefficientTable.csv" />
 		<None Remove="Data\Met\ashburton.csv" />
 		<None Remove="Data\Met\balclutha.csv" />
 		<None Remove="Data\Met\blenheim.csv" />
@@ -66,6 +67,7 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="Data\CropCoefficientTableFull.csv" />
+		<EmbeddedResource Include="Data\LossCoefficientTable.csv" />
 		<EmbeddedResource Include="Data\Met\ashburton.csv" />
 		<EmbeddedResource Include="Data\Met\balclutha.csv" />
 		<EmbeddedResource Include="Data\Met\blenheim.csv" />
