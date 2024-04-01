@@ -11,6 +11,7 @@ namespace SVSModel.Tests.Configuration;
 
 public class FieldConfigTests
 {
+    private static readonly string WeatherStation = Defaults.WeatherStation;
     private static readonly string SoilCategory = Defaults.SoilCategory;
     private static readonly string Texture = Defaults.SoilTexture;
     private static readonly double PMN = Defaults.PMN;
@@ -23,6 +24,7 @@ public class FieldConfigTests
 
     private readonly Dictionary<string, object> ExcelInputDict = new()
     {
+        { "WeatherStation", WeatherStation },
         { "SoilCategory", SoilCategory },
         { "Texture", Texture },
         { "PMN", PMN },

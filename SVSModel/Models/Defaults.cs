@@ -38,6 +38,7 @@ public static class Defaults
     public static readonly string ResidueRemoval = "None removed";
     public static readonly string ResidueIncorporation = "Full (Plough)";
 
+    public static readonly string WeatherStation = "Lincoln";
     public static readonly string SoilCategory = "Sedimentary";
     public static readonly string SoilTexture = "Silt loam";
     public static readonly string SampleDepth = "0-30cm";
