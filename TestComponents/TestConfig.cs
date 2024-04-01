@@ -18,6 +18,7 @@ namespace TestModel
 
         public static  Dictionary<string, object> configDict = new Dictionary<string, object>
             {
+                {"WeatherStation","Ashburton"}, 
                 {"InitialN",50.0},
                 {"SoilOrder","Brown"},
                 {"SampleDepth","0-30cm"},
@@ -64,8 +65,6 @@ namespace TestModel
                 { "FollowingHarvestStage","EarlyReproductive"},
                 { "FollowingResidueRemoval","None removed"},
                 { "FollowingResidueIncorporation","Full (Plough)"},
-                //{ "WeatherStation","Ashburton"} 
-
             };
     }
 }

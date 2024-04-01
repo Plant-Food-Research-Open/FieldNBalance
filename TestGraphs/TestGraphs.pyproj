@@ -32,10 +32,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MakeConfigs\Location.py" />
+    <Compile Include="MakeConfigs\Losses.py" />
     <Compile Include="MakeConfigs\Moisture.py" />
     <Compile Include="MakeConfigs\Residues.py" />
     <Compile Include="MakeConfigs\WS2.py" />
     <Compile Include="MakeGraphs\Location.py" />
+    <Compile Include="MakeGraphs\Losses.py" />
     <Compile Include="MakeGraphs\Moisture.py" />
     <Compile Include="MakeGraphs\Residues.py" />
     <Compile Include="MakeGraphs\WS2.py" />
