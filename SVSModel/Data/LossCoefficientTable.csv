@@ -1,4 +1,4 @@
-Location,Month,langmuir
+WeatherStation,Month,langmuirCoeff
 Ashburton,1,0.4221956844236277
 Ashburton,2,0.4040155222628269
 Ashburton,3,0.41829435230252165

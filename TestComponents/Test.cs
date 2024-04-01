@@ -46,7 +46,7 @@ namespace TestModel
             }
 
 
-            List<string> sets = new List<string> { "WS2", "Residues", "Location", "Moisture" };
+            List<string> sets = new List<string> { "WS2", "Residues", "Location", "Moisture", "Losses" };
 
             //Delete graphs from previous test run
             string graphFolder = Path.Join(Directory.GetCurrentDirectory(), "TestGraphs", "Outputs");
@@ -174,7 +174,8 @@ namespace TestModel
         {
             int testRow = getTestRow(test, allTests);
 
-            List<string> coeffs = new List<string> {"SoilCategory",
+            List<string> coeffs = new List<string> {"WeatherStation",
+                                                    "SoilCategory",
                                                     "Texture",
                                                     "Rocks",
                                                     "SampleDepth",

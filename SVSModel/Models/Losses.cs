@@ -36,7 +36,7 @@ namespace SVSModel.Models
             double b = 0.38;
             int month = d.Month;
             if (month != currentMonth)
-                b = findLossCoefficient(month, thisSim.config.Field.Location);
+                b = findLossCoefficient(month, thisSim.config.Field.WeatherStation);
             double PropDVol = thisSim.Drainage[d] / thisSim.config.Field.AWC;
             double PropNLoss = (PropDVol * b) / (1 + PropDVol * b);
             return PropNLoss * Math.Max(0, thisSim.SoilN[d]);

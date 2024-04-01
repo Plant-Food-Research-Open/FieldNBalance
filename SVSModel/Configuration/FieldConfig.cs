@@ -13,7 +13,7 @@ namespace SVSModel.Configuration
     public class FieldConfig
     {
         // Inputs
-        public string Location { get; init; }
+        public string WeatherStation { get; init; }
         public string SoilCategory { get; init; }
         public string SoilTexture { get; init; }
         public double PMN { get; init; }
@@ -45,7 +45,7 @@ namespace SVSModel.Configuration
         public FieldConfig(Dictionary<string, object> c)
         {
             // Only raw input values should be set in here
-            Location = c["Location"].ToString();
+            WeatherStation = c["WeatherStation"].ToString();
             SoilCategory = c["SoilCategory"].ToString();
             SoilTexture = c["Texture"].ToString();
             PMN = Functions.Num(c["PMN"]);
