@@ -79,7 +79,11 @@ AllData.index = pd.to_datetime(AllData.index)
 # -
 
 Treats = ["Base","LowYield","Rocks","VeryDry","VeryWet"]
-cols = ['k','orange','purple','red','blue']
+cols = [CBcolors['gray'],
+        CBcolors['orange'],
+        CBcolors['purple'],
+        CBcolors['red'],
+        CBcolors['blue']]
 
 # Make graph
 
