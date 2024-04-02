@@ -12,7 +12,9 @@ on:
 permissions:
   actions: write
   contents: write
-
+  deployments: write
+  pages: write
+  
 jobs:
   build:  
     runs-on: ubuntu-20.04
