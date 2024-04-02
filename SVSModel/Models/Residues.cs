@@ -74,24 +74,33 @@ namespace SVSModel.Models
         public residue(double amountN, double Nconc, DateTime additionDate, SimulationType thisSim)
         {
             double CNR = 40/Nconc;
-            this.ANm = amountN * 0.8;
-            this.ANi = amountN * (CNR * 2.5)/100;
-            this.Km = 0.97 * Math.Exp(-0.12*CNR) + 0.03;
-            this.Ki = 0.9 * Math.Exp(-0.12 * CNR) + 0.1; ;
+            this.ANm = amountN * 81.614/100;
+            this.ANi = amountN * (4.8701+(CNR * 2.43475))/100;
+            this.Km = 0.041678 + (1.026182 - 0.041678) * Math.Exp(-0.123883 * CNR) ;
+            this.Ki = 0.112333 + (1.026182 - 0.041678) * Math.Exp(-0.130226 * CNR) ; 
             this.NetMineralisation = Functions.dictMaker(thisSim.simDates, new double[thisSim.simDates.Length]);
             double sigmaFtm = 0;
             foreach (DateTime d in thisSim.simDates)
             {
                 if (d >= additionDate.AddDays(1))
                 {
-                    double Ft = SoilOrganic.LloydTaylorTemp(thisSim.meanT[d]);
-                    double Fm = SoilOrganic.QiuBeareCurtinWater(thisSim.RSWC[d]);
+                    double Ft = VanHoffQ10(thisSim.meanT[d]);
+                    double Fm = linearSoilWater(thisSim.RSWC[d]);
                     sigmaFtm += (Ft * Fm);
                     double mineralisation = ANm * (1 - Math.Exp(-Km * sigmaFtm));
                     double imobilisation = ANi * (1 - Math.Exp(-Ki * sigmaFtm));
                     NetMineralisation[d] = mineralisation - imobilisation;
                 }
             }
+        }
+
+        public static double VanHoffQ10(double temp)
+        {
+            return Math.Pow(2, ((temp - 30) / 10));
+        }
+        public static double linearSoilWater(double rwc)
+        {
+            return Math.Min(1, rwc * 2);
         }
 
     }
