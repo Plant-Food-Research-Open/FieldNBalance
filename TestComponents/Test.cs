@@ -46,7 +46,7 @@ namespace TestModel
             }
 
 
-            List<string> sets = new List<string> { "WS2", "Residues", "Location", "Moisture", "Losses" };
+            List<string> sets = new List<string> {"WS1", "WS2", "Residues", "Location", "Moisture", "Losses" };
 
             //Delete graphs from previous test run
             string graphFolder = Path.Join(Directory.GetCurrentDirectory(), "TestGraphs", "Outputs");
