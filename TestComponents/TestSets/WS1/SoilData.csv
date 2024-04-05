@@ -1,4 +1,4 @@
-﻿SimulationName,NitrogenTreatment,IrrigationTreatment,Location,Rotation,Crop,Date,SoilN_0_15,SoilN_15_30,SoilN_30_60,SoilN_60_90,SoilN_90_120,SoilN_120_150,SoilN_0_30,SoilN_0_60,SoilN_0_90,SoilN_0_120,SoilN_0_150
+﻿Site,NitrogenTreatment,IrrigationTreatment,Location,Rotation,Crop,Date,SoilN0_15,SoilN15_30,SoilN30_60,SoilN60_90,SoilN90_120,SoilN120_150,SoilN0_30,SoilN0_60,SoilN0_90,SoilN0_120,SoilN0_150
 LincolnRot1_N1_Irr1,N1,Irr1,Lincoln,Rotation1,Broccoli,2021-02-24,19.852,17.249,7.450,1.820,2.104,1.205,37.101,44.551,46.370,,
 LincolnRot1_N1_Irr1,N1,Irr1,Lincoln,Rotation1,Broccoli,2021-04-06,33.668,21.238,6.747,2.834,,,54.906,61.653,64.487,,
 LincolnRot1_N1_Irr1,N1,Irr1,Lincoln,Rotation1,Broccoli,2021-05-03,9.192,15.247,11.238,1.117,,,24.439,35.678,36.795,,
