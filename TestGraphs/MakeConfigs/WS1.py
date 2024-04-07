@@ -39,10 +39,17 @@ except:
 
 Configs = pd.read_excel(os.path.join(path, "FieldConfigs.xlsx"),sheet_name=Sites[1],nrows=45,usecols=lambda x: 'Unnamed' not in x,keep_default_na=False)
 Configs.set_index('Name',inplace=True)
-for s in range(2,5):
+for s in range(1,5):
     sites = pd.read_excel(os.path.join(path, "FieldConfigs.xlsx"),sheet_name=Sites[s],nrows=45,usecols=lambda x: 'Unnamed' not in x,keep_default_na=False)
     sites.set_index('Name',inplace=True)
-    Configs = pd.concat([Configs,sites],axis=1)
+    if s != 1:
+        Configs = pd.concat([Configs,sites],axis=1)
+    #set the other N treatments
+    nlast = "_N1_"
+    for n in ["_N2_","_N3_","_N4_"]:
+        sites.columns = [sites.columns[x].replace(nlast,n) for x in range(sites.columns.size)]
+        Configs = pd.concat([Configs,sites],axis=1)
+        nlast = n
 
 CSConfigs = Configs.transpose()
 CSConfigs.to_csv(os.path.join(path, "FieldConfigs.csv"),header=True)
