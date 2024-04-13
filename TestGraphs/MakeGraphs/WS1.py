@@ -78,16 +78,14 @@ AllData.sort_index(axis=0,inplace=True)
 AllData.index = pd.to_datetime(AllData.index)
 # -
 
-TestsFrame = pd.DataFrame(index = [tests],data=[x.split('_') for x in tests],columns = ['Site','N','Irr','Crop'])
+TestsFrame = pd.DataFrame(index = tests,data=[x.split('_') for x in tests],columns = ['Site','N','Irr','Crop'])
 
 ObsPredIndex = pd.MultiIndex.from_product([tests,AllData.index],names=['Treatment','Date'])
 ObsPredCropN = pd.DataFrame(index = ObsPredIndex, columns = ['obs','pred'])
-ObsPredCropN.loc[:,'Site'] =  [TestsFrame.loc[x,'Site'].values[0] for x in ObsPredCropN.index.get_level_values(0)]
+ObsPredCropN.loc[:,'Site'] =  [TestsFrame.loc[x,'Site'] for x in ObsPredCropN.index.get_level_values(0)]
 ObsPredCropN.set_index('Site',append=True,inplace=True)
 ObsPredCropN = ObsPredCropN.reorder_levels(['Site','Treatment','Date'],axis=0)
 ObsPredCropN = ObsPredCropN.sort_index()
-
-TestsFrame
 
 ObsCropN = observedCrop.loc[:,['Date','CropN']]
 ObsCropN.loc[:,'Date'] = [(ObsCropN.iloc[x,0] + dt.timedelta(hours=12)) for x in range(ObsCropN.index.size)]
@@ -95,8 +93,8 @@ ObsCropN.set_index('Date',append=True,inplace=True)
 ObsCropN.columns = ['obs']
 ObsCropN = ObsCropN.groupby(['Site','Date']).mean()
 for t in tests:
-    s = TestsFrame.loc[t,'Site'].values[0]
-    obst = TestsFrame.loc[t,'Site'].values[0]+"_"+TestsFrame.loc[t,'N'].values[0]+"_"+TestsFrame.loc[t,'Irr'].values[0]
+    s = TestsFrame.loc[t,'Site']
+    obst = TestsFrame.loc[t,'Site']+"_"+TestsFrame.loc[t,'N']+"_"+TestsFrame.loc[t,'Irr']
     obs = ObsCropN.loc[obst,:]
     obs.sort_index(inplace=True)
     dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
@@ -136,6 +134,8 @@ plt.plot(Obs,Pred,'o')
 plt.ylabel('Predicted')
 plt.xlabel('Observed')
 
+
+
 ObsSoilN = observedSoil.loc[:,['Date','SoilMineralN']]
 ObsSoilN.loc[:,'Date'] = [(ObsSoilN.iloc[x,0] + dt.timedelta(hours=12)) for x in range(ObsSoilN.index.size)]
 ObsSoilN.set_index('Date',append=True,inplace=True)
@@ -144,8 +144,8 @@ ObsSoilN = ObsSoilN.groupby(['Site','Date']).mean()
 blankIndex = pd.MultiIndex.from_product([[],[],[]], names = ['site','test','date'])
 ObsPredSoilN = pd.DataFrame(index = blankIndex, columns = ['obs','pred'])
 for t in tests:
-    s = TestsFrame.loc[t,'Site'].values[0]
-    obst = TestsFrame.loc[t,'Site'].values[0]+"_"+TestsFrame.loc[t,'N'].values[0]+"_"+TestsFrame.loc[t,'Irr'].values[0]
+    s = TestsFrame.loc[t,'Site']
+    obst = TestsFrame.loc[t,'Site']+"_"+TestsFrame.loc[t,'N']+"_"+TestsFrame.loc[t,'Irr']
     obs = ObsSoilN.loc[obst,:]
     dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'SoilMineralN')].index
     Pred = AllData.loc[dates,(t,'SoilMineralN')]
@@ -181,12 +181,9 @@ plt.plot(Obs,Pred,'o')
 plt.ylabel('Predicted')
 plt.xlabel('Observed')
 
-sites
 
-TestsFrame.loc[TestsFrame.Site==s,:].index.values
-
-
-def setColor(treat):
+# +
+def setEdgeColor(treat):
     if "_N1_" in treat:
         return CBcolors['red']
     if "_N2_" in treat:
@@ -196,120 +193,53 @@ def setColor(treat):
     else:
         return CBcolors['blue']
 
+def setFillColor(treat):
+    if "_Irr1_" in treat:
+        return 'white'
+    else:
+        return setEdgeColor(treat)
+    
+def setLineStyle(treat):
+    if "_Irr1_" in treat:
+        return '-'
+    else:
+        return '--'
 
-testsAtSite
 
-i1
+# -
 
-# +
-colors = ['orange','green']
-Graph = plt.figure(figsize=(10,400))
-pos = 1
-row_num=len(tests)
-
-for s in ['LincolnRot1']:#sites:
+for s in sites:
+    Graph = plt.figure(figsize=(10,12))
     testsAtSite = TestsFrame.loc[TestsFrame.Site==s,:].index.values
     cropsAtSite = []
     for t in testsAtSite:
-        if 'Irr1' in t[0]:
-            cropsAtSite.append(t[0])
-    for i1 in cropsAtSite:
-        dates = AllData.loc[Configs.loc["PriorHarvestDate",i1]:Configs.loc["CurrentHarvestDate",i1],(i1,'CropN')].index
-        c = setColor(i1)  
+        cropsAtSite.append(t.split("_")[3])
+    cropsAtSite = list(set(cropsAtSite))
+    pos = 1
+    row_num=int(len(testsAtSite)/8)
+    for cro in cropsAtSite:
         for v in ['SoilMineralN','CropN']:
             ax = Graph.add_subplot(row_num,2,pos)
-            Data = AllData.loc[dates,(i1,v)]
-            plt.plot(Data,"-",color=c,label='Irr1')
-            i2 = i1.replace('Irr1','Irr2')
-            Data = AllData.loc[dates,(i2,v)]
-            plt.plot(Data,"--",color=c,label='Irr2')
-            
-            site = TestsFrame.loc[i1,'Site']+"_"+TestsFrame.loc[i1,'N']+"_Irr1"
-            if v == 'CropN':
-                sData = observedCrop.loc[site,:]
-            if v == 'SoilMineralN':
-                sData = observedSoil.loc[site,:]
-            dFilter = [dates.min() <= sData['Date'].iloc[x] <= dates.max() for x in range(len(sData['Date']))]
-            plt.plot(sData.loc[dFilter,'Date'],sData.loc[dFilter,v],'o',mec=c,mfc=c)
+            pos+=1
+            for i in ['Irr1','Irr2']:
+                for n in ['N1','N2','N3','N4']:
+                    test = s+"_"+n+"_"+i+"_"+cro
+                    mec = setEdgeColor(test)
+                    mfc = setFillColor(test)
+                    dates = AllData.loc[Configs.loc["PriorHarvestDate",test]:Configs.loc["CurrentHarvestDate",test],(test,v)].index
+                    Data = AllData.loc[dates,(test,v)]
+                    plt.plot(Data,setLineStyle(test),color=mec,label=i)
 
-            site = TestsFrame.loc[i2,'Site']+"_"+TestsFrame.loc[i2,'N']+"_Irr2"
-            if v == 'CropN':
-                sData = observedCrop.loc[site,:]
-            if v == 'SoilMineralN':
-                sData = observedSoil.loc[site,:]
-            dFilter = [dates.min() <= sData['Date'].iloc[x] <= dates.max() for x in range(len(sData['Date']))]
-            plt.plot(sData.loc[dFilter,'Date'],sData.loc[dFilter,v],'o',mec=c,mfc='white')
-            
-            plt.title(t[0].split("_")[0]+" "+t[0].split("_")[3])
+                    site = s+"_"+n+"_"+i
+                    if v == 'CropN':
+                        sData = observedCrop.loc[site,:]
+                    if v == 'SoilMineralN':
+                        sData = observedSoil.loc[site,:]
+                    dFilter = [dates.min() <= sData['Date'].iloc[x] <= dates.max() for x in range(len(sData['Date']))]
+                    plt.plot(sData.loc[dFilter,'Date'],sData.loc[dFilter,v],'o',mec=mec,mfc=mfc)
+            plt.title(s+cro)
             plt.xticks(rotation=60)
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b-%y'))
-            #plt.ylim(0,80for s in sites:0)
-            plt.legend()
-            pos+=1
-Graph.tight_layout(pad=1.5)
-plt.savefig(os.path.join(outPath, "WS1_TimeCourse.png"))
-
-
-# +
-# colors = ['orange','green']
-# Graph = plt.figure(figsize=(10,10))
-# pos = 1
-# row_num=len(test_names)
-
-# for t in test_names:
-#     dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
-#     c = 0    
-#     for v in ['ResidueN','SoilOMN']:
-#         color = 'b'
-#         ax = Graph.add_subplot(row_num,2,pos)
-#         Data = AllData.loc[dates,(t,v)].cumsum()
-#         plt.plot(Data,color=CBcolors[colors[c]],label=v)
-#         plt.title(t)
-#         plt.xticks(rotation=60)
-#         ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
-#         plt.legend()
-#         Graph.tight_layout(pad=1.5)
-#         pos+=1
-#         c+=1
-# +
-# colors = ['orange','green']
-# Graph = plt.figure(figsize=(10,10))
-# pos = 1
-# row_num=len(test_names)
-
-# for t in test_names:
-#     dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
-#     c = 0    
-#     for v in ['Drainage', 'Irrigation']:
-#         color = 'b'
-#         ax = Graph.add_subplot(row_num,2,pos)
-#         Data = AllData.loc[dates,(t,v)].cumsum()
-#         plt.plot(Data,color=CBcolors[colors[c]],label=v)
-#         plt.title(t)
-#         plt.xticks(rotation=60)
-#         ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
-#         plt.legend()
-#         Graph.tight_layout(pad=1.5)
-#         pos+=1
-#         c+=1
-# +
-# colors = ['orange','green']
-# Graph = plt.figure(figsize=(10,10))
-# pos = 1
-# row_num=len(test_names)
-
-# for t in test_names:
-#     dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
-#     c = 0    
-#     for v in ['Green cover', 'RSWC']:
-#         color = 'b'
-#         ax = Graph.add_subplot(row_num,2,pos)
-#         Data = AllData.loc[dates,(t,v)]
-#         plt.plot(Data,color=CBcolors[colors[c]],label=v)
-#         plt.title(t)
-#         plt.xticks(rotation=60)
-#         ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
-#         plt.legend()
-#         Graph.tight_layout(pad=1.5)
-#         pos+=1
-#         c+=1
+            #plt.legend()
+    Graph.tight_layout(pad=1.5)
+    plt.savefig(os.path.join(outPath, "WS1_"+s+"TimeCourse.png"))
