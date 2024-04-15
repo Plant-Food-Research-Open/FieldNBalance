@@ -258,6 +258,8 @@ namespace TestModel
         {
             Dictionary<System.DateTime, double> fert = new Dictionary<System.DateTime, double>();
             string site = Regex.Replace(test, "[^0-9]", "");
+            if (site.Length > 1)
+                site = test;
 
             foreach (DataFrameRow row in allFert.Rows)
             {

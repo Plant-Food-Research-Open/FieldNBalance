@@ -1,130 +1,259 @@
-Location,Rotation,Nitrogen treatment,Crop ,Date,Rate (kg N/ha)
-Lincoln,Rotation1,N1,Wheat,24/08/2020,75
-Lincoln,Rotation1,N1,Wheat,17/09/2020,75
-Lincoln,Rotation1,N1,Broccoli,7/04/2021,0
-Lincoln,Rotation1,N1,Broccoli,4/05/2021,0
-Lincoln,Rotation1,N1,Onions,8/09/2021,0
-Lincoln,Rotation1,N1,Onions,10/11/2021,0
-Lincoln,Rotation1,N1,Onions,3/12/2021,0
-Lincoln,Rotation1,N1,Onions,22/12/2021,0
-Lincoln,Rotation1,N1,Ryegrass,5/05/2022,29
-Lincoln,Rotation1,N2,Wheat,24/08/2020,75
-Lincoln,Rotation1,N2,Wheat,17/09/2020,75
-Lincoln,Rotation1,N2,Broccoli,7/04/2021,15
-Lincoln,Rotation1,N2,Broccoli,4/05/2021,15
-Lincoln,Rotation1,N2,Onions,8/09/2021,15
-Lincoln,Rotation1,N2,Onions,10/11/2021,15
-Lincoln,Rotation1,N2,Onions,3/12/2021,15
-Lincoln,Rotation1,N2,Onions,22/12/2021,15
-Lincoln,Rotation1,N2,Ryegrass,5/05/2022,29
-Lincoln,Rotation1,N2,Ryegrass,1/09/2022,20
-Lincoln,Rotation1,N2,Ryegrass,29/09/2022,15
-Lincoln,Rotation1,N2,Ryegrass,4/11/2022,10
-Lincoln,Rotation1,N3,Wheat,24/08/2020,75
-Lincoln,Rotation1,N3,Wheat,17/09/2020,75
-Lincoln,Rotation1,N3,Broccoli,7/04/2021,30
-Lincoln,Rotation1,N3,Broccoli,4/05/2021,30
-Lincoln,Rotation1,N3,Onions,8/09/2021,30
-Lincoln,Rotation1,N3,Onions,10/11/2021,30
-Lincoln,Rotation1,N3,Onions,3/12/2021,30
-Lincoln,Rotation1,N3,Onions,22/12/2021,30
-Lincoln,Rotation1,N3,Ryegrass,5/05/2022,29
-Lincoln,Rotation1,N3,Ryegrass,1/09/2022,40
-Lincoln,Rotation1,N3,Ryegrass,29/09/2022,30
-Lincoln,Rotation1,N3,Ryegrass,4/11/2022,20
-Lincoln,Rotation1,N4,Wheat,24/08/2020,75
-Lincoln,Rotation1,N4,Wheat,17/09/2020,75
-Lincoln,Rotation1,N4,Broccoli,7/04/2021,60
-Lincoln,Rotation1,N4,Broccoli,4/05/2021,60
-Lincoln,Rotation1,N4,Onions,8/09/2021,60
-Lincoln,Rotation1,N4,Onions,10/11/2021,60
-Lincoln,Rotation1,N4,Onions,3/12/2021,60
-Lincoln,Rotation1,N4,Onions,22/12/2021,60
-Lincoln,Rotation1,N4,Ryegrass,5/05/2022,29
-Lincoln,Rotation1,N4,Ryegrass,1/09/2022,80
-Lincoln,Rotation1,N4,Ryegrass,29/09/2022,60
-Lincoln,Rotation1,N4,Ryegrass,4/11/2022,40
-Lincoln,Rotation2,N1,Pak choy,5/08/2020,40
-Lincoln,Rotation2,N1,Pak choy,21/12/2020,0
-Lincoln,Rotation2,N1,Pak choy,12/01/2021,0
-Lincoln,Rotation2,N1,Potatoes,13/12/2021,0
-Lincoln,Rotation2,N1,Potatoes,22/12/2021,0
-Lincoln,Rotation2,N1,Potatoes,7/01/2022,0
-Lincoln,Rotation2,N1,Ryegrass,12/05/2022,0
-Lincoln,Rotation2,N1,Ryegrass,1/09/2022,0
-Lincoln,Rotation2,N1,Ryegrass,29/09/2022,0
-Lincoln,Rotation2,N1,Ryegrass,4/11/2022,0
-Lincoln,Rotation2,N2,Pak choy,5/08/2020,40
-Lincoln,Rotation2,N2,Pak choy,21/12/2020,15
-Lincoln,Rotation2,N2,Pak choy,12/01/2021,15
-Lincoln,Rotation2,N2,Potatoes,13/12/2021,31
-Lincoln,Rotation2,N2,Potatoes,22/12/2021,31
-Lincoln,Rotation2,N2,Potatoes,7/01/2022,41
-Lincoln,Rotation2,N2,Ryegrass,12/05/2022,15
-Lincoln,Rotation2,N2,Ryegrass,1/09/2022,20
-Lincoln,Rotation2,N2,Ryegrass,29/09/2022,15
-Lincoln,Rotation2,N2,Ryegrass,4/11/2022,10
-Lincoln,Rotation2,N3,Pak choy,5/08/2020,40
-Lincoln,Rotation2,N3,Pak choy,21/12/2020,30
-Lincoln,Rotation2,N3,Pak choy,12/01/2021,30
-Lincoln,Rotation2,N3,Potatoes,13/12/2021,62
-Lincoln,Rotation2,N3,Potatoes,22/12/2021,62
-Lincoln,Rotation2,N3,Potatoes,7/01/2022,82
-Lincoln,Rotation2,N3,Ryegrass,12/05/2022,30
-Lincoln,Rotation2,N3,Ryegrass,1/09/2022,40
-Lincoln,Rotation2,N3,Ryegrass,29/09/2022,30
-Lincoln,Rotation2,N3,Ryegrass,4/11/2022,20
-Lincoln,Rotation2,N4,Pak choy,5/08/2020,40
-Lincoln,Rotation2,N4,Pak choy,21/12/2020,60
-Lincoln,Rotation2,N4,Pak choy,12/01/2021,80
-Lincoln,Rotation2,N4,Potatoes,13/12/2021,124
-Lincoln,Rotation2,N4,Potatoes,22/12/2021,124
-Lincoln,Rotation2,N4,Potatoes,7/01/2022,164
-Lincoln,Rotation2,N4,Ryegrass,12/05/2022,60
-Lincoln,Rotation2,N4,Ryegrass,1/09/2022,80
-Lincoln,Rotation2,N4,Ryegrass,29/09/2022,60
-Lincoln,Rotation2,N4,Ryegrass,4/11/2022,40
-Hawkes Bay,Rotation3,N1,Onions,21/09/2021,0
-Hawkes Bay,Rotation3,N1,Onions,4/10/2021,0
-Hawkes Bay,Rotation3,N1,Onions,30/11/2021,0
-Hawkes Bay,Rotation3,N1,Onions,20/12/2021,0
-Hawkes Bay,Rotation3,N2,Onions,21/09/2021,15
-Hawkes Bay,Rotation3,N2,Onions,4/10/2021,10
-Hawkes Bay,Rotation3,N2,Onions,30/11/2021,20
-Hawkes Bay,Rotation3,N2,Onions,20/12/2021,10
-Hawkes Bay,Rotation3,N3,Onions,21/09/2021,30
-Hawkes Bay,Rotation3,N3,Onions,4/10/2021,20
-Hawkes Bay,Rotation3,N3,Onions,30/11/2021,40
-Hawkes Bay,Rotation3,N3,Onions,20/12/2021,20
-Hawkes Bay,Rotation3,N4,Onions,21/09/2021,60
-Hawkes Bay,Rotation3,N4,Onions,4/10/2021,40
-Hawkes Bay,Rotation3,N4,Onions,30/11/2021,80
-Hawkes Bay,Rotation3,N4,Onions,20/12/2021,40
-Hawkes Bay,Rotation4,N1,Pak choy,29/04/2021,0
-Hawkes Bay,Rotation4,N1,Lettuce,24/09/2021,0
-Hawkes Bay,Rotation4,N1,Lettuce,18/10/2021,0
-Hawkes Bay,Rotation4,N1,Cauliflower,27/05/2022,0
-Hawkes Bay,Rotation4,N1,Cauliflower,27/06/2022,0
-Hawkes Bay,Rotation4,N1,Cauliflower,30/06/2022,0
-Hawkes Bay,Rotation4,N1,Cauliflower,12/09/2022,0
-Hawkes Bay,Rotation4,N2,Pak choy,29/04/2021,15
-Hawkes Bay,Rotation4,N2,Lettuce,24/09/2021,12
-Hawkes Bay,Rotation4,N2,Lettuce,18/10/2021,6.25
-Hawkes Bay,Rotation4,N2,Cauliflower,27/05/2022,25
-Hawkes Bay,Rotation4,N2,Cauliflower,27/06/2022,25
-Hawkes Bay,Rotation4,N2,Cauliflower,30/06/2022,25
-Hawkes Bay,Rotation4,N2,Cauliflower,12/09/2022,50
-Hawkes Bay,Rotation4,N3,Pak choy,29/04/2021,30
-Hawkes Bay,Rotation4,N3,Lettuce,24/09/2021,25
-Hawkes Bay,Rotation4,N3,Lettuce,18/10/2021,12.5
-Hawkes Bay,Rotation4,N3,Cauliflower,27/05/2022,50
-Hawkes Bay,Rotation4,N3,Cauliflower,27/06/2022,50
-Hawkes Bay,Rotation4,N3,Cauliflower,30/06/2022,50
-Hawkes Bay,Rotation4,N3,Cauliflower,12/09/2022,100
-Hawkes Bay,Rotation4,N4,Pak choy,29/04/2021,60
-Hawkes Bay,Rotation4,N4,Lettuce,24/09/2021,50
-Hawkes Bay,Rotation4,N4,Lettuce,18/10/2021,25
-Hawkes Bay,Rotation4,N4,Cauliflower,27/05/2022,100
-Hawkes Bay,Rotation4,N4,Cauliflower,27/06/2022,100
-Hawkes Bay,Rotation4,N4,Cauliflower,30/06/2022,100
-Hawkes Bay,Rotation4,N4,Cauliflower,12/09/2022,200
+Site,Date,FertiliserN,Location,Rotation,Nitrogen treatment,Crop
+LincolnRot1_N1_Irr1_Wheat,24/08/2020,75,Lincoln,Rotation1,N1,Wheat
+LincolnRot1_N1_Irr1_Wheat,17/09/2020,75,Lincoln,Rotation1,N1,Wheat
+LincolnRot1_N1_Irr1_Broccoli,7/04/2021,0,Lincoln,Rotation1,N1,Broccoli
+LincolnRot1_N1_Irr1_Broccoli,4/05/2021,0,Lincoln,Rotation1,N1,Broccoli
+LincolnRot1_N1_Irr1_Onion,8/09/2021,0,Lincoln,Rotation1,N1,Onion
+LincolnRot1_N1_Irr1_Onion,10/11/2021,0,Lincoln,Rotation1,N1,Onion
+LincolnRot1_N1_Irr1_Onion,3/12/2021,0,Lincoln,Rotation1,N1,Onion
+LincolnRot1_N1_Irr1_Onion,22/12/2021,0,Lincoln,Rotation1,N1,Onion
+LincolnRot1_N1_Irr1_Ryegrass,5/05/2022,29,Lincoln,Rotation1,N1,Ryegrass
+LincolnRot1_N2_Irr1_Wheat,24/08/2020,75,Lincoln,Rotation1,N2,Wheat
+LincolnRot1_N2_Irr1_Wheat,17/09/2020,75,Lincoln,Rotation1,N2,Wheat
+LincolnRot1_N2_Irr1_Broccoli,7/04/2021,15,Lincoln,Rotation1,N2,Broccoli
+LincolnRot1_N2_Irr1_Broccoli,4/05/2021,15,Lincoln,Rotation1,N2,Broccoli
+LincolnRot1_N2_Irr1_Onion,8/09/2021,15,Lincoln,Rotation1,N2,Onion
+LincolnRot1_N2_Irr1_Onion,10/11/2021,15,Lincoln,Rotation1,N2,Onion
+LincolnRot1_N2_Irr1_Onion,3/12/2021,15,Lincoln,Rotation1,N2,Onion
+LincolnRot1_N2_Irr1_Onion,22/12/2021,15,Lincoln,Rotation1,N2,Onion
+LincolnRot1_N2_Irr1_Ryegrass,5/05/2022,29,Lincoln,Rotation1,N2,Ryegrass
+LincolnRot1_N2_Irr1_Ryegrass,1/09/2022,20,Lincoln,Rotation1,N2,Ryegrass
+LincolnRot1_N2_Irr1_Ryegrass,29/09/2022,15,Lincoln,Rotation1,N2,Ryegrass
+LincolnRot1_N2_Irr1_Ryegrass,4/11/2022,10,Lincoln,Rotation1,N2,Ryegrass
+LincolnRot1_N3_Irr1_Wheat,24/08/2020,75,Lincoln,Rotation1,N3,Wheat
+LincolnRot1_N3_Irr1_Wheat,17/09/2020,75,Lincoln,Rotation1,N3,Wheat
+LincolnRot1_N3_Irr1_Broccoli,7/04/2021,30,Lincoln,Rotation1,N3,Broccoli
+LincolnRot1_N3_Irr1_Broccoli,4/05/2021,30,Lincoln,Rotation1,N3,Broccoli
+LincolnRot1_N3_Irr1_Onion,8/09/2021,30,Lincoln,Rotation1,N3,Onion
+LincolnRot1_N3_Irr1_Onion,10/11/2021,30,Lincoln,Rotation1,N3,Onion
+LincolnRot1_N3_Irr1_Onion,3/12/2021,30,Lincoln,Rotation1,N3,Onion
+LincolnRot1_N3_Irr1_Onion,22/12/2021,30,Lincoln,Rotation1,N3,Onion
+LincolnRot1_N3_Irr1_Ryegrass,5/05/2022,29,Lincoln,Rotation1,N3,Ryegrass
+LincolnRot1_N3_Irr1_Ryegrass,1/09/2022,40,Lincoln,Rotation1,N3,Ryegrass
+LincolnRot1_N3_Irr1_Ryegrass,29/09/2022,30,Lincoln,Rotation1,N3,Ryegrass
+LincolnRot1_N3_Irr1_Ryegrass,4/11/2022,20,Lincoln,Rotation1,N3,Ryegrass
+LincolnRot1_N4_Irr1_Wheat,24/08/2020,75,Lincoln,Rotation1,N4,Wheat
+LincolnRot1_N4_Irr1_Wheat,17/09/2020,75,Lincoln,Rotation1,N4,Wheat
+LincolnRot1_N4_Irr1_Broccoli,7/04/2021,60,Lincoln,Rotation1,N4,Broccoli
+LincolnRot1_N4_Irr1_Broccoli,4/05/2021,60,Lincoln,Rotation1,N4,Broccoli
+LincolnRot1_N4_Irr1_Onion,8/09/2021,60,Lincoln,Rotation1,N4,Onion
+LincolnRot1_N4_Irr1_Onion,10/11/2021,60,Lincoln,Rotation1,N4,Onion
+LincolnRot1_N4_Irr1_Onion,3/12/2021,60,Lincoln,Rotation1,N4,Onion
+LincolnRot1_N4_Irr1_Onion,22/12/2021,60,Lincoln,Rotation1,N4,Onion
+LincolnRot1_N4_Irr1_Ryegrass,5/05/2022,29,Lincoln,Rotation1,N4,Ryegrass
+LincolnRot1_N4_Irr1_Ryegrass,1/09/2022,80,Lincoln,Rotation1,N4,Ryegrass
+LincolnRot1_N4_Irr1_Ryegrass,29/09/2022,60,Lincoln,Rotation1,N4,Ryegrass
+LincolnRot1_N4_Irr1_Ryegrass,4/11/2022,40,Lincoln,Rotation1,N4,Ryegrass
+LincolnRot2_N1_Irr1_PakChoy,5/08/2020,40,Lincoln,Rotation2,N1,PakChoy
+LincolnRot2_N1_Irr1_PakChoy,21/12/2020,0,Lincoln,Rotation2,N1,PakChoy
+LincolnRot2_N1_Irr1_PakChoy,12/01/2021,0,Lincoln,Rotation2,N1,PakChoy
+LincolnRot2_N1_Irr1_Potato,13/12/2021,0,Lincoln,Rotation2,N1,Potato
+LincolnRot2_N1_Irr1_Potato,22/12/2021,0,Lincoln,Rotation2,N1,Potato
+LincolnRot2_N1_Irr1_Potato,7/01/2022,0,Lincoln,Rotation2,N1,Potato
+LincolnRot2_N1_Irr1_Ryegrass,12/05/2022,0,Lincoln,Rotation2,N1,Ryegrass
+LincolnRot2_N1_Irr1_Ryegrass,1/09/2022,0,Lincoln,Rotation2,N1,Ryegrass
+LincolnRot2_N1_Irr1_Ryegrass,29/09/2022,0,Lincoln,Rotation2,N1,Ryegrass
+LincolnRot2_N1_Irr1_Ryegrass,4/11/2022,0,Lincoln,Rotation2,N1,Ryegrass
+LincolnRot2_N2_Irr1_PakChoy,5/08/2020,40,Lincoln,Rotation2,N2,PakChoy
+LincolnRot2_N2_Irr1_PakChoy,21/12/2020,15,Lincoln,Rotation2,N2,PakChoy
+LincolnRot2_N2_Irr1_PakChoy,12/01/2021,15,Lincoln,Rotation2,N2,PakChoy
+LincolnRot2_N2_Irr1_Potato,13/12/2021,31,Lincoln,Rotation2,N2,Potato
+LincolnRot2_N2_Irr1_Potato,22/12/2021,31,Lincoln,Rotation2,N2,Potato
+LincolnRot2_N2_Irr1_Potato,7/01/2022,41,Lincoln,Rotation2,N2,Potato
+LincolnRot2_N2_Irr1_Ryegrass,12/05/2022,15,Lincoln,Rotation2,N2,Ryegrass
+LincolnRot2_N2_Irr1_Ryegrass,1/09/2022,20,Lincoln,Rotation2,N2,Ryegrass
+LincolnRot2_N2_Irr1_Ryegrass,29/09/2022,15,Lincoln,Rotation2,N2,Ryegrass
+LincolnRot2_N2_Irr1_Ryegrass,4/11/2022,10,Lincoln,Rotation2,N2,Ryegrass
+LincolnRot2_N3_Irr1_PakChoy,5/08/2020,40,Lincoln,Rotation2,N3,PakChoy
+LincolnRot2_N3_Irr1_PakChoy,21/12/2020,30,Lincoln,Rotation2,N3,PakChoy
+LincolnRot2_N3_Irr1_PakChoy,12/01/2021,30,Lincoln,Rotation2,N3,PakChoy
+LincolnRot2_N3_Irr1_Potato,13/12/2021,62,Lincoln,Rotation2,N3,Potato
+LincolnRot2_N3_Irr1_Potato,22/12/2021,62,Lincoln,Rotation2,N3,Potato
+LincolnRot2_N3_Irr1_Potato,7/01/2022,82,Lincoln,Rotation2,N3,Potato
+LincolnRot2_N3_Irr1_Ryegrass,12/05/2022,30,Lincoln,Rotation2,N3,Ryegrass
+LincolnRot2_N3_Irr1_Ryegrass,1/09/2022,40,Lincoln,Rotation2,N3,Ryegrass
+LincolnRot2_N3_Irr1_Ryegrass,29/09/2022,30,Lincoln,Rotation2,N3,Ryegrass
+LincolnRot2_N3_Irr1_Ryegrass,4/11/2022,20,Lincoln,Rotation2,N3,Ryegrass
+LincolnRot2_N4_Irr1_PakChoy,5/08/2020,40,Lincoln,Rotation2,N4,PakChoy
+LincolnRot2_N4_Irr1_PakChoy,21/12/2020,60,Lincoln,Rotation2,N4,PakChoy
+LincolnRot2_N4_Irr1_PakChoy,12/01/2021,80,Lincoln,Rotation2,N4,PakChoy
+LincolnRot2_N4_Irr1_Potato,13/12/2021,124,Lincoln,Rotation2,N4,Potato
+LincolnRot2_N4_Irr1_Potato,22/12/2021,124,Lincoln,Rotation2,N4,Potato
+LincolnRot2_N4_Irr1_Potato,7/01/2022,164,Lincoln,Rotation2,N4,Potato
+LincolnRot2_N4_Irr1_Ryegrass,12/05/2022,60,Lincoln,Rotation2,N4,Ryegrass
+LincolnRot2_N4_Irr1_Ryegrass,1/09/2022,80,Lincoln,Rotation2,N4,Ryegrass
+LincolnRot2_N4_Irr1_Ryegrass,29/09/2022,60,Lincoln,Rotation2,N4,Ryegrass
+LincolnRot2_N4_Irr1_Ryegrass,4/11/2022,40,Lincoln,Rotation2,N4,Ryegrass
+HawkesBayRot3_N1_Irr1_Onion,21/09/2021,0,Hawkes Bay,Rotation3,N1,Onion
+HawkesBayRot3_N1_Irr1_Onion,4/10/2021,0,Hawkes Bay,Rotation3,N1,Onion
+HawkesBayRot3_N1_Irr1_Onion,30/11/2021,0,Hawkes Bay,Rotation3,N1,Onion
+HawkesBayRot3_N1_Irr1_Onion,20/12/2021,0,Hawkes Bay,Rotation3,N1,Onion
+HawkesBayRot3_N2_Irr1_Onion,21/09/2021,15,Hawkes Bay,Rotation3,N2,Onion
+HawkesBayRot3_N2_Irr1_Onion,4/10/2021,10,Hawkes Bay,Rotation3,N2,Onion
+HawkesBayRot3_N2_Irr1_Onion,30/11/2021,20,Hawkes Bay,Rotation3,N2,Onion
+HawkesBayRot3_N2_Irr1_Onion,20/12/2021,10,Hawkes Bay,Rotation3,N2,Onion
+HawkesBayRot3_N3_Irr1_Onion,21/09/2021,30,Hawkes Bay,Rotation3,N3,Onion
+HawkesBayRot3_N3_Irr1_Onion,4/10/2021,20,Hawkes Bay,Rotation3,N3,Onion
+HawkesBayRot3_N3_Irr1_Onion,30/11/2021,40,Hawkes Bay,Rotation3,N3,Onion
+HawkesBayRot3_N3_Irr1_Onion,20/12/2021,20,Hawkes Bay,Rotation3,N3,Onion
+HawkesBayRot3_N4_Irr1_Onion,21/09/2021,60,Hawkes Bay,Rotation3,N4,Onion
+HawkesBayRot3_N4_Irr1_Onion,4/10/2021,40,Hawkes Bay,Rotation3,N4,Onion
+HawkesBayRot3_N4_Irr1_Onion,30/11/2021,80,Hawkes Bay,Rotation3,N4,Onion
+HawkesBayRot3_N4_Irr1_Onion,20/12/2021,40,Hawkes Bay,Rotation3,N4,Onion
+HawkesBayRot4_N1_Irr1_PakChoy,29/04/2021,0,Hawkes Bay,Rotation4,N1,PakChoy
+HawkesBayRot4_N1_Irr1_Lettuce,24/09/2021,0,Hawkes Bay,Rotation4,N1,Lettuce
+HawkesBayRot4_N1_Irr1_Lettuce,18/10/2021,0,Hawkes Bay,Rotation4,N1,Lettuce
+HawkesBayRot4_N1_Irr1_Cauliflower,27/05/2022,0,Hawkes Bay,Rotation4,N1,Cauliflower
+HawkesBayRot4_N1_Irr1_Cauliflower,27/06/2022,0,Hawkes Bay,Rotation4,N1,Cauliflower
+HawkesBayRot4_N1_Irr1_Cauliflower,30/06/2022,0,Hawkes Bay,Rotation4,N1,Cauliflower
+HawkesBayRot4_N1_Irr1_Cauliflower,12/09/2022,0,Hawkes Bay,Rotation4,N1,Cauliflower
+HawkesBayRot4_N2_Irr1_PakChoy,29/04/2021,15,Hawkes Bay,Rotation4,N2,PakChoy
+HawkesBayRot4_N2_Irr1_Lettuce,24/09/2021,12,Hawkes Bay,Rotation4,N2,Lettuce
+HawkesBayRot4_N2_Irr1_Lettuce,18/10/2021,6.25,Hawkes Bay,Rotation4,N2,Lettuce
+HawkesBayRot4_N2_Irr1_Cauliflower,27/05/2022,25,Hawkes Bay,Rotation4,N2,Cauliflower
+HawkesBayRot4_N2_Irr1_Cauliflower,27/06/2022,25,Hawkes Bay,Rotation4,N2,Cauliflower
+HawkesBayRot4_N2_Irr1_Cauliflower,30/06/2022,25,Hawkes Bay,Rotation4,N2,Cauliflower
+HawkesBayRot4_N2_Irr1_Cauliflower,12/09/2022,50,Hawkes Bay,Rotation4,N2,Cauliflower
+HawkesBayRot4_N3_Irr1_PakChoy,29/04/2021,30,Hawkes Bay,Rotation4,N3,PakChoy
+HawkesBayRot4_N3_Irr1_Lettuce,24/09/2021,25,Hawkes Bay,Rotation4,N3,Lettuce
+HawkesBayRot4_N3_Irr1_Lettuce,18/10/2021,12.5,Hawkes Bay,Rotation4,N3,Lettuce
+HawkesBayRot4_N3_Irr1_Cauliflower,27/05/2022,50,Hawkes Bay,Rotation4,N3,Cauliflower
+HawkesBayRot4_N3_Irr1_Cauliflower,27/06/2022,50,Hawkes Bay,Rotation4,N3,Cauliflower
+HawkesBayRot4_N3_Irr1_Cauliflower,30/06/2022,50,Hawkes Bay,Rotation4,N3,Cauliflower
+HawkesBayRot4_N3_Irr1_Cauliflower,12/09/2022,100,Hawkes Bay,Rotation4,N3,Cauliflower
+HawkesBayRot4_N4_Irr1_PakChoy,29/04/2021,60,Hawkes Bay,Rotation4,N4,PakChoy
+HawkesBayRot4_N4_Irr1_Lettuce,24/09/2021,50,Hawkes Bay,Rotation4,N4,Lettuce
+HawkesBayRot4_N4_Irr1_Lettuce,18/10/2021,25,Hawkes Bay,Rotation4,N4,Lettuce
+HawkesBayRot4_N4_Irr1_Cauliflower,27/05/2022,100,Hawkes Bay,Rotation4,N4,Cauliflower
+HawkesBayRot4_N4_Irr1_Cauliflower,27/06/2022,100,Hawkes Bay,Rotation4,N4,Cauliflower
+HawkesBayRot4_N4_Irr1_Cauliflower,30/06/2022,100,Hawkes Bay,Rotation4,N4,Cauliflower
+HawkesBayRot4_N4_Irr1_Cauliflower,12/09/2022,200,Hawkes Bay,Rotation4,N4,Cauliflower
+LincolnRot1_N1_Irr2_Wheat,24/08/2020,75,Lincoln,Rotation1,N1,Wheat
+LincolnRot1_N1_Irr2_Wheat,17/09/2020,75,Lincoln,Rotation1,N1,Wheat
+LincolnRot1_N1_Irr2_Broccoli,7/04/2021,0,Lincoln,Rotation1,N1,Broccoli
+LincolnRot1_N1_Irr2_Broccoli,4/05/2021,0,Lincoln,Rotation1,N1,Broccoli
+LincolnRot1_N1_Irr2_Onion,8/09/2021,0,Lincoln,Rotation1,N1,Onion
+LincolnRot1_N1_Irr2_Onion,10/11/2021,0,Lincoln,Rotation1,N1,Onion
+LincolnRot1_N1_Irr2_Onion,3/12/2021,0,Lincoln,Rotation1,N1,Onion
+LincolnRot1_N1_Irr2_Onion,22/12/2021,0,Lincoln,Rotation1,N1,Onion
+LincolnRot1_N1_Irr2_Ryegrass,5/05/2022,29,Lincoln,Rotation1,N1,Ryegrass
+LincolnRot1_N2_Irr2_Wheat,24/08/2020,75,Lincoln,Rotation1,N2,Wheat
+LincolnRot1_N2_Irr2_Wheat,17/09/2020,75,Lincoln,Rotation1,N2,Wheat
+LincolnRot1_N2_Irr2_Broccoli,7/04/2021,15,Lincoln,Rotation1,N2,Broccoli
+LincolnRot1_N2_Irr2_Broccoli,4/05/2021,15,Lincoln,Rotation1,N2,Broccoli
+LincolnRot1_N2_Irr2_Onion,8/09/2021,15,Lincoln,Rotation1,N2,Onion
+LincolnRot1_N2_Irr2_Onion,10/11/2021,15,Lincoln,Rotation1,N2,Onion
+LincolnRot1_N2_Irr2_Onion,3/12/2021,15,Lincoln,Rotation1,N2,Onion
+LincolnRot1_N2_Irr2_Onion,22/12/2021,15,Lincoln,Rotation1,N2,Onion
+LincolnRot1_N2_Irr2_Ryegrass,5/05/2022,29,Lincoln,Rotation1,N2,Ryegrass
+LincolnRot1_N2_Irr2_Ryegrass,1/09/2022,20,Lincoln,Rotation1,N2,Ryegrass
+LincolnRot1_N2_Irr2_Ryegrass,29/09/2022,15,Lincoln,Rotation1,N2,Ryegrass
+LincolnRot1_N2_Irr2_Ryegrass,4/11/2022,10,Lincoln,Rotation1,N2,Ryegrass
+LincolnRot1_N3_Irr2_Wheat,24/08/2020,75,Lincoln,Rotation1,N3,Wheat
+LincolnRot1_N3_Irr2_Wheat,17/09/2020,75,Lincoln,Rotation1,N3,Wheat
+LincolnRot1_N3_Irr2_Broccoli,7/04/2021,30,Lincoln,Rotation1,N3,Broccoli
+LincolnRot1_N3_Irr2_Broccoli,4/05/2021,30,Lincoln,Rotation1,N3,Broccoli
+LincolnRot1_N3_Irr2_Onion,8/09/2021,30,Lincoln,Rotation1,N3,Onion
+LincolnRot1_N3_Irr2_Onion,10/11/2021,30,Lincoln,Rotation1,N3,Onion
+LincolnRot1_N3_Irr2_Onion,3/12/2021,30,Lincoln,Rotation1,N3,Onion
+LincolnRot1_N3_Irr2_Onion,22/12/2021,30,Lincoln,Rotation1,N3,Onion
+LincolnRot1_N3_Irr2_Ryegrass,5/05/2022,29,Lincoln,Rotation1,N3,Ryegrass
+LincolnRot1_N3_Irr2_Ryegrass,1/09/2022,40,Lincoln,Rotation1,N3,Ryegrass
+LincolnRot1_N3_Irr2_Ryegrass,29/09/2022,30,Lincoln,Rotation1,N3,Ryegrass
+LincolnRot1_N3_Irr2_Ryegrass,4/11/2022,20,Lincoln,Rotation1,N3,Ryegrass
+LincolnRot1_N4_Irr2_Wheat,24/08/2020,75,Lincoln,Rotation1,N4,Wheat
+LincolnRot1_N4_Irr2_Wheat,17/09/2020,75,Lincoln,Rotation1,N4,Wheat
+LincolnRot1_N4_Irr2_Broccoli,7/04/2021,60,Lincoln,Rotation1,N4,Broccoli
+LincolnRot1_N4_Irr2_Broccoli,4/05/2021,60,Lincoln,Rotation1,N4,Broccoli
+LincolnRot1_N4_Irr2_Onion,8/09/2021,60,Lincoln,Rotation1,N4,Onion
+LincolnRot1_N4_Irr2_Onion,10/11/2021,60,Lincoln,Rotation1,N4,Onion
+LincolnRot1_N4_Irr2_Onion,3/12/2021,60,Lincoln,Rotation1,N4,Onion
+LincolnRot1_N4_Irr2_Onion,22/12/2021,60,Lincoln,Rotation1,N4,Onion
+LincolnRot1_N4_Irr2_Ryegrass,5/05/2022,29,Lincoln,Rotation1,N4,Ryegrass
+LincolnRot1_N4_Irr2_Ryegrass,1/09/2022,80,Lincoln,Rotation1,N4,Ryegrass
+LincolnRot1_N4_Irr2_Ryegrass,29/09/2022,60,Lincoln,Rotation1,N4,Ryegrass
+LincolnRot1_N4_Irr2_Ryegrass,4/11/2022,40,Lincoln,Rotation1,N4,Ryegrass
+LincolnRot2_N1_Irr2_PakChoy,5/08/2020,40,Lincoln,Rotation2,N1,PakChoy
+LincolnRot2_N1_Irr2_PakChoy,21/12/2020,0,Lincoln,Rotation2,N1,PakChoy
+LincolnRot2_N1_Irr2_PakChoy,12/01/2021,0,Lincoln,Rotation2,N1,PakChoy
+LincolnRot2_N1_Irr2_Potato,13/12/2021,0,Lincoln,Rotation2,N1,Potato
+LincolnRot2_N1_Irr2_Potato,22/12/2021,0,Lincoln,Rotation2,N1,Potato
+LincolnRot2_N1_Irr2_Potato,7/01/2022,0,Lincoln,Rotation2,N1,Potato
+LincolnRot2_N1_Irr2_Ryegrass,12/05/2022,0,Lincoln,Rotation2,N1,Ryegrass
+LincolnRot2_N1_Irr2_Ryegrass,1/09/2022,0,Lincoln,Rotation2,N1,Ryegrass
+LincolnRot2_N1_Irr2_Ryegrass,29/09/2022,0,Lincoln,Rotation2,N1,Ryegrass
+LincolnRot2_N1_Irr2_Ryegrass,4/11/2022,0,Lincoln,Rotation2,N1,Ryegrass
+LincolnRot2_N2_Irr2_PakChoy,5/08/2020,40,Lincoln,Rotation2,N2,PakChoy
+LincolnRot2_N2_Irr2_PakChoy,21/12/2020,15,Lincoln,Rotation2,N2,PakChoy
+LincolnRot2_N2_Irr2_PakChoy,12/01/2021,15,Lincoln,Rotation2,N2,PakChoy
+LincolnRot2_N2_Irr2_Potato,13/12/2021,31,Lincoln,Rotation2,N2,Potato
+LincolnRot2_N2_Irr2_Potato,22/12/2021,31,Lincoln,Rotation2,N2,Potato
+LincolnRot2_N2_Irr2_Potato,7/01/2022,41,Lincoln,Rotation2,N2,Potato
+LincolnRot2_N2_Irr2_Ryegrass,12/05/2022,15,Lincoln,Rotation2,N2,Ryegrass
+LincolnRot2_N2_Irr2_Ryegrass,1/09/2022,20,Lincoln,Rotation2,N2,Ryegrass
+LincolnRot2_N2_Irr2_Ryegrass,29/09/2022,15,Lincoln,Rotation2,N2,Ryegrass
+LincolnRot2_N2_Irr2_Ryegrass,4/11/2022,10,Lincoln,Rotation2,N2,Ryegrass
+LincolnRot2_N3_Irr2_PakChoy,5/08/2020,40,Lincoln,Rotation2,N3,PakChoy
+LincolnRot2_N3_Irr2_PakChoy,21/12/2020,30,Lincoln,Rotation2,N3,PakChoy
+LincolnRot2_N3_Irr2_PakChoy,12/01/2021,30,Lincoln,Rotation2,N3,PakChoy
+LincolnRot2_N3_Irr2_Potato,13/12/2021,62,Lincoln,Rotation2,N3,Potato
+LincolnRot2_N3_Irr2_Potato,22/12/2021,62,Lincoln,Rotation2,N3,Potato
+LincolnRot2_N3_Irr2_Potato,7/01/2022,82,Lincoln,Rotation2,N3,Potato
+LincolnRot2_N3_Irr2_Ryegrass,12/05/2022,30,Lincoln,Rotation2,N3,Ryegrass
+LincolnRot2_N3_Irr2_Ryegrass,1/09/2022,40,Lincoln,Rotation2,N3,Ryegrass
+LincolnRot2_N3_Irr2_Ryegrass,29/09/2022,30,Lincoln,Rotation2,N3,Ryegrass
+LincolnRot2_N3_Irr2_Ryegrass,4/11/2022,20,Lincoln,Rotation2,N3,Ryegrass
+LincolnRot2_N4_Irr2_PakChoy,5/08/2020,40,Lincoln,Rotation2,N4,PakChoy
+LincolnRot2_N4_Irr2_PakChoy,21/12/2020,60,Lincoln,Rotation2,N4,PakChoy
+LincolnRot2_N4_Irr2_PakChoy,12/01/2021,80,Lincoln,Rotation2,N4,PakChoy
+LincolnRot2_N4_Irr2_Potato,13/12/2021,124,Lincoln,Rotation2,N4,Potato
+LincolnRot2_N4_Irr2_Potato,22/12/2021,124,Lincoln,Rotation2,N4,Potato
+LincolnRot2_N4_Irr2_Potato,7/01/2022,164,Lincoln,Rotation2,N4,Potato
+LincolnRot2_N4_Irr2_Ryegrass,12/05/2022,60,Lincoln,Rotation2,N4,Ryegrass
+LincolnRot2_N4_Irr2_Ryegrass,1/09/2022,80,Lincoln,Rotation2,N4,Ryegrass
+LincolnRot2_N4_Irr2_Ryegrass,29/09/2022,60,Lincoln,Rotation2,N4,Ryegrass
+LincolnRot2_N4_Irr2_Ryegrass,4/11/2022,40,Lincoln,Rotation2,N4,Ryegrass
+HawkesBayRot3_N1_Irr2_Onion,21/09/2021,0,Hawkes Bay,Rotation3,N1,Onion
+HawkesBayRot3_N1_Irr2_Onion,4/10/2021,0,Hawkes Bay,Rotation3,N1,Onion
+HawkesBayRot3_N1_Irr2_Onion,30/11/2021,0,Hawkes Bay,Rotation3,N1,Onion
+HawkesBayRot3_N1_Irr2_Onion,20/12/2021,0,Hawkes Bay,Rotation3,N1,Onion
+HawkesBayRot3_N2_Irr2_Onion,21/09/2021,15,Hawkes Bay,Rotation3,N2,Onion
+HawkesBayRot3_N2_Irr2_Onion,4/10/2021,10,Hawkes Bay,Rotation3,N2,Onion
+HawkesBayRot3_N2_Irr2_Onion,30/11/2021,20,Hawkes Bay,Rotation3,N2,Onion
+HawkesBayRot3_N2_Irr2_Onion,20/12/2021,10,Hawkes Bay,Rotation3,N2,Onion
+HawkesBayRot3_N3_Irr2_Onion,21/09/2021,30,Hawkes Bay,Rotation3,N3,Onion
+HawkesBayRot3_N3_Irr2_Onion,4/10/2021,20,Hawkes Bay,Rotation3,N3,Onion
+HawkesBayRot3_N3_Irr2_Onion,30/11/2021,40,Hawkes Bay,Rotation3,N3,Onion
+HawkesBayRot3_N3_Irr2_Onion,20/12/2021,20,Hawkes Bay,Rotation3,N3,Onion
+HawkesBayRot3_N4_Irr2_Onion,21/09/2021,60,Hawkes Bay,Rotation3,N4,Onion
+HawkesBayRot3_N4_Irr2_Onion,4/10/2021,40,Hawkes Bay,Rotation3,N4,Onion
+HawkesBayRot3_N4_Irr2_Onion,30/11/2021,80,Hawkes Bay,Rotation3,N4,Onion
+HawkesBayRot3_N4_Irr2_Onion,20/12/2021,40,Hawkes Bay,Rotation3,N4,Onion
+HawkesBayRot4_N1_Irr2_PakChoy,29/04/2021,0,Hawkes Bay,Rotation4,N1,PakChoy
+HawkesBayRot4_N1_Irr2_Lettuce,24/09/2021,0,Hawkes Bay,Rotation4,N1,Lettuce
+HawkesBayRot4_N1_Irr2_Lettuce,18/10/2021,0,Hawkes Bay,Rotation4,N1,Lettuce
+HawkesBayRot4_N1_Irr2_Cauliflower,27/05/2022,0,Hawkes Bay,Rotation4,N1,Cauliflower
+HawkesBayRot4_N1_Irr2_Cauliflower,27/06/2022,0,Hawkes Bay,Rotation4,N1,Cauliflower
+HawkesBayRot4_N1_Irr2_Cauliflower,30/06/2022,0,Hawkes Bay,Rotation4,N1,Cauliflower
+HawkesBayRot4_N1_Irr2_Cauliflower,12/09/2022,0,Hawkes Bay,Rotation4,N1,Cauliflower
+HawkesBayRot4_N2_Irr2_PakChoy,29/04/2021,15,Hawkes Bay,Rotation4,N2,PakChoy
+HawkesBayRot4_N2_Irr2_Lettuce,24/09/2021,12,Hawkes Bay,Rotation4,N2,Lettuce
+HawkesBayRot4_N2_Irr2_Lettuce,18/10/2021,6.25,Hawkes Bay,Rotation4,N2,Lettuce
+HawkesBayRot4_N2_Irr2_Cauliflower,27/05/2022,25,Hawkes Bay,Rotation4,N2,Cauliflower
+HawkesBayRot4_N2_Irr2_Cauliflower,27/06/2022,25,Hawkes Bay,Rotation4,N2,Cauliflower
+HawkesBayRot4_N2_Irr2_Cauliflower,30/06/2022,25,Hawkes Bay,Rotation4,N2,Cauliflower
+HawkesBayRot4_N2_Irr2_Cauliflower,12/09/2022,50,Hawkes Bay,Rotation4,N2,Cauliflower
+HawkesBayRot4_N3_Irr2_PakChoy,29/04/2021,30,Hawkes Bay,Rotation4,N3,PakChoy
+HawkesBayRot4_N3_Irr2_Lettuce,24/09/2021,25,Hawkes Bay,Rotation4,N3,Lettuce
+HawkesBayRot4_N3_Irr2_Lettuce,18/10/2021,12.5,Hawkes Bay,Rotation4,N3,Lettuce
+HawkesBayRot4_N3_Irr2_Cauliflower,27/05/2022,50,Hawkes Bay,Rotation4,N3,Cauliflower
+HawkesBayRot4_N3_Irr2_Cauliflower,27/06/2022,50,Hawkes Bay,Rotation4,N3,Cauliflower
+HawkesBayRot4_N3_Irr2_Cauliflower,30/06/2022,50,Hawkes Bay,Rotation4,N3,Cauliflower
+HawkesBayRot4_N3_Irr2_Cauliflower,12/09/2022,100,Hawkes Bay,Rotation4,N3,Cauliflower
+HawkesBayRot4_N4_Irr2_PakChoy,29/04/2021,60,Hawkes Bay,Rotation4,N4,PakChoy
+HawkesBayRot4_N4_Irr2_Lettuce,24/09/2021,50,Hawkes Bay,Rotation4,N4,Lettuce
+HawkesBayRot4_N4_Irr2_Lettuce,18/10/2021,25,Hawkes Bay,Rotation4,N4,Lettuce
+HawkesBayRot4_N4_Irr2_Cauliflower,27/05/2022,100,Hawkes Bay,Rotation4,N4,Cauliflower
+HawkesBayRot4_N4_Irr2_Cauliflower,27/06/2022,100,Hawkes Bay,Rotation4,N4,Cauliflower
+HawkesBayRot4_N4_Irr2_Cauliflower,30/06/2022,100,Hawkes Bay,Rotation4,N4,Cauliflower
+HawkesBayRot4_N4_Irr2_Cauliflower,12/09/2022,200,Hawkes Bay,Rotation4,N4,Cauliflower
