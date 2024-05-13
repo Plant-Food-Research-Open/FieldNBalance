@@ -46,7 +46,7 @@ namespace TestModel
             }
 
 
-            List<string> sets = new List<string> {"WS1", "WS2", "Residues", "Location", "Moisture", "Losses" };
+            List<string> sets = new List<string> { "WS1" };// { "WS1", "WS2", "Residues", "Location", "Moisture", "Losses" };
 
             //Delete graphs from previous test run
             string graphFolder = Path.Join(Directory.GetCurrentDirectory(), "TestGraphs", "Outputs");
@@ -257,13 +257,9 @@ namespace TestModel
         private static Dictionary<System.DateTime, double> fertDict(string test, DataFrame allFert)
         {
             Dictionary<System.DateTime, double> fert = new Dictionary<System.DateTime, double>();
-            string site = Regex.Replace(test, "[^0-9]", "");
-            if (site.Length > 1)
-                site = test;
-
             foreach (DataFrameRow row in allFert.Rows)
             {
-                if (row[0].ToString() == site) //if this date row holds data for current site
+                if (row[0].ToString() == test) //if this date row holds data for current site
                 {
 
                     //DateTime date = DateTime.ParseExact(
