@@ -161,6 +161,7 @@ namespace SVSModel.Simulation
         public Dictionary<DateTime, double> NFertiliser;
         public Dictionary<DateTime, double> SoilN;
         public Dictionary<DateTime, double> ExportN;
+        public Dictionary<DateTime, double> CropShortageN;
         public CropNBalanceSummary CurrentNBalanceSummary;
 
         public SimulationType(DateTime[] _simDates, Config _config,
@@ -187,6 +188,7 @@ namespace SVSModel.Simulation
             NFertiliser = Functions.dictMaker(simDates, new double[simDates.Length]);
             SoilN = Functions.dictMaker(simDates, new double[simDates.Length]);
             ExportN = Functions.dictMaker(simDates, new double[simDates.Length]);
+            CropShortageN = Functions.dictMaker(simDates, new double[simDates.Length]);
         }
     }
 

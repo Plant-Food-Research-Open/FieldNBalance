@@ -72,10 +72,11 @@ namespace SVSModel.Models
                 {
                     thisSim.SoilN[d] += thisSim.NResidues[d];
                     thisSim.SoilN[d] += thisSim.NSoilOM[d];
-                    double actualUptake = thisSim.NUptake[d];//Math.Min(thisSim.NUptake[d], thisSim.SoilN[d]*.1);
-                                                             //double Nshortage = thisSim.NUptake[d] - actualUptake;
-                                                             //if (Nshortage < 0)
-                                                             //    Crop.ConstrainNUptake(ref thisSim, Nshortage,d);
+                    double actualUptake = Math.Min(thisSim.NUptake[d], thisSim.SoilN[d]*.2);
+                    double Nshortage = thisSim.NUptake[d] - actualUptake;
+                    if (Nshortage > 0)
+                        Crop.ConstrainNUptake(ref thisSim, Nshortage,d);
+                    thisSim.CropShortageN[d] = Nshortage;
                     thisSim.SoilN[d] -= actualUptake;
                 }
 

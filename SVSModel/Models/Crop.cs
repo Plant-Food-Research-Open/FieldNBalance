@@ -145,17 +145,16 @@ namespace SVSModel
         public static void ConstrainNUptake(ref SimulationType thisSim, double nShortage, DateTime shortageDate)
          {
             CropConfig current = null;
-            if ((shortageDate >= thisSim.config.Current.EstablishDate) && (shortageDate < thisSim.config.Current.HarvestDate))
+            if ((shortageDate >= thisSim.config.Current.EstablishDate) && (shortageDate <= thisSim.config.Current.HarvestDate))
                 current = thisSim.config.Current;
-            else if ((shortageDate >= thisSim.config.Following.EstablishDate) && (shortageDate < thisSim.config.Following.HarvestDate))
+            else if ((shortageDate >= thisSim.config.Following.EstablishDate) && (shortageDate <= thisSim.config.Following.HarvestDate))
                 current = thisSim.config.Following;
-
+            thisSim.NUptake[shortageDate] -= nShortage;
+            thisSim.ExportN[current.HarvestDate.AddDays(1)] -= nShortage;
             DateTime[] constrainDates = Functions.DateSeries(shortageDate, current.HarvestDate);
             foreach (DateTime d in constrainDates)
             {
                 thisSim.CropN[d] -= nShortage;
-                thisSim.NUptake[d] -= nShortage;
-                    
             }
             current.ResRoot -= nShortage * current.SimResults.nHIRoot;
             current.ResStover -= nShortage * current.SimResults.nHIStover; ;
