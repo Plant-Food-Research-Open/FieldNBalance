@@ -243,3 +243,21 @@ for s in sites:
             #plt.legend()
     Graph.tight_layout(pad=1.5)
     plt.savefig(os.path.join(outPath, "WS1_"+s+"TimeCourse.png"))
+
+CheckData = AllData.loc[:,'LincolnRot1_N2_Irr1_Broccoli'].dropna()
+
+CheckData.columns
+
+Graph = plt.figure(figsize=(5,15))
+ax = Graph.add_subplot(6,1,1)
+CheckData.SoilMineralN.plot(title='SoilN')
+ax = Graph.add_subplot(6,1,2)
+CheckData.UptakeN.cumsum().plot(title='Uptake')
+ax = Graph.add_subplot(6,1,3)
+CheckData.ResidueN.cumsum().plot(title='ResidueN')
+ax = Graph.add_subplot(6,1,4)
+CheckData.LostN.cumsum().plot(title='LostN')
+ax = Graph.add_subplot(6,1,5)
+CheckData.SoilOMN.cumsum().plot(title='SOM')
+ax = Graph.add_subplot(6,1,6)
+CheckData.FertiliserN.cumsum().plot(title='Fert')
