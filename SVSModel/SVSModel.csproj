@@ -36,6 +36,7 @@
 		<None Remove="Data\Met\lauder.csv" />
 		<None Remove="Data\Met\levin.csv" />
 		<None Remove="Data\Met\lincoln.csv" />
+		<None Remove="Data\Met\LincolnActual.csv" />
 		<None Remove="Data\Met\lumsden.csv" />
 		<None Remove="Data\Met\manukau.csv" />
 		<None Remove="Data\Met\martinborough.csv" />
@@ -87,6 +88,7 @@
 		<EmbeddedResource Include="Data\Met\lauder.csv" />
 		<EmbeddedResource Include="Data\Met\levin.csv" />
 		<EmbeddedResource Include="Data\Met\lincoln.csv" />
+		<EmbeddedResource Include="Data\Met\LincolnActual.csv" />
 		<EmbeddedResource Include="Data\Met\lumsden.csv" />
 		<EmbeddedResource Include="Data\Met\manukau.csv" />
 		<EmbeddedResource Include="Data\Met\martinborough.csv" />
