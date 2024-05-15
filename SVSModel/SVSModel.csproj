@@ -29,6 +29,7 @@
 		<None Remove="Data\Met\gore.csv" />
 		<None Remove="Data\Met\hamilton.csv" />
 		<None Remove="Data\Met\hastings.csv" />
+		<None Remove="Data\Met\HastingsActual.csv" />
 		<None Remove="Data\Met\hokitika.csv" />
 		<None Remove="Data\Met\invercargill.csv" />
 		<None Remove="Data\Met\kaitaia.csv" />
@@ -81,6 +82,7 @@
 		<EmbeddedResource Include="Data\Met\gore.csv" />
 		<EmbeddedResource Include="Data\Met\hamilton.csv" />
 		<EmbeddedResource Include="Data\Met\hastings.csv" />
+		<EmbeddedResource Include="Data\Met\HastingsActual.csv" />
 		<EmbeddedResource Include="Data\Met\hokitika.csv" />
 		<EmbeddedResource Include="Data\Met\invercargill.csv" />
 		<EmbeddedResource Include="Data\Met\kaitaia.csv" />
