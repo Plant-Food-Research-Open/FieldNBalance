@@ -113,7 +113,9 @@ namespace TestModel
 
                 string weatherStation = allTests["WeatherStation"][testRow].ToString();
 
-                MetDataDictionaries metData = ModelInterface.BuildMetDataDictionaries(_config.Prior.EstablishDate, _config.Following.HarvestDate.AddDays(1), weatherStation);
+                bool actualWeather = weatherStation.Contains("Actual");
+
+                MetDataDictionaries metData = ModelInterface.BuildMetDataDictionaries(_config.Prior.EstablishDate, _config.Following.HarvestDate.AddDays(1), weatherStation, actualWeather);
 
                 object[,] output = Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, _config);
 
