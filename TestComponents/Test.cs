@@ -101,6 +101,7 @@ namespace TestModel
             {
                 Tests.Add(row[0].ToString());
             }
+            //Tests.Add("LincolnRot2_N4_Irr2_PakChoi");
 
             foreach (string test in Tests)
             {
@@ -119,7 +120,7 @@ namespace TestModel
 
                 object[,] output = Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, _config);
 
-                DataFrameColumn[] columns = new DataFrameColumn[13];
+                DataFrameColumn[] columns = new DataFrameColumn[14];
                 List<string> OutPutHeaders = new List<string>();
                 for (int i = 0; i < output.GetLength(1); i += 1)
                 {
