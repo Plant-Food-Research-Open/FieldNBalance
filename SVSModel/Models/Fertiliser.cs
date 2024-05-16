@@ -76,7 +76,7 @@ namespace SVSModel.Models
                             double lastPassLossEst = losses;
                             double remainingReqN = remainingRequirement(d, endScheduleDate, thisSim) + losses;
                             NAppn = remainingReqN / remainingSplits;
-                            SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true);
+                            SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true, new Dictionary<DateTime, double>());
                             losses = anticipatedLosses(d, endScheduleDate, thisSim.NLost);
                             double lossChange = losses - lastPassLossEst;
                             if (lossChange < 0.1)
@@ -130,8 +130,8 @@ namespace SVSModel.Models
             {
                 if (appliedN.ContainsKey(d))
                 {
-                    thisSim.NFertiliser[d] = appliedN[d];
-                    SoilNitrogen.UpdateBalance(d, appliedN[d], thisSim.SoilN[d], thisSim.NLost[d],ref thisSim, true); 
+                    //thisSim.NFertiliser[d] = appliedN[d];
+                    //SoilNitrogen.UpdateBalance(d, appliedN[d], thisSim.SoilN[d], thisSim.NLost[d],ref thisSim, true); 
                 }
             }
         }

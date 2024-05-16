@@ -210,6 +210,7 @@ namespace SVSModel
         public Dictionary<DateTime, double> CropUptakeN;
         public Dictionary<DateTime, double> Cover;
         public Dictionary<DateTime, double> RootDepth;
+        public Dictionary<DateTime, double> TotalNDemand;
 
     }
 }

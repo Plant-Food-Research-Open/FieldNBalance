@@ -52,7 +52,7 @@ namespace SVSModel.Models
         /// <param name="residue">series of mineral N released daily to the soil from residue mineralisation</param>
         /// <param name="som">series of mineral N released daily to the soil from organic matter</param>
         /// <returns>date indexed series of estimated soil mineral N content</returns>
-        public static void UpdateBalance(DateTime updateDate, double dResetN, double preSetSoilN, double lossAlreadyCountedPriorToSet, ref SimulationType thisSim, bool IsSet)
+        public static void UpdateBalance(DateTime updateDate, double dResetN, double preSetSoilN, double lossAlreadyCountedPriorToSet, ref SimulationType thisSim, bool IsSet, Dictionary<DateTime, double> nAapplied)
         {
 
             thisSim.SoilN[updateDate] = preSetSoilN; //Fertiliser iterates through this multiple times so need to set start soil N back to value at start of itterations
@@ -72,6 +72,12 @@ namespace SVSModel.Models
                 {
                     thisSim.SoilN[d] += thisSim.NResidues[d];
                     thisSim.SoilN[d] += thisSim.NSoilOM[d];
+                    if (nAapplied.ContainsKey(d))
+                    {
+                        thisSim.NFertiliser[d] = nAapplied[d];
+                        thisSim.SoilN[d] += nAapplied[d];
+                    }
+
                     double actualUptake = Math.Min(thisSim.NUptake[d], thisSim.SoilN[d]*.2);
                     double Nshortage = thisSim.NUptake[d] - actualUptake;
                     if (Nshortage > 0)
@@ -94,7 +100,8 @@ namespace SVSModel.Models
                                                finalMinearlN: thisSim.SoilN[d],
                                                standingCropN: thisSim.CropN[d],
                                                dExportN: thisSim.ExportN[d],
-                                               dLostN: thisSim.NLost[d]);
+                                               dLostN: thisSim.NLost[d],
+                                               dFertiliserN: thisSim.NFertiliser[d]);
                 lossAlreadyCountedPriorToSet = 0; //Only discount losses already counted on day of reset
                 dResetN = 0; // Reset N only a non zero number on the set day otherwise zero
                 IsSet = false; // IsSet only true on the day the set is actioned, needs to be false so full balance is done every other day
@@ -113,7 +120,7 @@ namespace SVSModel.Models
             foreach (DateTime d in testResults.Keys)
             {
                 double dCorrection = testResults[d] - thisSim.SoilN[d];
-                SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d] - thisSim.NFertiliser[d], thisSim.NLost[d], ref thisSim, true); //need to take out fertiliser if fert applied on same day as test so it doesn't break balance check test
+                SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d] - thisSim.NFertiliser[d], thisSim.NLost[d], ref thisSim, true, new Dictionary<DateTime, double>()); //need to take out fertiliser if fert applied on same day as test so it doesn't break balance check test
             }
         }
     }
@@ -125,7 +132,7 @@ namespace SVSModel.Models
         {
             get
             {
-                return initialN + initialStandingCropN + dTransplantN + dResidueN + dSOMN + dResetN;
+                return initialN + initialStandingCropN + dTransplantN + dResidueN + dSOMN + dResetN + dFertiliserN;
             }
         }
         private double initialN { get; set; }
@@ -134,6 +141,7 @@ namespace SVSModel.Models
         private double dResidueN { get; set; }
         private double dSOMN { get; set; }
         private double dResetN { get; set; }
+        private double dFertiliserN { get; set; }
 
 
         /// Out
@@ -159,7 +167,7 @@ namespace SVSModel.Models
         
         public CheckNBalance() { }
         public CheckNBalance(double initSoilN, double initStandingCropN, double dtransPlantN, double dResidueN, double dSOMN, double dResetN,
-                             double finalMinearlN, double standingCropN, double dExportN,  double dLostN)
+                             double finalMinearlN, double standingCropN, double dExportN,  double dLostN, double dFertiliserN)
         {
             this.initialN = initSoilN;
             this.initialStandingCropN = initStandingCropN;
@@ -171,6 +179,7 @@ namespace SVSModel.Models
             this.standingCropN = standingCropN; 
             this.dExportN = dExportN;
             this.dLostN = dLostN;
+            this.dFertiliserN = dFertiliserN;
 
             doCheck();
         }
