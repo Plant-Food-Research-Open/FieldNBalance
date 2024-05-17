@@ -249,11 +249,9 @@ NbalComponents = ['SoilMineralN', 'UptakeN', 'ResidueN', 'SoilOMN', 'FertiliserN
 accumulate = [False,True,True,True,True,False,False,True]
 toAccumulate = dict(zip(NbalComponents,accumulate))
 
-sim
-
-rot = 'LincolnRot2_N'
+rot = 'HawkesBayRot3_N'
 irr = '_Irr2_'
-crop = 'PakChoi'
+crop = 'Ryegrass'
 Graph = plt.figure(figsize=(5,15))
 pos = 1
 for nbc in NbalComponents:
@@ -265,6 +263,7 @@ for nbc in NbalComponents:
         if toAccumulate[nbc] == True:
             CheckData = AllData.loc[:,sim].dropna().cumsum()
         plt.plot(CheckData.loc[:,nbc],'-')
+        plt.text(0.05,0.95,nbc,transform=ax.transAxes)
     pos +=1
 # ax = Graph.add_subplot(6,1,2)
 # CheckData.UptakeN.cumsum().plot(title='Uptake')
