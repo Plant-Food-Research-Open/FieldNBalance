@@ -70,20 +70,41 @@ namespace SVSModel.Models
 
                 if (IsSet == false)
                 {
-                    thisSim.SoilN[d] += thisSim.NResidues[d];
-                    thisSim.SoilN[d] += thisSim.NSoilOM[d];
+                    thisSim.SoilN[d] += thisSim.NSoilOM[d]; //add Som mineralisation
                     if (nAapplied.ContainsKey(d))
                     {
                         thisSim.NFertiliser[d] = nAapplied[d];
-                        thisSim.SoilN[d] += nAapplied[d];
+                        thisSim.SoilN[d] += nAapplied[d];  //add fertiliser
                     }
-
-                    double actualUptake = Math.Min(thisSim.NUptake[d], thisSim.SoilN[d]*.2);
-                    double Nshortage = thisSim.NUptake[d] - actualUptake;
-                    if (Nshortage > 0)
-                        Crop.ConstrainNUptake(ref thisSim, Nshortage,d);
-                    thisSim.CropShortageN[d] = Nshortage;
-                    thisSim.SoilN[d] -= actualUptake;
+                    double availableN = thisSim.SoilN[d] * .2; //20% of soil N can be used in a day
+                    double potentialImobilisation = Math.Max(0, thisSim.NResidues[d] * -1); //if NResidues is negative imobilisatin is happening 
+                    if (potentialImobilisation == 0)
+                    {
+                        thisSim.SoilN[d] += thisSim.NResidues[d]; // If imobilisation not happening add mineralisation from residues to soil
+                        availableN = thisSim.SoilN[d] * .2;  //and recalculate available soil N to account for residue mineralisation 
+                    }
+                    double potentialCropUptake = thisSim.NUptake[d];
+                    double potentialUptake = potentialCropUptake + potentialImobilisation;
+                    double actualCropUptake = potentialCropUptake;  //Start with uptake at potential and revise down if shortage
+                    double actualImobilisation = potentialImobilisation; //Start with uptake at potential and revise down if shortage
+                    if (potentialUptake > availableN) //Is there a shortage
+                    {
+                        double propnCropPotUptake = potentialCropUptake / potentialUptake;  //What proportion of the limited N will the crop get based on its relative demand
+                        actualCropUptake = availableN * propnCropPotUptake;
+                        double CropNshortage = potentialCropUptake - actualCropUptake;
+                        thisSim.CropShortageN[d] = CropNshortage;
+                        if (CropNshortage > 0)
+                        {
+                            Crop.ConstrainNUptake(ref thisSim, CropNshortage, d); //Reduce Crop uptake below potential
+                        }
+                        actualImobilisation = availableN * (1 - propnCropPotUptake);  //What proporiton of the limited N will residue imobilisation get based on its relative demand
+                        if (actualImobilisation > 0)
+                        {
+                            thisSim.NResidues[d] = -actualImobilisation; //Reduce imobilisation below potential
+                        }
+                    }
+                    thisSim.SoilN[d] -= actualCropUptake;  //Remove actual crop uptake from soil
+                    thisSim.SoilN[d] -= actualImobilisation; //Remove actual imobilisaiton from soil.  This will be zero if mineralisation is occuring.
                 }
 
                 double newLossEstimate = Losses.DailyLoss(d, thisSim);
