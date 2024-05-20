@@ -27,8 +27,10 @@ namespace SVSModel.Simulation
                                                       Dictionary<DateTime, double> meanRain,
                                                       Dictionary<DateTime, double> meanPET,
                                                       Dictionary<DateTime, double> testResults,
-                                                       Dictionary<DateTime, double> nAapplied,
-                                                      Config config)
+                                                      Dictionary<DateTime, double> nAapplied,
+                                                      Config config,
+                                                      double initialN,
+                                                      bool ScheduleFert = true)
         {
 
 
@@ -83,7 +85,7 @@ namespace SVSModel.Simulation
             SoilOrganic.Mineralisation(ref thisSim);
 
             //Do initial nitorgen balance with no fertiliser or resets
-            SoilNitrogen.UpdateBalance(config.StartDate, Constants.InitialN, 0, 0, ref thisSim, false, nAapplied);
+            SoilNitrogen.UpdateBalance(config.StartDate, initialN, 0, 0, ref thisSim, false, nAapplied, ScheduleFert);
 
             //Add fertiliser that has already been applied to the N balance
             //DateTime StartApplicationDate = config.StartDate;
