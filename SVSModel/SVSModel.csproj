@@ -18,6 +18,7 @@
 		<None Remove="Data\CropCoefficientTableFull.csv" />
 		<None Remove="Data\LossCoefficientTable.csv" />
 		<None Remove="Data\Met\ashburton.csv" />
+		<None Remove="Data\Met\AshburtonActual.csv" />
 		<None Remove="Data\Met\balclutha.csv" />
 		<None Remove="Data\Met\blenheim.csv" />
 		<None Remove="Data\Met\christchurch.csv" />
@@ -36,6 +37,7 @@
 		<None Remove="Data\Met\kerikeri.csv" />
 		<None Remove="Data\Met\lauder.csv" />
 		<None Remove="Data\Met\levin.csv" />
+		<None Remove="Data\Met\LevinActual.csv" />
 		<None Remove="Data\Met\lincoln.csv" />
 		<None Remove="Data\Met\LincolnActual.csv" />
 		<None Remove="Data\Met\lumsden.csv" />
@@ -43,9 +45,11 @@
 		<None Remove="Data\Met\martinborough.csv" />
 		<None Remove="Data\Met\masterton.csv" />
 		<None Remove="Data\Met\matamata.csv" />
+		<None Remove="Data\Met\MatamataActual.csv" />
 		<None Remove="Data\Met\middlemarch.csv" />
 		<None Remove="Data\Met\motueka.csv" />
 		<None Remove="Data\Met\napier.csv" />
+		<None Remove="Data\Met\NapierActual.csv" />
 		<None Remove="Data\Met\nelson.csv" />
 		<None Remove="Data\Met\new_plymouth.csv" />
 		<None Remove="Data\Met\north_auckland.csv" />
@@ -54,6 +58,7 @@
 		<None Remove="Data\Met\palmerston_north.csv" />
 		<None Remove="Data\Met\paraparaumu.csv" />
 		<None Remove="Data\Met\pukekohe.csv" />
+		<None Remove="Data\Met\PukekoheActual.csv" />
 		<None Remove="Data\Met\rotorua.csv" />
 		<None Remove="Data\Met\taupo.csv" />
 		<None Remove="Data\Met\tauranga.csv" />
@@ -71,6 +76,7 @@
 		<EmbeddedResource Include="Data\CropCoefficientTableFull.csv" />
 		<EmbeddedResource Include="Data\LossCoefficientTable.csv" />
 		<EmbeddedResource Include="Data\Met\ashburton.csv" />
+		<EmbeddedResource Include="Data\Met\AshburtonActual.csv" />
 		<EmbeddedResource Include="Data\Met\balclutha.csv" />
 		<EmbeddedResource Include="Data\Met\blenheim.csv" />
 		<EmbeddedResource Include="Data\Met\christchurch.csv" />
@@ -89,6 +95,7 @@
 		<EmbeddedResource Include="Data\Met\kerikeri.csv" />
 		<EmbeddedResource Include="Data\Met\lauder.csv" />
 		<EmbeddedResource Include="Data\Met\levin.csv" />
+		<EmbeddedResource Include="Data\Met\LevinActual.csv" />
 		<EmbeddedResource Include="Data\Met\lincoln.csv" />
 		<EmbeddedResource Include="Data\Met\LincolnActual.csv" />
 		<EmbeddedResource Include="Data\Met\lumsden.csv" />
@@ -96,9 +103,11 @@
 		<EmbeddedResource Include="Data\Met\martinborough.csv" />
 		<EmbeddedResource Include="Data\Met\masterton.csv" />
 		<EmbeddedResource Include="Data\Met\matamata.csv" />
+		<EmbeddedResource Include="Data\Met\MatamataActual.csv" />
 		<EmbeddedResource Include="Data\Met\middlemarch.csv" />
 		<EmbeddedResource Include="Data\Met\motueka.csv" />
 		<EmbeddedResource Include="Data\Met\napier.csv" />
+		<EmbeddedResource Include="Data\Met\NapierActual.csv" />
 		<EmbeddedResource Include="Data\Met\nelson.csv" />
 		<EmbeddedResource Include="Data\Met\new_plymouth.csv" />
 		<EmbeddedResource Include="Data\Met\north_auckland.csv" />
@@ -107,6 +116,7 @@
 		<EmbeddedResource Include="Data\Met\palmerston_north.csv" />
 		<EmbeddedResource Include="Data\Met\paraparaumu.csv" />
 		<EmbeddedResource Include="Data\Met\pukekohe.csv" />
+		<EmbeddedResource Include="Data\Met\PukekoheActual.csv" />
 		<EmbeddedResource Include="Data\Met\rotorua.csv" />
 		<EmbeddedResource Include="Data\Met\taupo.csv" />
 		<EmbeddedResource Include="Data\Met\tauranga.csv" />
