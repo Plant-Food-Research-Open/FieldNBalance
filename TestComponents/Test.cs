@@ -15,6 +15,7 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Text.RegularExpressions;
 using System.Data;
 using System.Globalization;
+using SVSModel.Configuration;
 
 namespace TestModel
 {
@@ -105,58 +106,63 @@ namespace TestModel
 
             foreach (string test in Tests)
             {
-                int testRow = getTestRow(test, allTests);
-
-                SVSModel.Configuration.Config _config = SetConfigFromDataFrame(test, allTests);
-
-                Dictionary<System.DateTime, double> testResults = new Dictionary<System.DateTime, double>();
-                Dictionary<System.DateTime, double> nApplied = fertDict(test, allFert);
-
-                string weatherStation = allTests["WeatherStation"][testRow].ToString();
-
-                bool actualWeather = weatherStation.Contains("Actual");
-
-                MetDataDictionaries metData = ModelInterface.BuildMetDataDictionaries(_config.Prior.EstablishDate, _config.Following.HarvestDate.AddDays(1), weatherStation, actualWeather);
-
-                object[,] output = Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, _config);
-
-                DataFrameColumn[] columns = new DataFrameColumn[14];
-                List<string> OutPutHeaders = new List<string>();
-                for (int i = 0; i < output.GetLength(1); i += 1)
+                if (test[0].ToString() != ">")
                 {
-                    OutPutHeaders.Add(output[0, i].ToString());
-                    if (i == 0)
+                    int testRow = getTestRow(test, allTests);
+
+                    (SVSModel.Configuration.Config, double) _testData = SetConfigFromDataFrame(test, allTests);
+                    SVSModel.Configuration.Config _config = _testData.Item1;
+                    double initialN = _testData.Item2;
+
+                    Dictionary<System.DateTime, double> testResults = new Dictionary<System.DateTime, double>();
+                    Dictionary<System.DateTime, double> nApplied = fertDict(test, allFert);
+
+                    string weatherStation = allTests["WeatherStation"][testRow].ToString();
+
+                    bool actualWeather = weatherStation.Contains("Actual");
+
+                    MetDataDictionaries metData = ModelInterface.BuildMetDataDictionaries(_config.Prior.EstablishDate, _config.Following.HarvestDate.AddDays(1), weatherStation, actualWeather);
+
+                    object[,] output = Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, _config, initialN, false);
+
+                    DataFrameColumn[] columns = new DataFrameColumn[14];
+                    List<string> OutPutHeaders = new List<string>();
+                    for (int i = 0; i < output.GetLength(1); i += 1)
                     {
-                        columns[i] = new PrimitiveDataFrameColumn<System.DateTime>(output[0, i].ToString());
+                        OutPutHeaders.Add(output[0, i].ToString());
+                        if (i == 0)
+                        {
+                            columns[i] = new PrimitiveDataFrameColumn<System.DateTime>(output[0, i].ToString());
+                        }
+                        else
+                        {
+                            columns[i] = new PrimitiveDataFrameColumn<double>(output[0, i].ToString());
+                        }
                     }
-                    else
+
+                    var newDataframe = new DataFrame(columns);
+
+                    for (int r = 1; r < output.GetLength(0); r += 1)
                     {
-                        columns[i] = new PrimitiveDataFrameColumn<double>(output[0, i].ToString());
+                        List<KeyValuePair<string, object>> nextRow = new List<KeyValuePair<string, object>>();
+                        for (int c = 0; c < output.GetLength(1); c += 1)
+                        {
+                            nextRow.Add(new KeyValuePair<string, object>(OutPutHeaders[c], output[r, c]));
+                        }
+                        newDataframe.Append(nextRow, true);
                     }
-                }
 
-                var newDataframe = new DataFrame(columns);
+                    string folderName = "OutputFiles";
 
-                for (int r = 1; r < output.GetLength(0); r += 1)
-                {
-                    List<KeyValuePair<string, object>> nextRow = new List<KeyValuePair<string, object>>();
-                    for (int c = 0; c < output.GetLength(1); c += 1)
+                    if (!Directory.Exists(folderName))
                     {
-                        nextRow.Add(new KeyValuePair<string, object>(OutPutHeaders[c], output[r, c]));
+                        System.IO.Directory.CreateDirectory("OutputFiles");
                     }
-                    newDataframe.Append(nextRow, true);
+
+                    DataFrame.SaveCsv(
+                        newDataframe, Path.Join(path, set, "Outputs", $"{test}.csv")
+                    );
                 }
-
-                string folderName = "OutputFiles";
-
-                if (!Directory.Exists(folderName))
-                {
-                    System.IO.Directory.CreateDirectory("OutputFiles");
-                }
-
-                DataFrame.SaveCsv(
-                    newDataframe, Path.Join(path, set, "Outputs", $"{test}.csv")
-                );
             }
         }
 
@@ -173,7 +179,7 @@ namespace TestModel
             proc.WaitForExit();
         }
 
-        public static SVSModel.Configuration.Config SetConfigFromDataFrame(string test, DataFrame allTests)
+        public static (SVSModel.Configuration.Config, double) SetConfigFromDataFrame(string test, DataFrame allTests)
         {
             int testRow = getTestRow(test, allTests);
 
@@ -236,11 +242,20 @@ namespace TestModel
             testConfigDict.Add("FollowingPopulation", "");
 
 
-            List<string> datesNames = new List<string>() { "PriorEstablishDate", "PriorHarvestDate", "CurrentEstablishDate", "CurrentHarvestDate", "FollowingEstablishDate", "FollowingHarvestDate" };
+            //List<string> datesNames = new List<string>() { "PriorEstablishDate", "PriorHarvestDate", "CurrentEstablishDate", "CurrentHarvestDate", "FollowingEstablishDate", "FollowingHarvestDate" };
 
             SVSModel.Configuration.Config ret = new SVSModel.Configuration.Config(testConfigDict);
+            
+            double initialN = Constants.InitialN;
+            try
+            {
+                initialN = Functions.Num(allTests["InitialN"][testRow]);
+            }
+            catch
+            {                
+            }
 
-            return ret;
+            return (ret, initialN);
         }
 
         private static int getTestRow(string test, DataFrame allTests)

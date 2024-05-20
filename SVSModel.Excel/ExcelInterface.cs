@@ -54,7 +54,7 @@ namespace SVSModel.Excel
                 Dictionary<DateTime, double> _nApplied = Functions.dictMaker(nApplied, "Amount");
                 var _config = new Config(Functions.dictMaker(config));
 
-                return Simulation.Simulation.SimulateField(_tt, _rain, _pet, _testResults, _nApplied, _config);
+                return Simulation.Simulation.SimulateField(_tt, _rain, _pet, _testResults, _nApplied, _config, Constants.InitialN);
             }
             else
             {

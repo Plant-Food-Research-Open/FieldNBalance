@@ -27,7 +27,7 @@ namespace SVSModel
         /// <param name="nApplied">A dictionary of nitrogen applications</param>
         /// <param name="config">Model config object, all parameters are required</param>
         /// <returns>A list of <see cref="DailyNBalance"/> objects</returns>
-        List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config);
+        List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config, double initialN);
         
         /// <summary>
         /// Gets the crop data from the data file
@@ -39,13 +39,13 @@ namespace SVSModel
 
     public class ModelInterface : IModelInterface
     {
-        public List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config)
+        public List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config, double initialN)
         {
             var startDate = config.Prior.EstablishDate.AddDays(-1);
             var endDate = config.Following.HarvestDate.AddDays(2);
             var metData = BuildMetDataDictionaries(startDate, endDate, weatherStation, false);
 
-            var rawResult = Simulation.Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, config);
+            var rawResult = Simulation.Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, config, Constants.InitialN);
 
             var result = new List<DailyNBalance>();
 
