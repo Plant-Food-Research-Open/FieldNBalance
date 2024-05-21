@@ -268,7 +268,7 @@ namespace TestModel
 
                     //DateTime date = DateTime.ParseExact(
                     //    row[1].ToString(), "d/M/yyyy", CultureInfo.InvariantCulture);
-                    DateTime date = (DateTime)row[1];
+                    //DateTime date = (DateTime)row[1];
                     
                     DateTime last = new DateTime();
                     if (fert.Keys.Count > 0)
