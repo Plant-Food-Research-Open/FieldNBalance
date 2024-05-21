@@ -73,17 +73,12 @@ jobs:
       run: |
         echo "{date}={$(date +'%Y-%m-%d')}" >> $GITHUB_ENV
 
-    - name: Zip file
-      if: github.event_name == 'pull_request'
-      run: |
-        zip validation_report.zip html -r
-
     - name: Upload validation report
       if: github.event_name == 'pull_request'
       uses: actions/upload-artifact@v4
       with:
         name: validation_report
-        path: validation_report.zip
+        path: html
         
     - name: Deploy to GitHub pages 🚀
       if: github.event_name != 'pull_request'
