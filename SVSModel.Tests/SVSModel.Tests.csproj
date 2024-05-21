@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SVSModel.Excel\SVSModel.Excel.csproj" />
     <ProjectReference Include="..\SVSModel\SVSModel.csproj" />
   </ItemGroup>
 
