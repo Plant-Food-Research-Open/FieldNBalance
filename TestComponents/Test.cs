@@ -272,7 +272,7 @@ namespace TestModel
             return testRow;
         }
 
-        private static Dictionary<System.DateTime, double> fertDict(string test, DataFrame allFert)
+       /* private static Dictionary<System.DateTime, double> fertDict(string test, DataFrame allFert)
         {
             Dictionary<System.DateTime, double> fert = new Dictionary<System.DateTime, double>();
             foreach (DataFrameRow row in allFert.Rows)
@@ -299,7 +299,7 @@ namespace TestModel
                 }
             }
             return fert;
-        }
+        }*/
 
     }
 }
