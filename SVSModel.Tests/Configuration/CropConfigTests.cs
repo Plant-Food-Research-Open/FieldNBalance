@@ -8,6 +8,8 @@ using SVSModel.Configuration;
 using SVSModel.Models;
 using Xunit;
 
+THIS WILL CAUSE THE UNIT TESTS TO FAIL
+
 namespace SVSModel.Tests.Configuration;
 
 public class CropConfigTests
