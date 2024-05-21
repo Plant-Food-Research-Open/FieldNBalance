@@ -115,7 +115,7 @@ namespace TestModel
                     double initialN = _testData.Item2;
 
                     Dictionary<System.DateTime, double> testResults = new Dictionary<System.DateTime, double>();
-                    Dictionary<System.DateTime, double> nApplied = fertDict(test, allFert);
+                    Dictionary<System.DateTime, double> nApplied = new Dictionary<System.DateTime, double>();//fertDict(test, allFert);
 
                     string weatherStation = allTests["WeatherStation"][testRow].ToString();
 
@@ -280,8 +280,8 @@ namespace TestModel
                 if (row[0].ToString() == test) //if this date row holds data for current site
                 {
 
-                    DateTime date = DateTime.ParseExact(row[1].ToString(), "d/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-                    //DateTime date = (DateTime)row[1];
+                    //DateTime date = DateTime.ParseExact(row[1].ToString(), "d/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+                    DateTime date = (DateTime)row[1];
                     
                     DateTime last = new DateTime();
                     if (fert.Keys.Count > 0)
