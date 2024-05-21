@@ -27,7 +27,7 @@ namespace SVSModel
         /// <param name="nApplied">A dictionary of nitrogen applications</param>
         /// <param name="config">Model config object, all parameters are required</param>
         /// <returns>A list of <see cref="DailyNBalance"/> objects</returns>
-        List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config);
+        List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config, double initialN);
         
         /// <summary>
         /// Gets the crop data from the data file
@@ -39,13 +39,13 @@ namespace SVSModel
 
     public class ModelInterface : IModelInterface
     {
-        public List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config)
+        public List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config, double initialN)
         {
             var startDate = config.Prior.EstablishDate.AddDays(-1);
             var endDate = config.Following.HarvestDate.AddDays(2);
-            var metData = BuildMetDataDictionaries(startDate, endDate, weatherStation);
+            var metData = BuildMetDataDictionaries(startDate, endDate, weatherStation, false);
 
-            var rawResult = Simulation.Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, config);
+            var rawResult = Simulation.Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, config, Constants.InitialN);
 
             var result = new List<DailyNBalance>();
 
@@ -112,28 +112,64 @@ namespace SVSModel
                 return data.ToList();
             }
         }
-
-        public static MetDataDictionaries BuildMetDataDictionaries(DateTime startDate, DateTime endDate, string weatherStation)
+        private static IEnumerable<TestStationData> GetActualMetData(string weatherStation)
         {
-            var metData = GetMetData(weatherStation).ToList();
+            var assembly = Assembly.GetExecutingAssembly();
 
+            var stream = assembly.GetManifestResourceStream($"SVSModel.Data.Met.{weatherStation}.csv");
+            if (stream == null) return Enumerable.Empty<TestStationData>();
+
+            using (var reader = new StreamReader(stream, Encoding.UTF8))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                var data = csv.GetRecords<TestStationData>();
+                return data.ToList();
+            }
+        }
+
+        public static MetDataDictionaries BuildMetDataDictionaries(DateTime startDate, DateTime endDate, string weatherStation, bool actualWeather)
+        {
             var meanT = new Dictionary<DateTime, double>();
             var rain = new Dictionary<DateTime, double>();
             var meanPET = new Dictionary<DateTime, double>();
 
-            var currDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
-            while (currDate < endDate)
+            if (actualWeather)
             {
-                var doy = currDate.DayOfYear;
-                var values = metData.FirstOrDefault(m => m.DOY == doy);
-
-                meanT.Add(currDate, values?.MeanT ?? 0);
-                rain.Add(currDate, values?.Rain ?? 0);
-                meanPET.Add(currDate, values?.MeanPET ?? 0);
-
-                currDate = currDate.AddDays(1);
+                var metData = GetActualMetData(weatherStation).ToList();
+                var currDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
+                while (currDate < endDate)
+                {
+                    var doy = currDate.DayOfYear;
+                    var year = currDate.Year;
+                    foreach (TestStationData t in metData)
+                    {
+                        if ((t.Year == year) && (t.DOY == doy))
+                        {
+                            meanT.Add(currDate, t?.MeanT ?? 0);
+                            rain.Add(currDate, t?.Rain ?? 0);
+                            meanPET.Add(currDate, t?.MeanPET ?? 0);
+                            break;
+                        }
+                    }
+                    currDate = currDate.AddDays(1);
+                }
             }
-            
+            else
+            {
+                var metData = GetMetData(weatherStation).ToList();
+                var currDate = new DateTime(startDate.Year, startDate.Month, startDate.Day);
+                while (currDate < endDate)
+                {
+                    var doy = currDate.DayOfYear;
+                    var values = metData.FirstOrDefault(m => m.DOY == doy);
+
+                    meanT.Add(currDate, values?.MeanT ?? 0);
+                    rain.Add(currDate, values?.Rain ?? 0);
+                    meanPET.Add(currDate, values?.MeanPET ?? 0);
+
+                    currDate = currDate.AddDays(1);
+                }
+            }
             return new MetDataDictionaries { MeanT = meanT, Rain = rain, MeanPET = meanPET };
         }
     }

@@ -52,7 +52,7 @@ namespace SVSModel.Models
         /// <param name="residue">series of mineral N released daily to the soil from residue mineralisation</param>
         /// <param name="som">series of mineral N released daily to the soil from organic matter</param>
         /// <returns>date indexed series of estimated soil mineral N content</returns>
-        public static void UpdateBalance(DateTime updateDate, double dResetN, double preSetSoilN, double lossAlreadyCountedPriorToSet, ref SimulationType thisSim, bool IsSet)
+        public static void UpdateBalance(DateTime updateDate, double dResetN, double preSetSoilN, double lossAlreadyCountedPriorToSet, ref SimulationType thisSim, bool IsSet, Dictionary<DateTime, double> nAapplied, bool scheduleFert)
         {
 
             thisSim.SoilN[updateDate] = preSetSoilN; //Fertiliser iterates through this multiple times so need to set start soil N back to value at start of itterations
@@ -70,13 +70,42 @@ namespace SVSModel.Models
 
                 if (IsSet == false)
                 {
-                    thisSim.SoilN[d] += thisSim.NResidues[d];
-                    thisSim.SoilN[d] += thisSim.NSoilOM[d];
-                    double actualUptake = thisSim.NUptake[d];//Math.Min(thisSim.NUptake[d], thisSim.SoilN[d]*.1);
-                                                             //double Nshortage = thisSim.NUptake[d] - actualUptake;
-                                                             //if (Nshortage < 0)
-                                                             //    Crop.ConstrainNUptake(ref thisSim, Nshortage,d);
-                    thisSim.SoilN[d] -= actualUptake;
+                    thisSim.SoilN[d] += thisSim.NSoilOM[d]; //add Som mineralisation
+                    if (nAapplied.ContainsKey(d))
+                    {
+                        thisSim.NFertiliser[d] = nAapplied[d];
+                        thisSim.SoilN[d] += nAapplied[d];  //add fertiliser
+                    }
+                    double availableN = thisSim.SoilN[d] * 0.2; //20% of soil N can be used in a day
+                    double potentialImobilisation = Math.Max(0, thisSim.NResidues[d] * -1); //if NResidues is negative imobilisatin is happening 
+                    if (potentialImobilisation == 0)
+                    {
+                        thisSim.SoilN[d] += thisSim.NResidues[d]; // If imobilisation not happening add mineralisation from residues to soil
+                        availableN = thisSim.SoilN[d] * 0.2;  //and recalculate available soil N to account for residue mineralisation 
+                    }
+                    double potentialCropUptake = thisSim.NUptake[d];
+                    double potentialUptake = potentialCropUptake + potentialImobilisation;
+                    double actualCropUptake = potentialCropUptake;  //Start with uptake at potential and revise down if shortage
+                    double actualImobilisation = potentialImobilisation; //Start with uptake at potential and revise down if shortage
+                    if ((potentialUptake > availableN)&& (scheduleFert == false)) //Is there a shortage  Only constrain crop N uptake if tests are being run.  For schedulling to work need to have crop uptake unconstrained
+                    {
+                        double propnCropPotUptake = 0;
+                        propnCropPotUptake = potentialCropUptake / potentialUptake;  //What proportion of the limited N will the crop get based on its relative demand
+                        actualCropUptake = availableN * propnCropPotUptake;
+                        double CropNshortage = potentialCropUptake - actualCropUptake;
+                        thisSim.CropShortageN[d] = CropNshortage;
+                        if (CropNshortage > 0)
+                        {
+                            Crop.ConstrainNUptake(ref thisSim, CropNshortage, d); //Reduce Crop uptake below potential
+                        }
+                        actualImobilisation = availableN * (1 - propnCropPotUptake);  //What proporiton of the limited N will residue imobilisation get based on its relative demand
+                        if (actualImobilisation > 0)
+                        {
+                            thisSim.NResidues[d] = -actualImobilisation; //Reduce imobilisation below potential
+                        }
+                    }
+                    thisSim.SoilN[d] -= actualCropUptake;  //Remove actual crop uptake from soil
+                    thisSim.SoilN[d] -= actualImobilisation; //Remove actual imobilisaiton from soil.  This will be zero if mineralisation is occuring.
                 }
 
                 double newLossEstimate = Losses.DailyLoss(d, thisSim);
@@ -93,7 +122,8 @@ namespace SVSModel.Models
                                                finalMinearlN: thisSim.SoilN[d],
                                                standingCropN: thisSim.CropN[d],
                                                dExportN: thisSim.ExportN[d],
-                                               dLostN: thisSim.NLost[d]);
+                                               dLostN: thisSim.NLost[d],
+                                               dFertiliserN: thisSim.NFertiliser[d]);
                 lossAlreadyCountedPriorToSet = 0; //Only discount losses already counted on day of reset
                 dResetN = 0; // Reset N only a non zero number on the set day otherwise zero
                 IsSet = false; // IsSet only true on the day the set is actioned, needs to be false so full balance is done every other day
@@ -112,7 +142,7 @@ namespace SVSModel.Models
             foreach (DateTime d in testResults.Keys)
             {
                 double dCorrection = testResults[d] - thisSim.SoilN[d];
-                SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d] - thisSim.NFertiliser[d], thisSim.NLost[d], ref thisSim, true); //need to take out fertiliser if fert applied on same day as test so it doesn't break balance check test
+                SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d] - thisSim.NFertiliser[d], thisSim.NLost[d], ref thisSim, true, new Dictionary<DateTime, double>(), true); //need to take out fertiliser if fert applied on same day as test so it doesn't break balance check test
             }
         }
     }
@@ -124,7 +154,7 @@ namespace SVSModel.Models
         {
             get
             {
-                return initialN + initialStandingCropN + dTransplantN + dResidueN + dSOMN + dResetN;
+                return initialN + initialStandingCropN + dTransplantN + dResidueN + dSOMN + dResetN + dFertiliserN;
             }
         }
         private double initialN { get; set; }
@@ -133,6 +163,7 @@ namespace SVSModel.Models
         private double dResidueN { get; set; }
         private double dSOMN { get; set; }
         private double dResetN { get; set; }
+        private double dFertiliserN { get; set; }
 
 
         /// Out
@@ -158,7 +189,7 @@ namespace SVSModel.Models
         
         public CheckNBalance() { }
         public CheckNBalance(double initSoilN, double initStandingCropN, double dtransPlantN, double dResidueN, double dSOMN, double dResetN,
-                             double finalMinearlN, double standingCropN, double dExportN,  double dLostN)
+                             double finalMinearlN, double standingCropN, double dExportN,  double dLostN, double dFertiliserN)
         {
             this.initialN = initSoilN;
             this.initialStandingCropN = initStandingCropN;
@@ -170,6 +201,7 @@ namespace SVSModel.Models
             this.standingCropN = standingCropN; 
             this.dExportN = dExportN;
             this.dLostN = dLostN;
+            this.dFertiliserN = dFertiliserN;
 
             doCheck();
         }

@@ -51,6 +51,9 @@ public class CropConfig
     public double ResStover { get; set; }
     public double ResFieldLoss { get; set; }
     public double NUptake { get; set; }
+    public double NDemand { get; set; }
+    public double ResStoverReturn { get { return ResStover * ResidueFactRetained; } }
+    public double ResFieldLossReturn { get { return ResFieldLoss * ResidueFactRetained; }}
     public CropType SimResults { get; set; }
 
     /// <summary>

@@ -93,6 +93,15 @@ namespace SVSModel.Models
         public double MeanPET { get; set; }
     }
 
+    public class TestStationData
+    {
+        public int Year { get; set; }
+        public int DOY { get; set; }
+        public double MeanT { get; set; }
+        public double Rain { get; set; }
+        public double MeanPET { get; set; }
+    }
+
     public class MetDataDictionaries
     {
         public Dictionary<DateTime, double> MeanT { get; set; }

@@ -29,7 +29,7 @@ CBcolors = {
     'purple':  '#984ea3',
     'gray':    '#999999',
     'red':     '#e41a1c',
-    'yellow':  '#dede00'
+    'yellow':  '#dede00',
 } 
 # -
 
@@ -243,3 +243,35 @@ for s in sites:
             #plt.legend()
     Graph.tight_layout(pad=1.5)
     plt.savefig(os.path.join(outPath, "WS1_"+s+"TimeCourse.png"))
+
+NbalComponents = ['SoilMineralN', 'UptakeN', 'ResidueN', 'SoilOMN', 'FertiliserN',
+       'CropN', 'NDemand','LostN']
+accumulate = [False,True,True,True,True,False,False,True]
+toAccumulate = dict(zip(NbalComponents,accumulate))
+
+rot = 'HawkesBayRot3_N'
+irr = '_Irr2_'
+crop = 'Ryegrass'
+Graph = plt.figure(figsize=(5,15))
+pos = 1
+for nbc in NbalComponents:
+    ax = Graph.add_subplot(8,1,pos)
+    for N in [1,2,3,4]:
+        sim = rot+str(N)+irr+crop
+        if toAccumulate[nbc] == False:
+            CheckData = AllData.loc[:,sim].dropna()
+        if toAccumulate[nbc] == True:
+            CheckData = AllData.loc[:,sim].dropna().cumsum()
+        plt.plot(CheckData.loc[:,nbc],'-')
+        plt.text(0.05,0.95,nbc,transform=ax.transAxes)
+    pos +=1
+# ax = Graph.add_subplot(6,1,2)
+# CheckData.UptakeN.cumsum().plot(title='Uptake')
+# ax = Graph.add_subplot(6,1,3)
+# CheckData.ResidueN.cumsum().plot(title='ResidueN')
+# ax = Graph.add_subplot(6,1,4)
+# CheckData.LostN.cumsum().plot(title='LostN')
+# ax = Graph.add_subplot(6,1,5)
+# CheckData.SoilOMN.cumsum().plot(title='SOM')
+# ax = Graph.add_subplot(6,1,6)
+# CheckData.FertiliserN.cumsum().plot(title='Fert')

@@ -131,6 +131,7 @@ Pred = ObsPredCropN.pred.values
 graph = plt.figure(figsize = (5,5))
 ax = graph.add_subplot(1,1,1)
 plt.plot(Obs,Pred,'o')
+plt.plot([0,500],[0,500],'-')
 #RegStats = MUte.MathUtilities.CalcRegressionStats('LN',Pred,Obs)
 #plt.text(0.05,0.8,'NSE = ' +str(RegStats.NSE),transform = ax.transAxes)
 plt.ylabel('Predicted')
@@ -179,8 +180,6 @@ plt.plot(Obs,Pred,'o')
 #plt.text(0.05,0.8,'NSE = ' +str(RegStats.NSE),transform = ax.transAxes)
 plt.ylabel('Predicted')
 plt.xlabel('Observed')
-
-TestsFrame
 
 # +
 colors = ['orange','green']
