@@ -58,12 +58,12 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       
-    - name: Run Tests
+    - name: Run tests
       run: |
         source .venv/bin/activate
         dotnet run --project TestConsole/TestsConsole.csproj
      
-    - name: Run Report Generator
+    - name: Run report generator
       run: |
         source .venv/bin/activate
         python TestGraphs/report.py 
@@ -72,7 +72,19 @@ jobs:
       id: date
       run: |
         echo "{date}={$(date +'%Y-%m-%d')}" >> $GITHUB_ENV
-         
+
+    - name: Zip file
+      if: github.event_name == 'pull_request'
+      run: |
+        zip validation_report.zip html -r
+
+    - name: Upload validation report
+      if: github.event_name == 'pull_request'
+      uses: actions/upload-artifact@v4
+      with:
+        name: validation_report
+        path: validation_report.zip
+        
     - name: Deploy to GitHub pages 🚀
       if: github.event_name != 'pull_request'
       uses: JamesIves/github-pages-deploy-action@v4.4.1
