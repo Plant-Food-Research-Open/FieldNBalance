@@ -43,14 +43,14 @@ namespace SVSModel
             thisCrop.T_sen = Constants.PropnTt["MidReproductive"] * thisCrop.T_mat;
             thisCrop.Xo_cov = thisCrop.Xo_Biomass * 0.4 / cropParams.rCover;
             thisCrop.b_cov = thisCrop.Xo_cov * 0.2;
-            thisCrop.typicalYield = cropParams.TypicalYield * Constants.UnitConversions[cropParams.TypicalYieldUnits];
+            thisCrop.fFieldLossPct = cf.FieldLoss;
+            thisCrop.fTotalProductFwt = cf.FieldYield; // Assuming Field yield is always entered as gross yield assumng no loss
             thisCrop.a_harvestIndex = cropParams.TypicalHI - cropParams.HIRange;
-            thisCrop.b_harvestIndex = cropParams.HIRange / thisCrop.typicalYield;
+            thisCrop.b_harvestIndex = cropParams.HIRange / thisCrop.fTotalProductFwt;
             thisCrop.stageCorrection = 1 / Constants.PropnMaxDM[cf.HarvestStage];
 
             // derive crop Harvest State Variables 
-            thisCrop.fFieldLossPct = cf.FieldLoss;
-            thisCrop.fTotalProductFwt = cf.FieldYield * (1 / (1 - thisCrop.fFieldLossPct / 100));
+
             thisCrop.HI = thisCrop.a_harvestIndex + thisCrop.fTotalProductFwt * thisCrop.b_harvestIndex;
             if (cropParams.YieldType == "Standing DM")
             {
@@ -176,7 +176,6 @@ namespace SVSModel
         public double T_sen;
         public double Xo_cov;
         public double b_cov;
-        public double typicalYield;
         public double a_harvestIndex;
         public double b_harvestIndex;
         public double stageCorrection;
