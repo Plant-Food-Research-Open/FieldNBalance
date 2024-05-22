@@ -12,6 +12,7 @@ Annual ryegrass Fodder General,8,Fodder,Grass,Annual ryegrass,General,Poaceae ,L
 Rape Fodder General,3,Fodder,Leafy brassica,Rape,General,Brassicaceae,Brassica,napus,napus,Brassica napus napus,napus napus,Seed,Oct,EarlyReproductive,Jan,6,t/ha,Standing DM,1,Dry,0,0,0.778,-0.122,0,0.1,1.2,1,2,0.8,1,2.5
 Kale Fodder General,4,Fodder,Leafy brassica,Kale,General,Brassicaceae,Brassica,oleracea,acephala,Brassica oleracea acephala,oleracea acephala,Seed,Oct,LateReproductive,Jul,16,t/ha,Standing DM,1,Dry,0,0,0.58,-0.22,0,0.1,1.2,1,2,0.8,1,2.5
 Turnip Fodder Leafy,6,Fodder,Leafy brassica,Turnip,Leafy,Brassicaceae,Brassica,rapa x napus,,Brassica rapa x napus ,rapa x napus ,Seed,Oct,Vegetative,Mar,6,t/ha,Standing DM,1,Dry,0,0,0.49,-0.21,0,0.1,1.2,1,2,0.8,1.5,3.5
+Pasture Regrowth,,Fodder,Grass,Pasture,General,,,,,,,Seedling,Apr,EarlyReproductive,Dec,3,t/ha,Standing DM,1,Dry,0,0,0.7,0,0,0.1,0.9,1,1.5,0.9,1.9,2.5
 Oat Grain General,13,Grain,Cereal,Oat,General,Poaceae ,Avena,sativa,,Avena sativa ,sativa ,Seed,May,Maturity,Feb,8,t/ha,Saleable grain ,1,Total,0,0,0.4,0.1,13,0.1,1.5,1,1,0.9,0.5,1.3
 Sunflower Grain General,17,Grain,Cereal,Sunflower,General,Asteraceae ,Helianthus,annus,,Helianthus annus ,annus ,Seed,Oct,Maturity,Mar,3,t/ha,Saleable grain ,1,Total,0,0,0.3,0.1,8,0.1,1.5,1,1,0.9,1.3,2.4
 Barley Grain General,18,Grain,Cereal,Barley,General,Poaceae ,Hordeum,vulgure,,Hordeum vulgure ,vulgure ,Seed,Sep,Maturity,Feb,10,t/ha,Saleable grain ,1,Total,0,0,0.463,0.1,13,0.1,1.2,1,1,0.9,0.5,1.2
