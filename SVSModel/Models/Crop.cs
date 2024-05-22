@@ -43,10 +43,22 @@ namespace SVSModel
             thisCrop.T_sen = Constants.PropnTt["MidReproductive"] * thisCrop.T_mat;
             thisCrop.Xo_cov = thisCrop.Xo_Biomass * 0.4 / cropParams.rCover;
             thisCrop.b_cov = thisCrop.Xo_cov * 0.2;
-            thisCrop.fFieldLossPct = cf.FieldLoss;
+            if (cropParams.TypicalYieldUnits == "kg/head")
+            {
+                thisCrop.typicalYield = cropParams.TypicalYield * cropParams.TypicalPopulation;
+            }
+            else
+            {
+                thisCrop.typicalYield = cropParams.TypicalYield * Constants.UnitConversions[cropParams.TypicalYieldUnits];
+            }
+			thisCrop.fFieldLossPct = cf.FieldLoss;
+            if (cropParams.EndUse == "Green manure")
+            {
+                thisCrop.fFieldLossPct = 100; //Set field loss to 100% for green manure crops so biomass is all returned as residual
+            }
             thisCrop.fTotalProductFwt = cf.FieldYield; // Assuming Field yield is always entered as gross yield assumng no loss
             thisCrop.a_harvestIndex = cropParams.TypicalHI - cropParams.HIRange;
-            thisCrop.b_harvestIndex = cropParams.HIRange / thisCrop.fTotalProductFwt;
+            thisCrop.b_harvestIndex = cropParams.HIRange / thisCrop.typicalYield;
             thisCrop.stageCorrection = 1 / Constants.PropnMaxDM[cf.HarvestStage];
 
             // derive crop Harvest State Variables 
@@ -127,7 +139,7 @@ namespace SVSModel
                     cropRow += 1;
             }
 
-            List<string> coeffs = new List<string> { "Typical Yield","Typical Yield Units","Yield type","Typical Population (/ha)",
+            List<string> coeffs = new List<string> { "EndUse", "Typical Yield","Typical Yield Units","Yield type","Typical Population (/ha)",
                                                       "TotalOrDry","Typical Dressing Loss %","Typical Field Loss %","Typical HI",
                                                       "HI Range","Moisture %","P Root","Max RD","A cover","rCover","Root [N]",
                                                       "Stover [N]","Product [N]" };
@@ -176,6 +188,7 @@ namespace SVSModel
         public double T_sen;
         public double Xo_cov;
         public double b_cov;
+        public double typicalYield;
         public double a_harvestIndex;
         public double b_harvestIndex;
         public double stageCorrection;
