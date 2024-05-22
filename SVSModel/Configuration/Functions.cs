@@ -215,13 +215,14 @@ namespace SVSModel.Configuration
             Dictionary<DateTime, double> tt = new Dictionary<DateTime, double>();
             foreach (DateTime d in dates)
             {
-                if (d == dates[0]) // if today is the first day the above will throw
+                double todayTt = Math.Max(0,Tt[d] - 5);
+                if (d == dates[0]) // if today is the first day the below will throw
                 {
-                    tt.Add(d, Tt[d]);
+                    tt.Add(d, todayTt);
                 }
                 else
                 {
-                    tt.Add(d, tt[d.AddDays(-1)] + Tt[d]);
+                    tt.Add(d, tt[d.AddDays(-1)] + todayTt);
                 }
             }
             return tt;

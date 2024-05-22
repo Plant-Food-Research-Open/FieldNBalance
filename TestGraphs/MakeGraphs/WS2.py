@@ -219,65 +219,50 @@ plt.savefig(os.path.join(outPath, "TimeCourse.png"))
 
 
 # +
-# colors = ['orange','green']
-# Graph = plt.figure(figsize=(10,10))
-# pos = 1
-# row_num=len(test_names)
+NbalComponents = ['UptakeN', 'ResidueN', 'SoilOMN', 'FertiliserN','NDemand','LostN']
+accumulate = [True,True,True,True,False,True]
+toAccumulate = dict(zip(NbalComponents,accumulate))
 
-# for t in test_names:
-#     dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
-#     c = 0    
-#     for v in ['ResidueN','SoilOMN']:
-#         color = 'b'
-#         ax = Graph.add_subplot(row_num,2,pos)
-#         Data = AllData.loc[dates,(t,v)].cumsum()
-#         plt.plot(Data,color=CBcolors[colors[c]],label=v)
-#         plt.title(t)
-#         plt.xticks(rotation=60)
-#         ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
-#         plt.legend()
-#         Graph.tight_layout(pad=1.5)
-#         pos+=1
-#         c+=1
-# +
-# colors = ['orange','green']
-# Graph = plt.figure(figsize=(10,10))
-# pos = 1
-# row_num=len(test_names)
+colors = ['orange','green']
+Graph = plt.figure(figsize=(10,10))
+pos = 1
+row_num=len(tests)
 
-# for t in test_names:
-#     dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
-#     c = 0    
-#     for v in ['Drainage', 'Irrigation']:
-#         color = 'b'
-#         ax = Graph.add_subplot(row_num,2,pos)
-#         Data = AllData.loc[dates,(t,v)].cumsum()
-#         plt.plot(Data,color=CBcolors[colors[c]],label=v)
-#         plt.title(t)
-#         plt.xticks(rotation=60)
-#         ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
-#         plt.legend()
-#         Graph.tight_layout(pad=1.5)
-#         pos+=1
-#         c+=1
-# +
-# colors = ['orange','green']
-# Graph = plt.figure(figsize=(10,10))
-# pos = 1
-# row_num=len(test_names)
+t = '9-3Broccoli'
+site = t[0]
+site = int(site)
 
-# for t in test_names:
-#     dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
-#     c = 0    
-#     for v in ['Green cover', 'RSWC']:
-#         color = 'b'
-#         ax = Graph.add_subplot(row_num,2,pos)
-#         Data = AllData.loc[dates,(t,v)]
-#         plt.plot(Data,color=CBcolors[colors[c]],label=v)
-#         plt.title(t)
-#         plt.xticks(rotation=60)
-#         ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
-#         plt.legend()
-#         Graph.tight_layout(pad=1.5)
-#         pos+=1
-#         c+=1
+dates = AllData.loc[Configs.loc["PriorHarvestDate",t]:Configs.loc["CurrentHarvestDate",t],(t,'CropN')].index
+c = 0    
+for v in ['SoilMineralN','CropN']:
+    ax = Graph.add_subplot(5,2,pos)
+    Data = AllData.loc[dates,(t,v)]
+    plt.plot(Data,color=CBcolors[colors[c]],label=v)
+
+    if v == 'CropN':
+        sData = observedCrop.loc[site,:]
+    if v == 'SoilMineralN':
+        sData = observedSoil.loc[site,:]
+    dFilter = [dates.min() <= sData['Date'].iloc[x] <= dates.max() for x in range(len(sData['Date']))]
+    plt.plot(sData.loc[dFilter,'Date'],sData.loc[dFilter,v],'o',color=CBcolors[colors[c]])
+
+    plt.title(t)
+    plt.xticks(rotation=60)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b-%y'))
+    #plt.ylim(0,800)
+    plt.legend()
+    pos+=1
+    c+=1
+    
+for nbc in NbalComponents:
+    ax = Graph.add_subplot(5,2,pos)
+    if toAccumulate[nbc] == False:
+        Data = AllData.loc[dates,(t,nbc)]
+    if toAccumulate[nbc] == True:
+        Data = AllData.loc[dates,(t,nbc)].cumsum()
+    plt.plot(Data,label=nbc)
+    plt.legend()
+    pos +=1
+    
+Graph.tight_layout(pad=1.5)
+plt.savefig(os.path.join(outPath, "TimeCourse.png"))

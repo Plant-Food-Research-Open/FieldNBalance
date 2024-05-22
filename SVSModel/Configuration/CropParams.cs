@@ -12,6 +12,7 @@ namespace SVSModel.Configuration
     /// </summary>
     public class CropParams
     {
+        public string EndUse { get; private set; }
         public double TypicalYield { get; private set; }
         public double TypicalYield_kgPerHa
         {
@@ -41,6 +42,7 @@ namespace SVSModel.Configuration
 
         public CropParams(Dictionary<string, object> c)
         {
+            EndUse = c["EndUse"].ToString();
             TypicalYield = Functions.Num(c["Typical Yield"]);
             TypicalYieldUnits = c["Typical Yield Units"].ToString();
             YieldType = c["Yield type"].ToString();
