@@ -159,9 +159,8 @@ namespace TestModel
                         System.IO.Directory.CreateDirectory("OutputFiles");
                     }
 
-                    CultureInfo cult = new CultureInfo("en-NZ");
                     DataFrame.SaveCsv(
-                        newDataframe, Path.Join(path, set, "Outputs", $"{test}.csv"), cultureInfo : cult
+                        newDataframe, Path.Join(path, set, "Outputs", $"{test}.csv")
                     );
                 }
             }
