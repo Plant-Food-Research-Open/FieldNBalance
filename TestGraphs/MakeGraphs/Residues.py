@@ -82,3 +82,6 @@ plt.xticks(rotation=60)
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
 Graph.tight_layout(pad=1.5)
 plt.savefig(os.path.join(outPath, 'Residues.png'))
+# -
+
+AllData
