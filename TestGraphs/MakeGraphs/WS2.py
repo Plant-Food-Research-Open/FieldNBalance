@@ -228,7 +228,7 @@ Graph = plt.figure(figsize=(10,10))
 pos = 1
 row_num=len(tests)
 
-t = '9-3Broccoli'
+t = '8-3Oat'
 site = t[0]
 site = int(site)
 
@@ -265,4 +265,4 @@ for nbc in NbalComponents:
     pos +=1
     
 Graph.tight_layout(pad=1.5)
-plt.savefig(os.path.join(outPath, "TimeCourse.png"))
+#plt.savefig(os.path.join(outPath, "TimeCourse.png"))
