@@ -27,7 +27,7 @@ namespace SVSModel
         /// <param name="nApplied">A dictionary of nitrogen applications</param>
         /// <param name="config">Model config object, all parameters are required</param>
         /// <returns>A list of <see cref="DailyNBalance"/> objects</returns>
-        List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config, double initialN);
+        List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config);
         
         /// <summary>
         /// Gets the crop data from the data file
@@ -39,7 +39,7 @@ namespace SVSModel
 
     public class ModelInterface : IModelInterface
     {
-        public List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config, double initialN = Constants.InitialN)
+        public List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config)
         {
             var startDate = config.Prior.EstablishDate.AddDays(-1);
             var endDate = config.Following.HarvestDate.AddDays(2);
