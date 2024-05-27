@@ -34,13 +34,27 @@ namespace SVSModel
             CropParams cropParams = ExtractCropParams(cf.CropNameFull, allCropParams);// new Dictionary<string, double>();
 
             // Derive Crop Parameters
-            thisCrop.Tt_Harv = tt.Values.Last();
-            thisCrop.Tt_estab = thisCrop.Tt_Harv * (Constants.PropnTt[cf.EstablishStage] / Constants.PropnTt[cf.HarvestStage]);
-            thisCrop.Xo_Biomass = (thisCrop.Tt_Harv + thisCrop.Tt_estab) * .45 * (1 / Constants.PropnTt[cf.HarvestStage]);
-            thisCrop.b_Biomass = thisCrop.Xo_Biomass * .25;
-            thisCrop.T_mat = thisCrop.Xo_Biomass * 2.2222;
-            thisCrop.T_maxRD = Constants.PropnTt["EarlyReproductive"] * thisCrop.T_mat;
-            thisCrop.T_sen = Constants.PropnTt["MidReproductive"] * thisCrop.T_mat;
+            thisCrop.TtEstabToHarv = tt.Values.Last();
+            
+            thisCrop.TtSowToEmerg = 0;
+            if (cf.EstablishStage == "Seed")
+            {
+                thisCrop.TtSowToEmerg = cropParams.TtSowtoEmerge;
+            }
+
+            double PropnTt_EstToHarv = Constants.PropnTt[cf.HarvestStage] - Math.Max(Constants.PropnTt[cf.EstablishStage], 0); //Constants.PropnTt["Emergence"]);
+            thisCrop.TtEmergToMat = (thisCrop.TtEstabToHarv - thisCrop.TtSowToEmerg) * 1 / PropnTt_EstToHarv;
+
+            thisCrop.TtEmergToSeedling = 0;
+            if (cf.EstablishStage == "Seedling")
+            {
+                thisCrop.TtEmergToSeedling = thisCrop.TtEmergToMat * Constants.PropnTt["Seedling"];
+            }
+
+            thisCrop.Xo_Biomass = thisCrop.TtEmergToMat * 0.5;
+            thisCrop.b_Biomass = thisCrop.Xo_Biomass * .2;
+            thisCrop.T_maxRD = Constants.PropnTt["EarlyReproductive"] * thisCrop.TtEmergToMat;
+            thisCrop.T_sen = Constants.PropnTt["MidReproductive"] * thisCrop.TtEmergToMat;
             thisCrop.Xo_cov = thisCrop.Xo_Biomass * 0.4 / cropParams.rCover;
             thisCrop.b_cov = thisCrop.Xo_cov * 0.2;
             if (cropParams.TypicalYieldUnits == "kg/head")
@@ -59,7 +73,7 @@ namespace SVSModel
             thisCrop.fTotalProductFwt = cf.FieldYield; // Assuming Field yield is always entered as gross yield assumng no loss
             thisCrop.a_harvestIndex = cropParams.TypicalHI - cropParams.HIRange;
             thisCrop.b_harvestIndex = cropParams.HIRange / thisCrop.typicalYield;
-            thisCrop.stageCorrection = 1 / Constants.PropnMaxDM[cf.HarvestStage];
+            thisCrop.stageCorrection = 1.0 / Functions.sigmoid(thisCrop.TtEstabToHarv - thisCrop.TtSowToEmerg + thisCrop.TtEmergToSeedling, thisCrop.Xo_Biomass, thisCrop.b_Biomass);
 
             // derive crop Harvest State Variables 
 
@@ -85,20 +99,22 @@ namespace SVSModel
 
 
             //Daily time-step, calculate Daily Scallers to give in-crop patterns
+            double estab_adjust = -thisCrop.TtSowToEmerg + thisCrop.TtEmergToSeedling;
             Dictionary<DateTime, double> biomassScaller = new Dictionary<DateTime, double>();
             Dictionary<DateTime, double> coverScaller = new Dictionary<DateTime, double>();
             Dictionary<DateTime, double> rootDepthScaller = new Dictionary<DateTime, double>();
             foreach (DateTime d in tt.Keys)
             {
-                double bmScaller = (1 / (1 + Math.Exp(-((tt[d] - thisCrop.Xo_Biomass) / (thisCrop.b_Biomass)))));
+                double ttEmerged = Math.Max(0, tt[d] + estab_adjust);
+                double bmScaller = Functions.sigmoid(ttEmerged, thisCrop.Xo_Biomass , thisCrop.b_Biomass);
                 biomassScaller.Add(d, bmScaller);
                 double rdScaller = 1;
-                if (tt[d] < thisCrop.T_maxRD)
-                    rdScaller = tt[d] / thisCrop.T_maxRD;
+                if (ttEmerged < thisCrop.T_maxRD)
+                    rdScaller = ttEmerged / thisCrop.T_maxRD;
                 rootDepthScaller.Add(d, rdScaller);
-                double cScaller = Math.Max(0, (1 - (tt[d] - thisCrop.T_sen) / (thisCrop.T_mat - thisCrop.T_sen)));
-                if (tt[d] < thisCrop.T_sen)
-                    cScaller = 1 / (1 + Math.Exp(-((tt[d] - thisCrop.Xo_cov) / thisCrop.b_cov)));
+                double cScaller = Math.Max(0, (1 - (ttEmerged - thisCrop.T_sen) / (thisCrop.TtEmergToMat - thisCrop.T_sen)));
+                if (ttEmerged < thisCrop.T_sen)
+                    cScaller = Functions.sigmoid(ttEmerged,thisCrop.Xo_cov ,thisCrop.b_cov);
                 coverScaller.Add(d, cScaller);
             }
 
@@ -142,7 +158,7 @@ namespace SVSModel
             List<string> coeffs = new List<string> { "EndUse", "Typical Yield","Typical Yield Units","Yield type","Typical Population (/ha)",
                                                       "TotalOrDry","Typical Dressing Loss %","Typical Field Loss %","Typical HI",
                                                       "HI Range","Moisture %","P Root","Max RD","A cover","rCover","Root [N]",
-                                                      "Stover [N]","Product [N]" };
+                                                      "Stover [N]","Product [N]","TtEmerg" };
 
             Dictionary<string, object> cropParamDict = new Dictionary<string, object>();
             foreach (string c in coeffs)
@@ -179,11 +195,12 @@ namespace SVSModel
 
         public DateTime[] growDates;
         ///Crop parameters
-        public double Tt_Harv;
-        public double Tt_estab;
+        public double TtEstabToHarv;
+        public double TtSowToEmerg;
+        public double TtEmergToSeedling;
+        public double TtEmergToMat;
         public double Xo_Biomass;
         public double b_Biomass;
-        public double T_mat;
         public double T_maxRD;
         public double T_sen;
         public double Xo_cov;

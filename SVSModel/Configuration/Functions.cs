@@ -294,5 +294,10 @@ namespace SVSModel.Configuration
             }
             return ret;
         }
+
+        public static double sigmoid(double dX, double Xo, double b)
+        {
+            return 1 / (1 + Math.Exp(-(dX - Xo) / b));
+        }
     }
 }

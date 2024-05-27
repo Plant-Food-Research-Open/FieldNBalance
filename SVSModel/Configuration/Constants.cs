@@ -14,8 +14,8 @@ namespace SVSModel.Configuration
         /// <summary>Dictionary containing values for the proportion of maximum DM that occurs at each predefined crop stage</summary>
         public static readonly Dictionary<string, double> PropnMaxDM = new()
         {
-            { "Seed", 0.0066 },
-            { "Seedling", 0.015 },
+            { "Seed", 0.004 },
+            { "Seedling", 0.011 },
             { "Vegetative", 0.5 },
             { "EarlyReproductive", 0.75 },
             { "MidReproductive", 0.86 },
@@ -27,14 +27,14 @@ namespace SVSModel.Configuration
         /// <summary>Dictionary containing values for the proportion of thermal time to maturity that has accumulate at each predefined crop stage</summary>
         public static readonly Dictionary<string, double> PropnTt = new()
         {
-            { "Seed", 0 },
-            { "Seedling", 0.16 },
+            { "Seed", -0.0517 },
+            { "Seedling", 0.050 },
             { "Vegetative", 0.5 },
-            { "EarlyReproductive", 0.61 },
-            { "MidReproductive", 0.69 },
-            { "LateReproductive", 0.8 },
-            { "Maturity", 1.0 },
-            { "Late", 1.27 }
+            { "EarlyReproductive", 0.5847 },
+            { "MidReproductive", 0.6815 },
+            { "LateReproductive", 0.7944 },
+            { "Maturity", 0.999 },
+            { "Late", 1.2957 }
         };
 
         /// <summary>Dictionary containing conversion from specified units to kg/ha which are the units that the model works in </summary>
