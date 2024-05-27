@@ -12,6 +12,7 @@
     <None Remove="actualConfigData.csv" />
     <None Remove="observed.csv" />
     <None Remove="TestSets\actualWS2DataConfig.csv" />
+    <None Remove="TestSets\CropStage\FieldConfigs.csv" />
     <None Remove="TestSets\Location\FieldConfigs.csv" />
     <None Remove="TestSets\Losses\FieldConfigs.csv" />
     <None Remove="TestSets\Moisture\FieldConfigs.csv" />
@@ -28,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="TestSets\CropStage\FieldConfigs.csv" />
     <EmbeddedResource Include="TestSets\Location\FieldConfigs.csv" />
     <EmbeddedResource Include="TestSets\Losses\FieldConfigs.csv" />
     <EmbeddedResource Include="TestSets\Moisture\FieldConfigs.csv" />
