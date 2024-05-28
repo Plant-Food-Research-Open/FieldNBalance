@@ -210,12 +210,12 @@ namespace SVSModel.Configuration
         /// </summary>
         /// <param name="Tt">array of daily average temperatures</param>
         /// <returns>Array of accumulated thermal time</returns>
-        public static Dictionary<DateTime, double> AccumulateTt(DateTime[] dates, Dictionary<DateTime, double> Tt)
+        public static Dictionary<DateTime, double> AccumulateTt(DateTime[] dates, Dictionary<DateTime, double> Tt, double Tbase)
         {
             Dictionary<DateTime, double> tt = new Dictionary<DateTime, double>();
             foreach (DateTime d in dates)
             {
-                double todayTt = Math.Max(0,Tt[d] - 5);
+                double todayTt = Math.Max(0,Tt[d] - Tbase);
                 if (d == dates[0]) // if today is the first day the below will throw
                 {
                     tt.Add(d, todayTt);

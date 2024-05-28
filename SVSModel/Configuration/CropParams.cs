@@ -40,6 +40,7 @@ namespace SVSModel.Configuration
         public double StoverN { get; private set; }
         public double ProductN { get; private set; }
         public double TtSowtoEmerge { get; private set; }
+        public double Tbase { get; private set; }
 
         public CropParams(Dictionary<string, object> c)
         {
@@ -62,6 +63,7 @@ namespace SVSModel.Configuration
             StoverN = Functions.Num(c["Stover [N]"]);
             ProductN = Functions.Num(c["Product [N]"]);
             TtSowtoEmerge = Functions.Num(c["TtEmerg"]);
+            Tbase = Functions.Num(c["Tbase"].ToString());
         }
     }
 }

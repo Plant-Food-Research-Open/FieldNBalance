@@ -24,14 +24,16 @@ namespace SVSModel
         /// <param name="tt">An array containing the accumulated thermal time for the duration of the crop</param>
         /// <param name="cf">A specific class that holds all the simulation configuration data in the correct types for use in the model</param>
         /// <returns>A 2D array of crop model outputs</returns>
-        public static CropType Grow(Dictionary<DateTime, double> tt,
+        public static CropType Grow(Dictionary<DateTime, double> meanT,
                                      CropConfig cf)
         {
             CropType thisCrop = new CropType();
+
             ///Set up data structures
             thisCrop.growDates = Functions.DateSeries(cf.EstablishDate, cf.HarvestDate);
             DataFrame allCropParams = Crop.LoadCropCoefficients();
             CropParams cropParams = ExtractCropParams(cf.CropNameFull, allCropParams);// new Dictionary<string, double>();
+            Dictionary<DateTime, double> tt = Functions.AccumulateTt(thisCrop.growDates, meanT, cropParams.Tbase);
 
             // Derive Crop Parameters
             thisCrop.TtEstabToHarv = tt.Values.Last();
@@ -158,7 +160,7 @@ namespace SVSModel
             List<string> coeffs = new List<string> { "EndUse", "Typical Yield","Typical Yield Units","Yield type","Typical Population (/ha)",
                                                       "TotalOrDry","Typical Dressing Loss %","Typical Field Loss %","Typical HI",
                                                       "HI Range","Moisture %","P Root","Max RD","A cover","rCover","Root [N]",
-                                                      "Stover [N]","Product [N]","TtEmerg" };
+                                                      "Stover [N]","Product [N]","TtEmerg","Tbase"};
 
             Dictionary<string, object> cropParamDict = new Dictionary<string, object>();
             foreach (string c in coeffs)
@@ -199,6 +201,7 @@ namespace SVSModel
         public double TtSowToEmerg;
         public double TtEmergToSeedling;
         public double TtEmergToMat;
+        public double Tbase;
         public double Xo_Biomass;
         public double b_Biomass;
         public double T_maxRD;
