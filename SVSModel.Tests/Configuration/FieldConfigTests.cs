@@ -56,8 +56,8 @@ public class FieldConfigTests
     {
         var fieldConfig = new FieldConfig
         {
-            SoilCategory = SoilCategory,
-            SoilTexture = Texture,
+            Category = SoilCategory,
+            Texture = Texture,
             PMN = PMN,
             Splits = Splits,
             _rawRocks = Rocks,
@@ -69,8 +69,8 @@ public class FieldConfigTests
         
         var fieldConfigExcel = new FieldConfig(ExcelInputDict);
         
-        Assert.Equal(fieldConfig.SoilCategory, fieldConfigExcel.SoilCategory);
-        Assert.Equal(fieldConfig.SoilTexture, fieldConfigExcel.SoilTexture);
+        Assert.Equal(fieldConfig.Category, fieldConfigExcel.Category);
+        Assert.Equal(fieldConfig.Texture, fieldConfigExcel.Texture);
         Assert.Equal(fieldConfig.Rocks, fieldConfigExcel.Rocks);
         Assert.Equal(fieldConfig.SampleDepthFactor, fieldConfigExcel.SampleDepthFactor);
         Assert.Equal(fieldConfig.BulkDensity, fieldConfigExcel.BulkDensity);
