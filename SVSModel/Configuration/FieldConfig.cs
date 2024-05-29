@@ -16,12 +16,12 @@ namespace SVSModel.Configuration
     {
         // Inputs
         public string WeatherStation { get; init; }
-        public SoilCategory Category { get; init; }
-        public SoilTexture Texture { get; init; }
+        public SoilCategoris Category { get; init; }
+        public SoilTextures Texture { get; init; }
         public double PMN { get; init; }
         public int Splits { get; init; }
         public double _rawRocks { internal get; init; }
-        public SampleDepth _sampleDepth { internal get; init; }
+        public SampleDepths _sampleDepth { internal get; init; }
         public string _prePlantRain { internal get; init; }
         public string _inCropRain { internal get; init; }
         public string _irrigation { internal get; init; }
@@ -48,13 +48,13 @@ namespace SVSModel.Configuration
         {
             // Only raw input values should be set in here
             WeatherStation = c["WeatherStation"].ToString();
-            Enum.TryParse(c["SoilCategory"].ToString(), out SoilCategory Category);
-            Enum.TryParse(c["Texture"].ToString(), out SoilTexture Texture);
+            Enum.TryParse(c["SoilCategory"].ToString(), out SoilCategoris Category);
+            Enum.TryParse(c["Texture"].ToString(), out SoilTextures Texture);
             PMN = Functions.Num(c["PMN"]);
             Splits = int.Parse(c["Splits"].ToString());
 
             _rawRocks = Functions.Num(c["Rocks"]);
-            Enum.TryParse(c["SampleDepth"].ToString(), out SampleDepth _sampleDepth);
+            Enum.TryParse(c["SampleDepth"].ToString(), out SampleDepths _sampleDepth);
             _prePlantRain = c["PrePlantRain"].ToString();
             _inCropRain = c["InCropRain"].ToString();
             _irrigation = c["Irrigation"].ToString();

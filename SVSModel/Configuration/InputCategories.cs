@@ -78,13 +78,13 @@ namespace SVSModel.Configuration
         }
 
 
-        public enum SoilCategory
+        public enum SoilCategoris
         {
             Sedimentary,
             Volcanic
         }
 
-        public enum SampleDepth
+        public enum SampleDepths
         {
             [Description("0-15cm")]
             Top15cm,
@@ -96,7 +96,7 @@ namespace SVSModel.Configuration
             Top90cm
         }
 
-        public enum SoilTexture
+        public enum SoilTextures
         {
             [Description("Sand")]
             Sand,

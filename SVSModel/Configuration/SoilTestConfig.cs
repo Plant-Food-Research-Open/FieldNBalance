@@ -19,11 +19,11 @@ public class SoilTestConfig
     // Inputs
     public DateTime TestDate { get; init; }
     public double TestValue { get; init; }
-    public SampleDepth DepthOfSample {get; init;}
+    public SampleDepths DepthOfSample {get; init;}
     public TestType TypeOfTest { get; init; }
     public TestMoisture MoistureOfSample {  get; init; } 
-    public SoilCategory CategoryOfSoil { get; init; }
-    public SoilTexture TextureOfSoil { get; init; }
+    public SoilCategoris CategoryOfSoil { get; init; }
+    public SoilTextures TextureOfSoil { get; init; }
 
     public double BulkDensity
     {
@@ -51,8 +51,8 @@ public class SoilTestConfig
     /// <summary>
     /// Constructor used only by the Excel model
     /// </summary>
-    public SoilTestConfig(DateTime testDate, double testValue, SampleDepth depthOfSample, 
-        TestType typeOfTest, TestMoisture moistureOfSample, SoilCategory categoryOfSoil, SoilTexture textureOfSoil)
+    public SoilTestConfig(DateTime testDate, double testValue, SampleDepths depthOfSample, 
+        TestType typeOfTest, TestMoisture moistureOfSample, SoilCategoris categoryOfSoil, SoilTextures textureOfSoil)
     {
         TestDate = testDate;
         TestValue = testValue;
