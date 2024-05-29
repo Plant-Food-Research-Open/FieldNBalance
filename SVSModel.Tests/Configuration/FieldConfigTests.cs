@@ -6,18 +6,19 @@ using System.Collections.Generic;
 using SVSModel.Configuration;
 using SVSModel.Models;
 using Xunit;
+using static SVSModel.Configuration.InputCategories;
 
 namespace SVSModel.Tests.Configuration;
 
 public class FieldConfigTests
 {
     private static readonly string WeatherStation = Defaults.WeatherStation;
-    private static readonly string SoilCategory = Defaults.SoilCategory;
-    private static readonly string Texture = Defaults.SoilTexture;
+    private static readonly SoilCategoris SoilCategory = Defaults.SoilCategory;
+    private static readonly SoilTextures Texture = Defaults.SoilTexture;
     private static readonly double PMN = Defaults.PMN;
     private static readonly int Splits = Defaults.Splits;
     private static readonly double Rocks = 10;
-    private static readonly string SampleDepth = Defaults.SampleDepth;
+    private static readonly SampleDepths SampleDepth = Defaults.SampleDepth;
     private static readonly string PrePlantRain = Defaults.RainPrior;
     private static readonly string InCropRain = Defaults.RainDuring;
     private static readonly string Irrigation = Defaults.IrrigationApplied;

@@ -3,6 +3,7 @@
 // Copyright (c) 2024 The New Zealand Institute for Plant and Food Research Limited
 
 using System;
+using static SVSModel.Configuration.InputCategories;
 
 namespace SVSModel.Models;
 
@@ -39,9 +40,9 @@ public static class Defaults
     public static readonly string ResidueIncorporation = "Full (Plough)";
 
     public static readonly string WeatherStation = "Lincoln";
-    public static readonly string SoilCategory = "Sedimentary";
-    public static readonly string SoilTexture = "Silt loam";
-    public static readonly string SampleDepth = "0-30cm";
+    public static readonly SoilCategoris SoilCategory = SoilCategoris.Sedimentary;
+    public static readonly SoilTextures SoilTexture = SoilTextures.SiltLoam;
+    public static readonly SampleDepths SampleDepth = SampleDepths.Top30cm;
     public static readonly double PMN = 55;
     public static readonly int Splits = 3;
     public static readonly string RainPrior = "Typical";
