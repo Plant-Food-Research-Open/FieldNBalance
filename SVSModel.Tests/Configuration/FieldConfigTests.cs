@@ -62,7 +62,7 @@ public class FieldConfigTests
             PMN = PMN,
             Splits = Splits,
             _rawRocks = Rocks,
-            _sampleDepth = SampleDepth,
+            SampleDepth = SampleDepth,
             _prePlantRain = PrePlantRain,
             _inCropRain = InCropRain,
             _irrigation = Irrigation

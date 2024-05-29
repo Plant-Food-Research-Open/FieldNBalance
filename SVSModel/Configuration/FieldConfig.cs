@@ -21,14 +21,14 @@ namespace SVSModel.Configuration
         public double PMN { get; init; }
         public int Splits { get; init; }
         public double _rawRocks { internal get; init; }
-        public SampleDepths _sampleDepth { internal get; init; }
+        public SampleDepths SampleDepth { internal get; init; }
         public string _prePlantRain { internal get; init; }
         public string _inCropRain { internal get; init; }
         public string _irrigation { internal get; init; }
         
         // Calculated fields
         public double Rocks => _rawRocks / 100;
-        public double SampleDepthFactor => Constants.SampleDepthFactor[_sampleDepth];
+        public double SampleDepthFactor => Constants.SampleDepthFactor[SampleDepth];
         public double BulkDensity => Constants.BulkDensity(Category, Texture);
         public double AWC => 3 * Constants.AWCpct[Texture] * (1 - Rocks);
         public double PrePlantRainFactor => Constants.PPRainFactors[_prePlantRain];
@@ -48,13 +48,16 @@ namespace SVSModel.Configuration
         {
             // Only raw input values should be set in here
             WeatherStation = c["WeatherStation"].ToString();
-            Enum.TryParse(c["SoilCategory"].ToString(), out SoilCategoris Category);
-            Enum.TryParse(c["Texture"].ToString(), out SoilTextures Texture);
+            Enum.TryParse(c["SoilCategory"].ToString(), out SoilCategoris _category);
+            Category = _category;
+            Enum.TryParse(c["Texture"].ToString(), out SoilTextures _texture);
+            Texture = _texture; 
             PMN = Functions.Num(c["PMN"]);
             Splits = int.Parse(c["Splits"].ToString());
 
             _rawRocks = Functions.Num(c["Rocks"]);
             Enum.TryParse(c["SampleDepth"].ToString(), out SampleDepths _sampleDepth);
+            SampleDepth = _sampleDepth;
             _prePlantRain = c["PrePlantRain"].ToString();
             _inCropRain = c["InCropRain"].ToString();
             _irrigation = c["Irrigation"].ToString();
