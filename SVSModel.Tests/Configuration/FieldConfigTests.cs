@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using SVSModel.Configuration;
 using SVSModel.Models;
 using Xunit;
+using static SVSModel.Configuration.InputCategories;
 
 namespace SVSModel.Tests.Configuration;
 
@@ -43,7 +44,7 @@ public class FieldConfigTests
 
         Assert.Equal(fieldConfig.Rocks, Rocks / 100);
         Assert.Equal(fieldConfig.SampleDepthFactor, Constants.SampleDepthFactor[SampleDepth]);
-        Assert.Equal(fieldConfig.BulkDensity, Constants.ParticleDensity[SoilCategory] * Constants.Porosity[Texture]);
+        Assert.Equal(fieldConfig.BulkDensity, Constants.BulkDensity(SoilCategory, Texture));
         Assert.Equal(fieldConfig.AWC, 3 * Constants.AWCpct[Texture] * (1 - Rocks / 100));
         Assert.Equal(fieldConfig.PrePlantRainFactor, Constants.PPRainFactors[PrePlantRain]);
         Assert.Equal(fieldConfig.InCropRainFactor, Constants.ICRainFactors[InCropRain]);
@@ -56,12 +57,12 @@ public class FieldConfigTests
     {
         var fieldConfig = new FieldConfig
         {
-            SoilCategory = SoilCategory,
-            SoilTexture = Texture,
+            Category = SoilCategory,
+            Texture = Texture,
             PMN = PMN,
             Splits = Splits,
             _rawRocks = Rocks,
-            _sampleDepth = SampleDepth,
+            SampleDepth = SampleDepth,
             _prePlantRain = PrePlantRain,
             _inCropRain = InCropRain,
             _irrigation = Irrigation
@@ -69,8 +70,8 @@ public class FieldConfigTests
         
         var fieldConfigExcel = new FieldConfig(ExcelInputDict);
         
-        Assert.Equal(fieldConfig.SoilCategory, fieldConfigExcel.SoilCategory);
-        Assert.Equal(fieldConfig.SoilTexture, fieldConfigExcel.SoilTexture);
+        Assert.Equal(fieldConfig.Category, fieldConfigExcel.Category);
+        Assert.Equal(fieldConfig.Texture, fieldConfigExcel.Texture);
         Assert.Equal(fieldConfig.Rocks, fieldConfigExcel.Rocks);
         Assert.Equal(fieldConfig.SampleDepthFactor, fieldConfigExcel.SampleDepthFactor);
         Assert.Equal(fieldConfig.BulkDensity, fieldConfigExcel.BulkDensity);

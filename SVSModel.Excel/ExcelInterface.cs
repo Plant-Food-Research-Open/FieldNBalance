@@ -8,6 +8,8 @@ using SVSModel.Configuration;
 using ExcelDna.Integration;
 using System.Linq;
 using SVSModel.Models;
+using static SVSModel.Configuration.Constants;
+using static SVSModel.Configuration.InputCategories;
 
 namespace SVSModel.Excel
 {
@@ -18,10 +20,41 @@ namespace SVSModel.Excel
         object[,] GetDailyCropData(double[] Tt, object[,] Config);
 
         object[,] GetCropCoefficients();
+
+        object[,] GetSoilTestResult(object testDate, double testValue, string depthOfSample,
+                                               string typeOfTest, string moistureOfTest,
+                                               string soilCategory, string soilTexture);
     }
 
     public static class MyFunctions //: IMyFunctions
     {
+        /// <summary>
+        /// Takes soil test input values and returns a value in kg N/ha
+        /// </summary>
+        /// <param name="testDate">Date of test</param>
+        /// <param name="testValue">value of test in mgN/g soil</param>
+        /// <param name="depthOfSample">0-15, 30, 60 or 90cm</param>
+        /// <param name="typeOfTest">Lab or Quicktest</param>
+        /// <param name="moistureOfTest">Wet, Moist, dry</param>
+        /// <param name="categoryOfSoil">Volcanic or sedementary</param>
+        /// <param name="textureOfSoil">a valid texture class</param>
+        /// <returns>Soil nitrogen in kg/ha</returns>
+        public static object[,] GetSoilTestResult(object testDate, double testValue, 
+                                                                     string depthOfSample,
+                                                                     string typeOfTest, string moistureOfTest,
+                                                                     string categoryOfSoil, string textureOfSoil)
+
+        {
+            DateTime _testDate = Functions.Date(testDate);
+            SoilTestConfig test = new SoilTestConfig(_testDate, testValue, depthOfSample,
+                                                       typeOfTest, moistureOfTest,
+                                                       categoryOfSoil, textureOfSoil);
+            object[,] st = new object[1, 2];
+            st[0, 0] = test.Result.Keys.First();
+            st[0, 1] = test.Result.Values.First();
+            return st;
+        }
+
         /// <summary>
         /// Function that takes input data in 2D array format and calculates a N balance for a 3 crops rotation and returns N balance variables in 2D array format
         /// </summary>

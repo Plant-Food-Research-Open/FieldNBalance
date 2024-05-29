@@ -14,6 +14,8 @@ using CsvHelper;
 using SVSModel.Configuration;
 using SVSModel.Models;
 using SVSModel.Simulation;
+using static SVSModel.Configuration.Constants;
+using static SVSModel.Configuration.InputCategories;
 
 namespace SVSModel
 {
@@ -27,7 +29,8 @@ namespace SVSModel
         /// <param name="nApplied">A dictionary of nitrogen applications</param>
         /// <param name="config">Model config object, all parameters are required</param>
         /// <returns>A list of <see cref="DailyNBalance"/> objects</returns>
-        List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config);
+        List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults,
+                                             Dictionary<DateTime, double> nApplied, Config config);
         
         /// <summary>
         /// Gets the crop data from the data file
@@ -35,10 +38,24 @@ namespace SVSModel
         /// <returns>List of <see cref="CropCoefficient"/>s directly from the data file</returns>
         IEnumerable<CropCoefficient> GetCropCoefficients();
 
+        Dictionary<DateTime, double> GetSoilTestResult(DateTime testDate, double testValue, string depthOfSample,
+                                                       string typeOfTest, string moistureOfTest,
+                                                       string categoryOfSoil, string textureOfSoil);
+
     }
 
     public class ModelInterface : IModelInterface
     {
+        public Dictionary<DateTime, double> GetSoilTestResult(DateTime testDate, double testValue, string depthOfSample,
+                                                       string typeOfTest, string moistureOfTest,
+                                                       string categoryOfSoil, string textureOfSoil)
+        {
+            SoilTestConfig test = new SoilTestConfig(testDate, testValue, depthOfSample,
+                                                       typeOfTest, moistureOfTest,
+                                                       categoryOfSoil, textureOfSoil);
+            return test.Result;
+        }
+
         public List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config)
         {
             var startDate = config.Prior.EstablishDate.AddDays(-1);

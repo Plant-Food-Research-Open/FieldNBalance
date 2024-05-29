@@ -47,7 +47,7 @@ namespace TestModel
             }
 
 
-            List<string> sets = new List<string>  { "WS1", "WS2", "Residues", "Location", "Moisture", "Losses" };
+            List<string> sets = new List<string> { "WS1", "WS2", "CropStage", "Residues", "Location", "Moisture", "Losses" };
 
             //Delete graphs from previous test run
             string graphFolder = Path.Join(Directory.GetCurrentDirectory(), "TestGraphs", "Outputs");
@@ -102,7 +102,7 @@ namespace TestModel
             {
                 Tests.Add(row[0].ToString());
             }
-            //Tests.Add("LincolnRot2_N4_Irr2_PakChoi");
+            //Tests.Add("8-1Wheat");
 
             foreach (string test in Tests)
             {

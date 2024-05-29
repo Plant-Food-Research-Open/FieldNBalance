@@ -44,12 +44,8 @@ namespace SVSModel.Simulation
             //Run crop model for each crop in rotation to calculate CropN (total standing in in crop) and Nuptake (Daily N removal from the soil by the crop)
             foreach (CropConfig crop in config.Rotation) //Step through each crop position
             {
-                //Make date series for duraion of the crop and accumulate thermal time over that period
-                DateTime[] cropDates = Functions.DateSeries(crop.EstablishDate, crop.HarvestDate);
-                Dictionary<DateTime, double> AccTt = Functions.AccumulateTt(cropDates, meanT);
-
                 //Calculated outputs for each crop
-                CropType currentCrop = Crop.Grow(AccTt, crop);
+                CropType currentCrop = Crop.Grow(meanT, crop);
 
                 foreach (DateTime d in currentCrop.growDates)
                 {

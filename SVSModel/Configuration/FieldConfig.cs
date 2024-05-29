@@ -2,7 +2,9 @@
 // Author: Hamish Brown.
 // Copyright (c) 2024 The New Zealand Institute for Plant and Food Research Limited
 
+using System;
 using System.Collections.Generic;
+using static SVSModel.Configuration.InputCategories;
 
 namespace SVSModel.Configuration
 {
@@ -14,21 +16,21 @@ namespace SVSModel.Configuration
     {
         // Inputs
         public string WeatherStation { get; init; }
-        public string SoilCategory { get; init; }
-        public string SoilTexture { get; init; }
+        public string Category { get; init; }
+        public string Texture { get; init; }
         public double PMN { get; init; }
         public int Splits { get; init; }
         public double _rawRocks { internal get; init; }
-        public string _sampleDepth { internal get; init; }
+        public string SampleDepth { internal get; init; }
         public string _prePlantRain { internal get; init; }
         public string _inCropRain { internal get; init; }
         public string _irrigation { internal get; init; }
-
+        
         // Calculated fields
         public double Rocks => _rawRocks / 100;
-        public double SampleDepthFactor => Constants.SampleDepthFactor[_sampleDepth];
-        public double BulkDensity => Constants.ParticleDensity[SoilCategory] * Constants.Porosity[SoilTexture];
-        public double AWC => 3 * Constants.AWCpct[SoilTexture] * (1 - Rocks);
+        public double SampleDepthFactor => Constants.SampleDepthFactor[SampleDepth];
+        public double BulkDensity => Constants.BulkDensity(Category, Texture);
+        public double AWC => 3 * Constants.AWCpct[Texture] * (1 - Rocks);
         public double PrePlantRainFactor => Constants.PPRainFactors[_prePlantRain];
         public double InCropRainFactor => Constants.ICRainFactors[_inCropRain];
         public double IrrigationTrigger => Constants.IrrigationTriggers[_irrigation];
@@ -46,13 +48,13 @@ namespace SVSModel.Configuration
         {
             // Only raw input values should be set in here
             WeatherStation = c["WeatherStation"].ToString();
-            SoilCategory = c["SoilCategory"].ToString();
-            SoilTexture = c["Texture"].ToString();
+            Category = c["SoilCategory"].ToString();
+            Texture = c["Texture"].ToString(); 
             PMN = Functions.Num(c["PMN"]);
             Splits = int.Parse(c["Splits"].ToString());
-            
+
             _rawRocks = Functions.Num(c["Rocks"]);
-            _sampleDepth = c["SampleDepth"].ToString();
+            SampleDepth = c["SampleDepth"].ToString();
             _prePlantRain = c["PrePlantRain"].ToString();
             _inCropRain = c["InCropRain"].ToString();
             _irrigation = c["Irrigation"].ToString();
