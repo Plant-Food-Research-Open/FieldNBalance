@@ -41,8 +41,10 @@ namespace SVSModel.Models
         public double ACover { get; set; }
         public double RCover { get; set; }
         public double RootN { get; set; }
-        public double StOverN { get; set; }
+        public double StoverN { get; set; }
         public double ProductN { get; set; }
+        public double TtEmerg { get; set; }
+        public double Tbase { get; set; }
     }
 
     public sealed class CropCoefficientMap : ClassMap<CropCoefficient>
@@ -80,8 +82,10 @@ namespace SVSModel.Models
             Map(c => c.ACover).Name("A cover").Default(0);
             Map(c => c.RCover).Name("rCover").Default(0);
             Map(c => c.RootN).Name("Root [N]").Default(0);
-            Map(c => c.StOverN).Name("Stover [N]").Default(0);
+            Map(c => c.StoverN).Name("Stover [N]").Default(0);
             Map(c => c.ProductN).Name("Product [N]").Default(0);
+            Map(c => c.TtEmerg).Name("Thermal Time to emerge").Default(0);
+            Map(c => c.Tbase).Name("Base temperature for growth").Default(0);
         }
     }
 
