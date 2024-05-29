@@ -102,74 +102,74 @@ namespace SVSModel.Configuration
         };
 
         /// <summary>Sample depth factor to adjust measurments to equivelent of 30cm measure</summary>
-        public static readonly Dictionary<SampleDepths, double> SampleDepthFactor = new()
+        public static readonly Dictionary<string, double> SampleDepthFactor = new()
         {
-            { SampleDepths.Top15cm, 0.75 },
-            { SampleDepths.Top30cm, 1 },
-            { SampleDepths.Top60cm, 1.25 },
-            { SampleDepths.Top90cm, 1.5 }
+            { "Top15cm", 0.75 },
+            { "Top30cm", 1 },
+            { "Top60cm", 1.25 },
+            { "Top90cm", 1.5 }
         };
 
         /// <summary>Available water capacity %</summary>
-        public static readonly Dictionary<SoilTextures, double> AWCpct = new()
+        public static readonly Dictionary<string, double> AWCpct = new()
         {
-            { SoilTextures.Sand,          8 },
-            { SoilTextures.LoamySand,     18 },
-            { SoilTextures.SandyLoam,     23 },
-            { SoilTextures.SandyClay,     20 },
-            { SoilTextures.SandyClayLoam, 16 },
-            { SoilTextures.Loam,          22 },
-            { SoilTextures.Silt,          22 },
-            { SoilTextures.SiltLoam,      22 },
-            { SoilTextures.SiltyClayLoam, 20 },
-            { SoilTextures.ClayLoam,      18 },
-            { SoilTextures.SiltyClay,     20 },
-            { SoilTextures.Clay,          18 },
+            { "Sand",          8 },
+            { "LoamySand",     18 },
+            { "SandyLoam",     23 },
+            { "SandyClay",     20 },
+            { "SandyClayLoam", 16 },
+            { "Loam",          22 },
+            { "Silt",          22 },
+            { "SiltLoam",      22 },
+            { "SiltyClayLoam", 20 },
+            { "ClayLoam",      18 },
+            { "SiltyClay",     20 },
+            { "Clay",          18 },
         };
 
         /// <summary>The porocity (mm3 pores/mm3 soil volume) of different soil texture classes</summary>
-        public static readonly Dictionary<SoilTextures, double> Porosity = new()
+        public static readonly Dictionary<string, double> Porosity = new()
         {
-            { SoilTextures.Sand,          0.5 },
-            { SoilTextures.LoamySand,     0.51 },
-            { SoilTextures.SandyLoam,     0.52 },
-            { SoilTextures.SandyClay,     0.54 },
-            { SoilTextures.SandyClayLoam, 0.56 },
-            { SoilTextures.Loam,          0.54 },
-            { SoilTextures.Silt,          0.54 },
-            { SoilTextures.SiltLoam,      0.55 },
-            { SoilTextures.SiltyClayLoam, 0.58 },
-            { SoilTextures.ClayLoam,      0.58 },
-            { SoilTextures.SiltyClay,     0.61 },
-            { SoilTextures.Clay,          0.63 },
+            { "Sand",          0.5 },
+            { "LoamySand",     0.51 },
+            { "SandyLoam",     0.52 },
+            { "SandyClay",     0.54 },
+            { "SandyClayLoam", 0.56 },
+            { "Loam",          0.54 },
+            { "Silt",          0.54 },
+            { "SiltLoam",      0.55 },
+            { "SiltyClayLoam", 0.58 },
+            { "ClayLoam",      0.58 },
+            { "SiltyClay",     0.61 },
+            { "Clay",          0.63 },
         };
 
         /// <summary>particle bulk density (g/mm3)</summary>
-        public static readonly Dictionary<SoilCategoris, double> ParticleDensity = new()
+        public static readonly Dictionary<string, double> ParticleDensity = new()
         {
-            { SoilCategoris.Sedimentary, 2.65 },
-            { SoilCategoris.Volcanic, 1.9 },
+            { "Sedimentary", 2.65 },
+            { "Volcanic", 1.9 },
         };
 
-        public static double BulkDensity(SoilCategoris soilCategory, SoilTextures soilTexture)
+        public static double BulkDensity(string soilCategory, string soilTexture)
         {
             return Constants.ParticleDensity[soilCategory] * (1 - Constants.Porosity[soilTexture]);
         }
 
         public static readonly Dictionary<string, Dictionary<string, double>> MoistureFactor = new Dictionary<string, Dictionary<string, double>>()
         {
-            {SoilTextures.Clay.ToString(),          new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.5},{ "Wet", 1.3} } },
-            {SoilTextures.ClayLoam.ToString(),      new Dictionary<string, double>() { { "Dry", 1.7}, { "Moist", 1.4},{ "Wet", 1.3} } },
-            {SoilTextures.Loam.ToString(),          new Dictionary<string, double>() { { "Dry", 2.0}, { "Moist", 1.5},{ "Wet", 1.3} } },
-            {SoilTextures.LoamySand.ToString(),     new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.5},{ "Wet", 1.4} } },
-            {SoilTextures.Sand.ToString(),          new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.5},{ "Wet", 1.4} } },
-            {SoilTextures.SandyClay.ToString(),     new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.4},{ "Wet", 1.3} } },
-            {SoilTextures.SandyClayLoam.ToString(), new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.6},{ "Wet", 1.4} } },
-            {SoilTextures.SandyLoam.ToString(),     new Dictionary<string, double>() { { "Dry", 2.1}, { "Moist", 1.8},{ "Wet", 1.5} } },
-            {SoilTextures.Silt.ToString(),          new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.4},{ "Wet", 1.3} } },
-            {SoilTextures.SiltLoam.ToString(),      new Dictionary<string, double>() { { "Dry", 1.7}, { "Moist", 1.4},{ "Wet", 1.3} } },
-            {SoilTextures.SiltyClay.ToString(),     new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.6},{ "Wet", 1.4} } },
-            {SoilTextures.SiltyClayLoam.ToString(), new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.5},{ "Wet", 1.4} } },
+            {"Clay",          new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.5},{ "Wet", 1.3} } },
+            {"ClayLoam",      new Dictionary<string, double>() { { "Dry", 1.7}, { "Moist", 1.4},{ "Wet", 1.3} } },
+            {"Loam",          new Dictionary<string, double>() { { "Dry", 2.0}, { "Moist", 1.5},{ "Wet", 1.3} } },
+            {"LoamySand",     new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.5},{ "Wet", 1.4} } },
+            {"Sand",          new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.5},{ "Wet", 1.4} } },
+            {"SandyClay",     new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.4},{ "Wet", 1.3} } },
+            {"SandyClayLoam", new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.6},{ "Wet", 1.4} } },
+            {"SandyLoam",     new Dictionary<string, double>() { { "Dry", 2.1}, { "Moist", 1.8},{ "Wet", 1.5} } },
+            {"Silt",          new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.4},{ "Wet", 1.3} } },
+            {"SiltLoam",      new Dictionary<string, double>() { { "Dry", 1.7}, { "Moist", 1.4},{ "Wet", 1.3} } },
+            {"SiltyClay",     new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.6},{ "Wet", 1.4} } },
+            {"SiltyClayLoam", new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.5},{ "Wet", 1.4} } },
         };
     }
 }

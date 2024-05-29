@@ -38,17 +38,17 @@ namespace SVSModel
         /// <returns>List of <see cref="CropCoefficient"/>s directly from the data file</returns>
         IEnumerable<CropCoefficient> GetCropCoefficients();
 
-        Dictionary<DateTime, double> GetSoilTestResult(DateTime testDate, double testValue, SampleDepths depthOfSample,
-                                                       TestType typeOfTest, TestMoisture moistureOfTest,
-                                                       SoilCategoris categoryOfSoil, SoilTextures textureOfSoil);
+        Dictionary<DateTime, double> GetSoilTestResult(DateTime testDate, double testValue, string depthOfSample,
+                                                       string typeOfTest, string moistureOfTest,
+                                                       string categoryOfSoil, string textureOfSoil);
 
     }
 
     public class ModelInterface : IModelInterface
     {
-        public Dictionary<DateTime, double> GetSoilTestResult(DateTime testDate, double testValue, SampleDepths depthOfSample,
-                                                       TestType typeOfTest, TestMoisture moistureOfTest,
-                                                       SoilCategoris categoryOfSoil, SoilTextures textureOfSoil)
+        public Dictionary<DateTime, double> GetSoilTestResult(DateTime testDate, double testValue, string depthOfSample,
+                                                       string typeOfTest, string moistureOfTest,
+                                                       string categoryOfSoil, string textureOfSoil)
         {
             SoilTestConfig test = new SoilTestConfig(testDate, testValue, depthOfSample,
                                                        typeOfTest, moistureOfTest,

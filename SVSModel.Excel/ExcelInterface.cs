@@ -46,14 +46,9 @@ namespace SVSModel.Excel
 
         {
             DateTime _testDate = Functions.Date(testDate);
-            Enum.TryParse(depthOfSample, out SampleDepths _depthOfSample);
-            Enum.TryParse(typeOfTest, out TestType _typeOfTest);
-            Enum.TryParse(moistureOfTest, out  TestMoisture _moistureOfTest);
-            Enum.TryParse(categoryOfSoil, out SoilCategoris _categoryOfSoil);
-            Enum.TryParse(textureOfSoil, out SoilTextures _textureOfSoil);
-            SoilTestConfig test = new SoilTestConfig(_testDate, testValue, _depthOfSample,
-                                                       _typeOfTest, _moistureOfTest,
-                                                       _categoryOfSoil, _textureOfSoil);
+            SoilTestConfig test = new SoilTestConfig(_testDate, testValue, depthOfSample,
+                                                       typeOfTest, moistureOfTest,
+                                                       categoryOfSoil, textureOfSoil);
             object[,] st = new object[1, 2];
             st[0, 0] = test.Result.Keys.First();
             st[0, 1] = test.Result.Values.First();
