@@ -41,14 +41,14 @@ CBcolors = {
 # Path for current Tests
 
 dayfirst = True
-date_format = '%d/%m/%Y %H:%M:%S %p
+date_format = '%d/%m/%Y %H:%M:%S %p'
 try: 
     if os.environ["GITHUB_WORKSPACE"] != None:
         root = os.environ["GITHUB_WORKSPACE"]
         inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
         outPath = os.path.join(root, "TestGraphs", "Outputs")  
         dayfirst = False
-        date_format = '%m/%d/%Y %H:%M:%S %p        
+        date_format = '%m/%d/%Y %H:%M:%S %p'       
 except:
     rootfrags = os.path.abspath('Moisture.py').split("\\")
     root = ""
