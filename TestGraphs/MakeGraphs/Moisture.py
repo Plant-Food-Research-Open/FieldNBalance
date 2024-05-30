@@ -40,11 +40,15 @@ CBcolors = {
 
 # Path for current Tests
 
+dayfirst = True
+date_format = '%d/%m/%Y %H:%M:%S %p
 try: 
     if os.environ["GITHUB_WORKSPACE"] != None:
         root = os.environ["GITHUB_WORKSPACE"]
         inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
         outPath = os.path.join(root, "TestGraphs", "Outputs")  
+        dayfirst = False
+        date_format = '%m/%d/%Y %H:%M:%S %p        
 except:
     rootfrags = os.path.abspath('Moisture.py').split("\\")
     root = ""
@@ -55,7 +59,6 @@ except:
             root += d + "\\"
     inPath = os.path.join(root,"FieldNBalance","TestComponents", "TestSets", "Moisture", "Outputs")
     outPath = os.path.join(root,"FieldNBalance","TestGraphs", "Outputs")  
-
 
 # Get names and results from each test
 
@@ -71,12 +74,12 @@ for file in os.listdir(inPath):
 # +
 Alltests =[]
 for t in testFiles[:]:  
-    testframe = pd.read_csv(os.path.join(inPath, t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
+    testframe = pd.read_csv(os.path.join(inPath, t),index_col=0,dayfirst=dayfirst,date_format=date_format)  
     Alltests.append(testframe)   
 
 AllData = pd.concat(Alltests,axis=1,keys=tests)
 AllData.sort_index(axis=0,inplace=True)
-AllData.index = pd.to_datetime(AllData.index, dayfirst=False)
+AllData.index = pd.to_datetime(AllData.index, dayfirst=dayfirst)
 # -
 
 AllData.columns
