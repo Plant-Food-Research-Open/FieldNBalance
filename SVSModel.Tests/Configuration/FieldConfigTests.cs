@@ -45,7 +45,7 @@ public class FieldConfigTests
         Assert.Equal(fieldConfig.Rocks, Rocks / 100);
         Assert.Equal(fieldConfig.SampleDepthFactor, Constants.SampleDepthFactor[SampleDepth]);
         Assert.Equal(fieldConfig.BulkDensity, Constants.BulkDensity(SoilCategory, Texture));
-        Assert.Equal(fieldConfig.AWC, 3 * Constants.AWCpct[Texture] * (1 - Rocks / 100));
+        Assert.Equal(fieldConfig.AWC, 3 * Constants.AWCPercent[Texture] * (1 - Rocks / 100));
         Assert.Equal(fieldConfig.PrePlantRainFactor, Constants.PPRainFactors[PrePlantRain]);
         Assert.Equal(fieldConfig.InCropRainFactor, Constants.ICRainFactors[InCropRain]);
         Assert.Equal(fieldConfig.IrrigationTrigger, Constants.IrrigationTriggers[Irrigation]);
@@ -62,7 +62,7 @@ public class FieldConfigTests
             PMN = PMN,
             Splits = Splits,
             _rawRocks = Rocks,
-            SampleDepth = SampleDepth,
+            _sampleDepth = SampleDepth,
             _prePlantRain = PrePlantRain,
             _inCropRain = InCropRain,
             _irrigation = Irrigation
