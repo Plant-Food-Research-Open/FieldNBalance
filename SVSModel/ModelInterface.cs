@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -13,9 +12,7 @@ using System.Text;
 using CsvHelper;
 using SVSModel.Configuration;
 using SVSModel.Models;
-using SVSModel.Simulation;
 using static SVSModel.Configuration.Constants;
-using static SVSModel.Configuration.InputCategories;
 
 namespace SVSModel
 {
@@ -28,45 +25,59 @@ namespace SVSModel
         /// <param name="testResults">A dictionary of nitrogen test results</param>
         /// <param name="nApplied">A dictionary of nitrogen applications</param>
         /// <param name="config">Model config object, all parameters are required</param>
-        /// <returns>A list of <see cref="DailyNBalance"/> objects</returns>
-        List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults,
-                                             Dictionary<DateTime, double> nApplied, Config config);
-        
+        /// <returns>An object containing a list of <see cref="DailyNBalance"/> and an NBalance Graph summary</returns>
+        DailyNBalanceDTO GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config);
+
         /// <summary>
         /// Gets the crop data from the data file
         /// </summary>
         /// <returns>List of <see cref="CropCoefficient"/>s directly from the data file</returns>
         IEnumerable<CropCoefficient> GetCropCoefficients();
 
-        Dictionary<DateTime, double> GetSoilTestResult(DateTime testDate, double testValue, string depthOfSample,
-                                                       string typeOfTest, string moistureOfTest,
-                                                       string categoryOfSoil, string textureOfSoil);
-
+        Dictionary<DateTime, double> GetSoilTestResult(
+            DateTime testDate,
+            double testValue,
+            string depthOfSample,
+            string typeOfTest,
+            string moistureOfTest,
+            string categoryOfSoil,
+            string textureOfSoil);
     }
 
     public class ModelInterface : IModelInterface
     {
-        public Dictionary<DateTime, double> GetSoilTestResult(DateTime testDate, double testValue, string depthOfSample,
-                                                       string typeOfTest, string moistureOfTest,
-                                                       string categoryOfSoil, string textureOfSoil)
+        public Dictionary<DateTime, double> GetSoilTestResult(
+            DateTime testDate,
+            double testValue,
+            string depthOfSample,
+            string typeOfTest,
+            string moistureOfTest,
+            string categoryOfSoil,
+            string textureOfSoil)
         {
-            SoilTestConfig test = new SoilTestConfig(testDate, testValue, depthOfSample,
-                                                       typeOfTest, moistureOfTest,
-                                                       categoryOfSoil, textureOfSoil);
+            var test = new SoilTestConfig(
+                testDate,
+                testValue,
+                depthOfSample,
+                typeOfTest,
+                moistureOfTest,
+                categoryOfSoil,
+                textureOfSoil);
+            
             return test.Result;
         }
 
-        public List<DailyNBalance> GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config)
+        public DailyNBalanceDTO GetDailyNBalance(string weatherStation, Dictionary<DateTime, double> testResults, Dictionary<DateTime, double> nApplied, Config config)
         {
             var startDate = config.Prior.EstablishDate.AddDays(-1);
             var endDate = config.Following.HarvestDate.AddDays(2);
             var metData = BuildMetDataDictionaries(startDate, endDate, weatherStation, false);
 
-            var rawResult = Simulation.Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, config, Constants.InitialN);
+            var rawResult = Simulation.Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, config, InitialN);
 
-            var result = new List<DailyNBalance>();
+            List<DailyNBalance> results = [];
 
-            // Convert from the 2d object array that SimulateField returns into something user friendly
+            // Convert from the 2d object array that SimulateField returns into something user-friendly
             for (var r = 1; r < rawResult.GetLength(0); r++)
             {
                 var row = Enumerable.Range(0, rawResult.GetLength(1))
@@ -92,10 +103,12 @@ namespace SVSModel
                     GreenCover = values[11],
                 };
 
-                result.Add(data);
+                results.Add(data);
             }
+            
+            var nBalance = Simulation.Simulation.thisSim.CurrentNBalanceSummary;
 
-            return result;
+            return new DailyNBalanceDTO { Results = results, NBalance = nBalance };
         }
 
         public IEnumerable<CropCoefficient> GetCropCoefficients()
@@ -103,16 +116,15 @@ namespace SVSModel
             var assembly = Assembly.GetExecutingAssembly();
 
             var stream = assembly.GetManifestResourceStream("SVSModel.Data.CropCoefficientTableFull.csv");
-            if (stream == null) return Enumerable.Empty<CropCoefficient>();
+            if (stream == null) return [];
 
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                csv.Context.RegisterClassMap<CropCoefficientMap>();
+            using var reader = new StreamReader(stream, Encoding.UTF8);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            
+            csv.Context.RegisterClassMap<CropCoefficientMap>();
 
-                var cropData = csv.GetRecords<CropCoefficient>();
-                return cropData.ToList();
-            }
+            var cropData = csv.GetRecords<CropCoefficient>();
+            return cropData.ToList();
         }
 
         private static IEnumerable<WeatherStationData> GetMetData(string weatherStation)
@@ -122,26 +134,25 @@ namespace SVSModel
             var stream = assembly.GetManifestResourceStream($"SVSModel.Data.Met.{weatherStation}.csv");
             if (stream == null) return Enumerable.Empty<WeatherStationData>();
 
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                var data = csv.GetRecords<WeatherStationData>();
-                return data.ToList();
-            }
+            using var reader = new StreamReader(stream, Encoding.UTF8);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            
+            var data = csv.GetRecords<WeatherStationData>();
+            return data.ToList();
         }
+
         private static IEnumerable<TestStationData> GetActualMetData(string weatherStation)
         {
             var assembly = Assembly.GetExecutingAssembly();
 
             var stream = assembly.GetManifestResourceStream($"SVSModel.Data.Met.{weatherStation}.csv");
-            if (stream == null) return Enumerable.Empty<TestStationData>();
+            if (stream == null) return [];
 
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                var data = csv.GetRecords<TestStationData>();
-                return data.ToList();
-            }
+            using var reader = new StreamReader(stream, Encoding.UTF8);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            
+            var data = csv.GetRecords<TestStationData>();
+            return data.ToList();
         }
 
         public static MetDataDictionaries BuildMetDataDictionaries(DateTime startDate, DateTime endDate, string weatherStation, bool actualWeather)
