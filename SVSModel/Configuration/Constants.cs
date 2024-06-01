@@ -3,8 +3,6 @@
 // Copyright (c) 2024 The New Zealand Institute for Plant and Food Research Limited
 
 using System.Collections.Generic;
-using System.ComponentModel;
-using static SVSModel.Configuration.InputCategories;
 
 namespace SVSModel.Configuration
 {
@@ -14,7 +12,7 @@ namespace SVSModel.Configuration
         public const double InitialN = 50;
 
         /// <summary>Dictionary containing values for the proportion of maximum DM that occurs at each predefined crop stage</summary>
-        public static readonly Dictionary<string, double> PropnMaxDM = new()
+        public static readonly Dictionary<string, double> PropNMaxDM = new()
         {
             { "Seed", 0.004 },
             { "Seedling", 0.011 },
@@ -26,8 +24,8 @@ namespace SVSModel.Configuration
             { "Late", 0.9995 }
         };
 
-        /// <summary>Dictionary containing values for the proportion of thermal time to maturity that has accumulate at each predefined crop stage</summary>
-        public static readonly Dictionary<string, double> PropnTt = new()
+        /// <summary>Dictionary containing values for the proportion of thermal time to maturity that has accumulated at each predefined crop stage</summary>
+        public static readonly Dictionary<string, double> PropNTt = new()
         {
             { "Seed", -0.0517 },
             { "Seedling", 0.050 },
@@ -47,7 +45,7 @@ namespace SVSModel.Configuration
             { "kg/head", 1.0 }
         };
 
-        /// <summary>Dictionary containing conversion from specified residue treatments to proportoins returned </summary>
+        /// <summary>Dictionary containing conversion from specified residue treatments to proportions returned </summary>
         public static readonly Dictionary<string, double> ResidueFactRetained = new()
         {
             { "None removed", 1.0 },
@@ -57,7 +55,7 @@ namespace SVSModel.Configuration
             { "All removed", 0.0 }
         };
 
-        /// <summary>Dictionary containing conversion from specified residue treatments to proportoins returned </summary>
+        /// <summary>Dictionary containing conversion from specified residue treatments to proportions returned </summary>
         public static readonly Dictionary<string, double> ResidueIncorporation = new()
         {
             { "None (Surface)", 0.0 },
@@ -101,7 +99,7 @@ namespace SVSModel.Configuration
             { "Full", 0.9 }
         };
 
-        /// <summary>Sample depth factor to adjust measurments to equivelent of 30cm measure</summary>
+        /// <summary>Sample depth factor to adjust measurements to equivalent of 30cm measure</summary>
         public static readonly Dictionary<string, double> SampleDepthFactor = new()
         {
             { "Top15cm", 0.75 },
@@ -111,7 +109,7 @@ namespace SVSModel.Configuration
         };
 
         /// <summary>Available water capacity %</summary>
-        public static readonly Dictionary<string, double> AWCpct = new()
+        public static readonly Dictionary<string, double> AWCPercent = new()
         {
             { "Sand",          8 },
             { "LoamySand",     18 },
@@ -127,7 +125,7 @@ namespace SVSModel.Configuration
             { "Clay",          18 },
         };
 
-        /// <summary>The porocity (mm3 pores/mm3 soil volume) of different soil texture classes</summary>
+        /// <summary>The porosity (mm3 pores/mm3 soil volume) of different soil texture classes</summary>
         public static readonly Dictionary<string, double> Porosity = new()
         {
             { "Sand",          0.5 },
@@ -148,28 +146,28 @@ namespace SVSModel.Configuration
         public static readonly Dictionary<string, double> ParticleDensity = new()
         {
             { "Sedimentary", 2.65 },
-            { "Volcanic", 1.9 },
+            { "Volcanic", 1.9 }
         };
 
         public static double BulkDensity(string soilCategory, string soilTexture)
         {
-            return Constants.ParticleDensity[soilCategory] * (1 - Constants.Porosity[soilTexture]);
+            return ParticleDensity[soilCategory] * (1 - Porosity[soilTexture]);
         }
 
-        public static readonly Dictionary<string, Dictionary<string, double>> MoistureFactor = new Dictionary<string, Dictionary<string, double>>()
+        public static readonly Dictionary<string, Dictionary<string, double>> MoistureFactor = new()
         {
-            {"Clay",          new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.5},{ "Wet", 1.3} } },
-            {"ClayLoam",      new Dictionary<string, double>() { { "Dry", 1.7}, { "Moist", 1.4},{ "Wet", 1.3} } },
-            {"Loam",          new Dictionary<string, double>() { { "Dry", 2.0}, { "Moist", 1.5},{ "Wet", 1.3} } },
-            {"LoamySand",     new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.5},{ "Wet", 1.4} } },
-            {"Sand",          new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.5},{ "Wet", 1.4} } },
-            {"SandyClay",     new Dictionary<string, double>() { { "Dry", 1.8}, { "Moist", 1.4},{ "Wet", 1.3} } },
-            {"SandyClayLoam", new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.6},{ "Wet", 1.4} } },
-            {"SandyLoam",     new Dictionary<string, double>() { { "Dry", 2.1}, { "Moist", 1.8},{ "Wet", 1.5} } },
-            {"Silt",          new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.4},{ "Wet", 1.3} } },
-            {"SiltLoam",      new Dictionary<string, double>() { { "Dry", 1.7}, { "Moist", 1.4},{ "Wet", 1.3} } },
-            {"SiltyClay",     new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.6},{ "Wet", 1.4} } },
-            {"SiltyClayLoam", new Dictionary<string, double>() { { "Dry", 1.9}, { "Moist", 1.5},{ "Wet", 1.4} } },
+            { "Clay",          new Dictionary<string, double> { { "Dry", 1.8}, { "Moist", 1.5}, { "Wet", 1.3} } },
+            { "ClayLoam",      new Dictionary<string, double> { { "Dry", 1.7}, { "Moist", 1.4}, { "Wet", 1.3} } },
+            { "Loam",          new Dictionary<string, double> { { "Dry", 2.0}, { "Moist", 1.5}, { "Wet", 1.3} } },
+            { "LoamySand",     new Dictionary<string, double> { { "Dry", 1.8}, { "Moist", 1.5}, { "Wet", 1.4} } },
+            { "Sand",          new Dictionary<string, double> { { "Dry", 1.8}, { "Moist", 1.5}, { "Wet", 1.4} } },
+            { "SandyClay",     new Dictionary<string, double> { { "Dry", 1.8}, { "Moist", 1.4}, { "Wet", 1.3} } },
+            { "SandyClayLoam", new Dictionary<string, double> { { "Dry", 1.9}, { "Moist", 1.6}, { "Wet", 1.4} } },
+            { "SandyLoam",     new Dictionary<string, double> { { "Dry", 2.1}, { "Moist", 1.8}, { "Wet", 1.5} } },
+            { "Silt",          new Dictionary<string, double> { { "Dry", 1.9}, { "Moist", 1.4}, { "Wet", 1.3} } },
+            { "SiltLoam",      new Dictionary<string, double> { { "Dry", 1.7}, { "Moist", 1.4}, { "Wet", 1.3} } },
+            { "SiltyClay",     new Dictionary<string, double> { { "Dry", 1.9}, { "Moist", 1.6}, { "Wet", 1.4} } },
+            { "SiltyClayLoam", new Dictionary<string, double> { { "Dry", 1.9}, { "Moist", 1.5}, { "Wet", 1.4} } }
         };
     }
 }

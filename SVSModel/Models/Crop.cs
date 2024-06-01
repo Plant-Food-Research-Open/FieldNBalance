@@ -4,13 +4,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Data.Analysis;
-using SVSModel;
 using SVSModel.Configuration;
 using SVSModel.Simulation;
 
@@ -44,19 +41,19 @@ namespace SVSModel
                 thisCrop.TtSowToEmerg = cropParams.TtSowtoEmerge;
             }
 
-            double PropnTt_EstToHarv = Constants.PropnTt[cf.HarvestStage] - Math.Max(Constants.PropnTt[cf.EstablishStage], 0); //Constants.PropnTt["Emergence"]);
+            double PropnTt_EstToHarv = Constants.PropNTt[cf.HarvestStage] - Math.Max(Constants.PropNTt[cf.EstablishStage], 0); //Constants.PropNTt["Emergence"]);
             thisCrop.TtEmergToMat = (thisCrop.TtEstabToHarv - thisCrop.TtSowToEmerg) * 1 / PropnTt_EstToHarv;
 
             thisCrop.TtEmergToSeedling = 0;
             if (cf.EstablishStage == "Seedling")
             {
-                thisCrop.TtEmergToSeedling = thisCrop.TtEmergToMat * Constants.PropnTt["Seedling"];
+                thisCrop.TtEmergToSeedling = thisCrop.TtEmergToMat * Constants.PropNTt["Seedling"];
             }
 
             thisCrop.Xo_Biomass = thisCrop.TtEmergToMat * 0.5;
             thisCrop.b_Biomass = thisCrop.Xo_Biomass * .2;
-            thisCrop.T_maxRD = Constants.PropnTt["EarlyReproductive"] * thisCrop.TtEmergToMat;
-            thisCrop.T_sen = Constants.PropnTt["MidReproductive"] * thisCrop.TtEmergToMat;
+            thisCrop.T_maxRD = Constants.PropNTt["EarlyReproductive"] * thisCrop.TtEmergToMat;
+            thisCrop.T_sen = Constants.PropNTt["MidReproductive"] * thisCrop.TtEmergToMat;
             thisCrop.Xo_cov = thisCrop.Xo_Biomass * 0.4 / cropParams.rCover;
             thisCrop.b_cov = thisCrop.Xo_cov * 0.2;
             if (cropParams.TypicalYieldUnits == "kg/head")
