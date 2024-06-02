@@ -12,7 +12,7 @@ namespace SVSModel.Configuration
         public const double InitialN = 50;
 
         /// <summary>Dictionary containing values for the proportion of maximum DM that occurs at each predefined crop stage</summary>
-        public static readonly Dictionary<string, double> PropNMaxDM = new()
+        public static readonly Dictionary<string, double> ProportionMaxDM = new()
         {
             { "Seed", 0.004 },
             { "Seedling", 0.011 },
@@ -25,7 +25,7 @@ namespace SVSModel.Configuration
         };
 
         /// <summary>Dictionary containing values for the proportion of thermal time to maturity that has accumulated at each predefined crop stage</summary>
-        public static readonly Dictionary<string, double> PropNTt = new()
+        public static readonly Dictionary<string, double> ProportionTt = new()
         {
             { "Seed", -0.0517 },
             { "Seedling", 0.050 },

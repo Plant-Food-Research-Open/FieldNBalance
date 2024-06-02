@@ -21,8 +21,7 @@ namespace SVSModel
         /// <param name="tt">An array containing the accumulated thermal time for the duration of the crop</param>
         /// <param name="cf">A specific class that holds all the simulation configuration data in the correct types for use in the model</param>
         /// <returns>A 2D array of crop model outputs</returns>
-        public static CropType Grow(Dictionary<DateTime, double> meanT,
-                                     CropConfig cf)
+        public static CropType Grow(Dictionary<DateTime, double> meanT, CropConfig cf)
         {
             CropType thisCrop = new CropType();
 
@@ -41,19 +40,19 @@ namespace SVSModel
                 thisCrop.TtSowToEmerg = cropParams.TtSowtoEmerge;
             }
 
-            double PropnTt_EstToHarv = Constants.PropNTt[cf.HarvestStage] - Math.Max(Constants.PropNTt[cf.EstablishStage], 0); //Constants.PropNTt["Emergence"]);
+            double PropnTt_EstToHarv = Constants.ProportionTt[cf.HarvestStage] - Math.Max(Constants.ProportionTt[cf.EstablishStage], 0); //Constants.PropNTt["Emergence"]);
             thisCrop.TtEmergToMat = (thisCrop.TtEstabToHarv - thisCrop.TtSowToEmerg) * 1 / PropnTt_EstToHarv;
 
             thisCrop.TtEmergToSeedling = 0;
             if (cf.EstablishStage == "Seedling")
             {
-                thisCrop.TtEmergToSeedling = thisCrop.TtEmergToMat * Constants.PropNTt["Seedling"];
+                thisCrop.TtEmergToSeedling = thisCrop.TtEmergToMat * Constants.ProportionTt["Seedling"];
             }
 
             thisCrop.Xo_Biomass = thisCrop.TtEmergToMat * 0.5;
             thisCrop.b_Biomass = thisCrop.Xo_Biomass * .2;
-            thisCrop.T_maxRD = Constants.PropNTt["EarlyReproductive"] * thisCrop.TtEmergToMat;
-            thisCrop.T_sen = Constants.PropNTt["MidReproductive"] * thisCrop.TtEmergToMat;
+            thisCrop.T_maxRD = Constants.ProportionTt["EarlyReproductive"] * thisCrop.TtEmergToMat;
+            thisCrop.T_sen = Constants.ProportionTt["MidReproductive"] * thisCrop.TtEmergToMat;
             thisCrop.Xo_cov = thisCrop.Xo_Biomass * 0.4 / cropParams.rCover;
             thisCrop.b_cov = thisCrop.Xo_cov * 0.2;
             if (cropParams.TypicalYieldUnits == "kg/head")
