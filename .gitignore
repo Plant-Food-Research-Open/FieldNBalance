@@ -367,7 +367,6 @@ FodyWeavers.xsd
 /TestGraphs/.ipynb_checkpoints/ResidueSensibilityGraphs-checkpoint.ipynb
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
 *.py[cod]
 *$py.class
 
@@ -424,7 +423,6 @@ cover/
 *.pot
 
 # Django stuff:
-*.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -527,10 +525,37 @@ cython_debug/
 #.idea/
 
 .DS_Store
-.cache
 .idea
 serve
 
 .hydra
 !html/*
 !index.*.png
+/TestGraphs/html/index.001.png
+/TestGraphs/html/index.002.png
+/TestGraphs/html/index.003.png
+/TestGraphs/html/index.004.png
+/TestGraphs/html/index.005.png
+/TestGraphs/html/index.006.png
+/TestGraphs/html/index.007.png
+/TestGraphs/html/index.008.png
+/TestGraphs/html/index.009.png
+/TestGraphs/html/index.010.png
+/TestGraphs/html/index.011.png
+/TestGraphs/html/index.012.png
+/TestGraphs/html/index.013.png
+/TestGraphs/html/index.014.png
+/TestGraphs/html/index.015.png
+/TestGraphs/html/index.016.png
+/TestGraphs/html/index.017.png
+/TestGraphs/html/index.018.png
+/TestGraphs/html/index.019.png
+/TestGraphs/html/index.020.png
+/TestGraphs/html/index.021.png
+/TestGraphs/html/index.022.png
+/TestGraphs/html/index.023.png
+/TestGraphs/html/index.024.png
+/TestGraphs/html/index.025.png
+/TestGraphs/html/index.026.png
+/TestGraphs/html/index.027.png
+/TestGraphs/html/index.html

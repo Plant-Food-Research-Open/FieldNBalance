@@ -187,12 +187,12 @@ plt.xlabel('Observed')
 
 # +
 colors = ['orange','green']
-Graph = plt.figure(figsize=(10,100))
-pos = 1
-row_num=len(tests)
 
 for s in range(1,10):
+    Graph = plt.figure(figsize=(10,15))
     testsAtSite = TestsFrame.loc[s,'crop'].values
+    row_num=len(testsAtSite)
+    pos = 1
     for t in testsAtSite: #['1Gra-A']:#tests:
         site = t[0]
         site = int(site)
@@ -218,8 +218,8 @@ for s in range(1,10):
             plt.legend()
             pos+=1
             c+=1
-Graph.tight_layout(pad=1.5)
-plt.savefig(os.path.join(outPath, "TimeCourse.png"))
+    Graph.tight_layout(pad=1.5)
+    plt.savefig(os.path.join(outPath, "WS2 Site "+str(s) +".png"))
 
 
 # +
