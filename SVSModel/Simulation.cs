@@ -199,18 +199,18 @@ namespace SVSModel.Simulation
 
     public class CropNBalanceSummary
     {
-        public double MineralIn;
-        public double CropIn;
-        public double ResidueIn;
-        public double SOMIn;
-        public double FertiliserIn;
+        public double MineralIn { get; }
+        public double CropIn { get; }
+        public double ResidueIn { get; }
+        public double SOMIn { get; }
+        public double FertiliserIn { get; }
         public double UncharacterisedIn { get { return Math.Max(0, Outs - Ins); } }
 
         /// Out
-        public double MinearlOut;
-        public double ProductOut;
-        public double StoverOut;
-        public double LossesOut;
+        public double MinearlOut { get; }
+        public double ProductOut { get; }
+        public double StoverOut { get; }
+        public double LossesOut { get; }
         public double UncharacterisedOut { get { return Math.Max(0,Ins-Outs); } }
 
         public double Ins { get { return MineralIn + CropIn + ResidueIn + SOMIn + FertiliserIn; } }

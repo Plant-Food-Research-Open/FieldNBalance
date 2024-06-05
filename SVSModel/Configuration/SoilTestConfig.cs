@@ -4,28 +4,34 @@
 
 using System;
 using System.Collections.Generic;
-using SVSModel.Models;
 using static SVSModel.Configuration.Constants;
 using static SVSModel.Configuration.InputCategories;
 
 namespace SVSModel.Configuration;
 
 /// <summary>
-/// Class that stores the configuration information in the correct type for a specific Soil Test .  
-/// I.e constructor takes all config settings as objects and converts them to appropriates types
+/// Class that stores the configuration information in the correct type for a specific Soil Test.  
+/// I.E. constructor takes all config settings as objects and converts them to appropriates types
 /// </summary>
-public class SoilTestConfig
+public class SoilTestConfig(
+    DateTime testDate,
+    double testValue,
+    string depthOfSample,
+    string typeOfTest,
+    string moistureOfSample,
+    string categoryOfSoil,
+    string textureOfSoil)
 {
     // Inputs
-    public DateTime TestDate { get; init; }
-    public double TestValue { get; init; }
-    public string DepthOfSample {get; init;}
-    public string TypeOfTest { get; init; }
-    public string MoistureOfSample {  get; init; } 
-    public string CategoryOfSoil { get; init; }
-    public string TextureOfSoil { get; init; }
+    private DateTime TestDate { get; } = testDate;
+    private double TestValue { get; } = testValue;
+    private string DepthOfSample {get;} = depthOfSample;
+    private string TypeOfTest { get; } = typeOfTest;
+    private string MoistureOfSample {  get; } = moistureOfSample;
+    private string CategoryOfSoil { get; } = categoryOfSoil;
+    private string TextureOfSoil { get; } = textureOfSoil;
 
-    public double BulkDensity
+    private double BulkDensity
     {
         get { return Constants.BulkDensity(CategoryOfSoil, TextureOfSoil); }
     }
@@ -35,31 +41,15 @@ public class SoilTestConfig
         get
         {
             double soilMF = 1;
-            if (TypeOfTest.ToString()==TestType.QuickTest.ToString())
-                soilMF = Constants.MoistureFactor[TextureOfSoil.ToString()][MoistureOfSample.ToString()];
-            double soilDepthFactor = SampleDepthFactor[DepthOfSample];
-            double result = TestValue / soilMF * BulkDensity * 3 * soilDepthFactor;
-            return new Dictionary<DateTime, double>() { { TestDate, result } };
+            if (TypeOfTest == TestType.QuickTest.ToString())
+            {
+                soilMF = MoistureFactor[TextureOfSoil][MoistureOfSample];
+            }
+            
+            var soilDepthFactor = SampleDepthFactor[DepthOfSample];
+            var result = TestValue / soilMF * BulkDensity * 3 * soilDepthFactor;
+            
+            return new Dictionary<DateTime, double> { { TestDate, result } };
         }
-    }
-    
-    /// <summary>
-    /// Constructor used only by external webapp
-    /// </summary>
-    public SoilTestConfig() { }
-
-    /// <summary>
-    /// Constructor used only by the Excel model
-    /// </summary>
-    public SoilTestConfig(DateTime testDate, double testValue, string depthOfSample, 
-        string typeOfTest, string moistureOfSample, string categoryOfSoil, string textureOfSoil)
-    {
-        TestDate = testDate;
-        TestValue = testValue;
-        DepthOfSample = depthOfSample;
-        TypeOfTest = typeOfTest;  
-        MoistureOfSample = moistureOfSample;
-        CategoryOfSoil = categoryOfSoil;
-        TextureOfSoil = textureOfSoil;
     }
 }

@@ -84,8 +84,8 @@ namespace SVSModel.Models
             Map(c => c.RootN).Name("Root [N]").Default(0);
             Map(c => c.StoverN).Name("Stover [N]").Default(0);
             Map(c => c.ProductN).Name("Product [N]").Default(0);
-            Map(c => c.TtEmerg).Name("Thermal Time to emerge").Default(0);
-            Map(c => c.Tbase).Name("Base temperature for growth").Default(0);
+            Map(c => c.TtEmerg).Name("TtEmerg").Default(0);
+            Map(c => c.Tbase).Name("Tbase").Default(0);
         }
     }
 
