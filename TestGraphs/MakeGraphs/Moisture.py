@@ -47,9 +47,11 @@ try:
         root = os.environ["GITHUB_WORKSPACE"]
         inPath = os.path.join(root, "TestComponents", "TestSets", "Moisture", "Outputs")
         outPath = os.path.join(root, "TestGraphs", "Outputs")  
-        dayfirst = False
-        date_format = '%m/%d/%Y %H:%M:%S %p'       
+        localDayFirst = False
+        localDateFormat = '%m/%d/%Y %H:%M:%S'      
 except:
+    localDayFirst = True
+    localDateFormat = '%d/%m/%Y %H:%M:%S %p'
     rootfrags = os.path.abspath('Moisture.py').split("\\")
     root = ""
     for d in rootfrags:
@@ -74,7 +76,7 @@ for file in os.listdir(inPath):
 # +
 Alltests =[]
 for t in testFiles[:]:  
-    testframe = pd.read_csv(os.path.join(inPath, t),index_col=0,dayfirst=dayfirst,date_format=date_format)  
+    testframe = pd.read_csv(os.path.join(inPath, t),index_col=0,dayfirst=localDayFirst,date_format=localDateFormat)   
     Alltests.append(testframe)   
 
 AllData = pd.concat(Alltests,axis=1,keys=tests)

@@ -41,8 +41,12 @@ try:
     if os.environ["GITHUB_WORKSPACE"] != None:
         root = os.environ["GITHUB_WORKSPACE"]
         inPath = os.path.join(root, "TestComponents", "TestSets", "WS2")
-        outPath = os.path.join(root, "TestGraphs", "Outputs")  
+        outPath = os.path.join(root, "TestGraphs", "Outputs") 
+        localDayFirst = False
+        localDateFormat = '%m/%d/%Y %H:%M:%S'
 except: 
+    localDayFirst = True
+    localDateFormat = '%d/%m/%Y %H:%M:%S %p'
     rootfrags = os.path.abspath('WS2.py').split("\\")
     root = ""
     for d in rootfrags:
@@ -74,7 +78,7 @@ for file in os.listdir(os.path.join(inPath,"Outputs")):
 # +
 Alltests =[]
 for t in testFiles[:]:  
-    testframe = pd.read_csv(os.path.join(inPath, "Outputs", t),index_col=0,dayfirst=True,date_format='%d/%m/%Y %H:%M:%S %p')  
+    testframe = pd.read_csv(os.path.join(inPath, "Outputs", t),index_col=0,dayfirst=localDayFirst,date_format=localDateFormat)  
     Alltests.append(testframe)   
 
 AllData = pd.concat(Alltests,axis=1,keys=tests)
