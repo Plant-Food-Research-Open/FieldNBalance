@@ -63,7 +63,7 @@ namespace SVSModel.Models
             // Determine dates that each fertiliser application should be made
             foreach (DateTime d in schedullingDates)
             {
-                if (thisSim.SoilN[d] < Constants.Trigger)
+                if (thisSim.SoilN[d] < thisSim.NUptake[d]*10)
                 {
                     double initialN = thisSim.SoilN[d];
                     double initialLossEst = thisSim.NLost[d];
