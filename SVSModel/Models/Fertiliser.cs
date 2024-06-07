@@ -63,7 +63,8 @@ namespace SVSModel.Models
             // Determine dates that each fertiliser application should be made
             foreach (DateTime d in schedullingDates)
             {
-                if (thisSim.SoilN[d] < thisSim.NUptake[d]*10)
+                double trigger = thisSim.NUptake[d] * 10;
+                if (thisSim.SoilN[d] < trigger)
                 {
                     double initialN = thisSim.SoilN[d];
                     double initialLossEst = thisSim.NLost[d];
@@ -74,7 +75,7 @@ namespace SVSModel.Models
                         for (int passes = 0; passes < 50; passes++)
                         {
                             double lastPassLossEst = losses;
-                            double remainingReqN = remainingRequirement(d, endScheduleDate, thisSim) + losses;
+                            double remainingReqN = remainingRequirement(d, endScheduleDate, thisSim, trigger) + losses;
                             NAppn = remainingReqN / remainingSplits;
                             SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true, new Dictionary<DateTime, double>(),true);
                             losses = anticipatedLosses(d, endScheduleDate, thisSim.NLost);
@@ -89,12 +90,13 @@ namespace SVSModel.Models
             }
         }
 
-        private static double remainingRequirement(DateTime startDate, DateTime endDate, SimulationType thisSim)
+        private static double remainingRequirement(DateTime startDate, DateTime endDate, SimulationType thisSim, double trigger)
         {
             double remainingCropN = thisSim.CropN[endDate] - thisSim.CropN[startDate];
             DateTime[] remainingDates = Functions.DateSeries(startDate, endDate);
             double remainingOrgN = remainingMineralisation(remainingDates, thisSim.NResidues, thisSim.NSoilOM);
-            return Math.Max(0, remainingCropN - remainingOrgN);
+            double surplussMineralN = Math.Max(0, trigger - Constants.Trigger);
+            return Math.Max(0, remainingCropN - remainingOrgN - surplussMineralN);
         }
 
         private static double remainingMineralisation(DateTime[] remainingDates, Dictionary<DateTime, double> residueMin, Dictionary<DateTime, double> somN)
