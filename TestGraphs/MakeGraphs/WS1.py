@@ -246,7 +246,7 @@ for s in sites:
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b-%y'))
             #plt.legend()
     Graph.tight_layout(pad=1.5)
-    plt.savefig(os.path.join(outPath, "WS1_"+s+"TimeCourse.png"))
+    plt.savefig(os.path.join(outPath, "1-WS1_"+s+"TimeCourse.png"))
 
 NbalComponents = ['SoilMineralN', 'UptakeN', 'ResidueN', 'SoilOMN', 'FertiliserN',
        'CropN', 'NDemand','LostN']
