@@ -219,7 +219,7 @@ for s in range(1,10):
             pos+=1
             c+=1
     Graph.tight_layout(pad=1.5)
-    plt.savefig(os.path.join(outPath, "WS2 Site "+str(s) +".png"))
+    plt.savefig(os.path.join(outPath, "2-WS2 Site "+str(s) +".png"))
 
 
 # +

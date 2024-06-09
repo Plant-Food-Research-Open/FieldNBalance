@@ -109,4 +109,4 @@ for site in ['Lauder','Lincoln','Levin']:
     plt.xticks(rotation=60)
     pos+=1
 Graph.tight_layout(pad=1.5)             
-plt.savefig(os.path.join(outPath,'Losses.png'))       
+plt.savefig(os.path.join(outPath,'5-Losses.png'))       

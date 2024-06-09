@@ -20,7 +20,6 @@ import os.path as osp
 from glob import glob
 from pathlib import Path
 
-print("report Started")
 try: 
     if os.environ["GITHUB_WORKSPACE"] != None:
         root = os.environ["GITHUB_WORKSPACE"]
