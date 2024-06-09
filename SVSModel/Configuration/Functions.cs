@@ -277,7 +277,7 @@ namespace SVSModel.Configuration
             foreach (DateTime d in meanRain.Keys) 
             { 
                 double todayRain = meanRain[d];
-                if ((d>= config.Current.EstablishDate) && (d<= config.Current.HarvestDate))
+                if ((d>= config.Current.EstablishDate) && (d<= config.Current.HarvestDate) && (d<=DateTime.Today))
                     todayRain *= config.Field.InCropRainFactor;
                 adjustedmeanRain.Add(d, todayRain);
             }
