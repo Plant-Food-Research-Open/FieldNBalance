@@ -10,6 +10,6 @@ namespace SVSModel.Models
     public class DailyNBalanceDTO
     {
         public List<DailyNBalance> Results { get; set; } = [];
-        public CropNBalanceSummary NBalance { get; set; }
+        public NBalanceSummary NBalance { get; set; }
     }
 }
