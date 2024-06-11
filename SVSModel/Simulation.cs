@@ -232,4 +232,40 @@ namespace SVSModel.Simulation
             LossesOut = lossesOut;
         }
     }
+
+    public class NBalanceSummary
+    { 
+        public Dictionary<string,int> Mineral { get; }
+        public Dictionary<string,int> CropProduct { get;}
+        public Dictionary<string ,int> OtherCropParts { get;}
+        public Dictionary<string, int> SoilOrganic { get; }
+        public Dictionary<string, int> Residues { get; }
+        public Dictionary<string, int> Fertiliser { get;}
+        public Dictionary<string, int> UnCharacterised { get; }
+        public Dictionary <string, int> Total { get;}
+
+        public NBalanceSummary(CropNBalanceSummary nBalance)
+        {
+            double resMin = Math.Max(0, nBalance.ResidueIn);
+            double resImob = Math.Max(0, -nBalance.ResidueIn);
+            double unCharOut = nBalance.UncharacterisedOut + nBalance.LossesOut;
+            Mineral = new Dictionary<string, int>         { { "In", (int)Math.Round(nBalance.MineralIn,0) },
+                                                            { "Out", (int)Math.Round(nBalance.MinearlOut,0) } };
+            CropProduct = new Dictionary<string, int>     { { "In", 0 },
+                                                            { "Out", (int)Math.Round(nBalance.ProductOut,0) } };
+            OtherCropParts = new Dictionary<string, int>  { { "In", (int)Math.Round(nBalance.CropIn, 0) },
+                                                            { "Out",(int)Math.Round(nBalance.StoverOut, 0)} };
+            SoilOrganic = new Dictionary<string, int>     { { "In", (int)Math.Round(nBalance.SOMIn, 0) },
+                                                            { "Out", 0 }};
+            Residues = new Dictionary<string, int>        { { "In", (int)Math.Round(resMin,0) },
+                                                            { "Out", (int)Math.Round(resImob,0) } };
+            Fertiliser = new Dictionary<string, int>      { { "In",(int)Math.Round(nBalance.FertiliserIn,0) },
+                                                            { "Out",0 }};
+            UnCharacterised = new Dictionary<string, int> { { "In", (int)Math.Round(nBalance.UncharacterisedIn, 0) },
+                                                            { "Out", (int)Math.Round(unCharOut,0) } };
+            Total = new Dictionary<string, int>           { { "In", (int)Math.Round(nBalance.Ins) },
+                                                            { "Out", (int)Math.Round(nBalance.Outs) } };
+        }
+    
+    }
 }

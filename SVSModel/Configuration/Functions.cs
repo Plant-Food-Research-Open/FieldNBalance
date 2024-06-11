@@ -131,6 +131,18 @@ namespace SVSModel.Configuration
         /// Function that packs an array of variables into a specified column in a 2D array
         /// </summary>
         /// <param name="colInd">index position of the column</param>
+        /// <param name="column">value to be packed into column</param>
+        /// <param name="df">the 2D array that the column is to be packed into</param>
+        public static void packRows(int colInd, Dictionary<string,int> column, ref object[,] df)
+        {
+            df[1, colInd] = column["In"];
+            df[2, colInd] = column["Out"];
+        }
+
+        /// <summary>
+        /// Function that packs an array of variables into a specified column in a 2D array
+        /// </summary>
+        /// <param name="colInd">index position of the column</param>
         /// <param name="column">array to be packed into column</param>
         /// <param name="df">the 2D array that the column is to be packed into</param>
         public static void packRows(int colInd, Dictionary<DateTime, double> column, ref object[,] df)
