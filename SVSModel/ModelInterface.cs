@@ -12,6 +12,7 @@ using System.Text;
 using CsvHelper;
 using SVSModel.Configuration;
 using SVSModel.Models;
+using SVSModel.Simulation;
 using static SVSModel.Configuration.Constants;
 
 namespace SVSModel
@@ -106,7 +107,7 @@ namespace SVSModel
                 results.Add(data);
             }
             
-            var nBalance = Simulation.Simulation.thisSim.CurrentNBalanceSummary;
+            var nBalance = new NBalanceSummary(Simulation.Simulation.thisSim.CurrentNBalanceSummary);
 
             return new DailyNBalanceDTO { Results = results, NBalance = nBalance };
         }
