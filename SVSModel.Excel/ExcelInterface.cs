@@ -12,12 +12,16 @@ using static SVSModel.Configuration.Constants;
 using static SVSModel.Configuration.InputCategories;
 using System.Runtime.InteropServices.ComTypes;
 using SVSModel;
+using System.Net;
+using SVSModel.Simulation;
 
 namespace SVSModel.Excel
 {
     public interface IMyFunctions
     {
-        object[,] GetDailyNBalance(object[,] met, object[,] config, object[,] testResults, object[,] nApplied);
+        object[,] GetDailyNBalance(object[,] config, object[,] testResults, object[,] nApplied);
+
+        object[,] GetDailyNBalanceSummary(object[,] config, object[,] testResults, object[,] nApplied);
 
         object[,] GetDailyCropData(double[] Tt, object[,] Config);
 
@@ -57,6 +61,8 @@ namespace SVSModel.Excel
             return st;
         }
 
+
+
         /// <summary>
         /// Function that takes input data in 2D array format and calculates a N balance for a 3 crops rotation and returns N balance variables in 2D array format
         /// </summary>
@@ -83,6 +89,61 @@ namespace SVSModel.Excel
 
                 return Simulation.Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, _testResults, _nApplied, _config, Constants.InitialN);
             }
+            else
+            {
+                object[,] listOfComplaints = new object[configErrors.Count, 3];
+                int c = 0;
+                foreach (string e in configErrors)
+                {
+                    listOfComplaints[c, 2] = e;
+                    c++;
+                }
+                return listOfComplaints;
+            }
+        }
+
+        /// <summary>
+        /// Function that takes input data in 2D array format and calculates a N balance for a 3 crops rotation and returns N balance variables in 2D array format
+        /// </summary>
+        /// <param name="met">2D Array with dates in first column and daily meterological data over the duration of the rotation in the second column</param>
+        /// <param name="config">2D array with parameter names and values for crop field configuration parameters</param>
+        /// <param name="testResults">2D array with dates in teh first column and soil N test results in the second</param>
+        /// <returns>Dictionary with parameter names as keys and parameter values as values</returns>
+        [ExcelFunction(Description = "Returns full N balance results")]
+        public static object[,] GetDailyNBalanceSummary(object[,] config, object[,] testResults, object[,] nApplied)
+        {
+            List<string> configErrors = Functions.ValidateConfig(config);
+
+            if (configErrors.Count == 0)
+            {
+                var _config = new Config(Functions.dictMaker(config));
+
+                var startDate = _config.Prior.EstablishDate.AddDays(-1);
+                var endDate = _config.Following.HarvestDate.AddDays(2);
+                var weatherStation = _config.Field.WeatherStation;
+                MetDataDictionaries metData = ModelInterface.BuildMetDataDictionaries(startDate, endDate, weatherStation, false);
+
+                Dictionary<DateTime, double> _testResults = Functions.dictMaker(testResults, "Value");
+                Dictionary<DateTime, double> _nApplied = Functions.dictMaker(nApplied, "Amount");
+
+                var rawResult = Simulation.Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, _testResults, _nApplied, _config, Constants.InitialN);
+
+                NBalanceSummary nBalSum = new NBalanceSummary(Simulation.Simulation.thisSim.CurrentNBalanceSummary);
+
+                object[,] outputs = new object[3, 8];
+
+                outputs[0, 0] = "Mineral"; Functions.packRows(0, nBalSum.Mineral, ref outputs);
+                outputs[0, 1] = "Crop Product"; Functions.packRows(1, nBalSum.CropProduct, ref outputs);
+                outputs[0, 2] = "Other Crop Parts"; Functions.packRows(2, nBalSum.OtherCropParts, ref outputs);
+                outputs[0, 3] = "Soil Organic"; Functions.packRows(3, nBalSum.SoilOrganic, ref outputs);
+                outputs[0, 4] = "Residues"; Functions.packRows(4, nBalSum.Residues, ref outputs);
+                outputs[0, 5] = "Fertiliser"; Functions.packRows(5, nBalSum.Fertiliser, ref outputs);
+                outputs[0, 6] = "Uncharacterised"; Functions.packRows(6, nBalSum.UnCharacterised, ref outputs);
+                outputs[0, 7] = "Total"; Functions.packRows(7, nBalSum.Total, ref outputs);
+
+                return outputs;
+            }
+
             else
             {
                 object[,] listOfComplaints = new object[configErrors.Count, 3];
