@@ -24,16 +24,14 @@ namespace SVSModel.Simulation
         /// <param name="config">A specific class that holds all the simulation configuration data in the correct types for use in the model</param>
         /// <returns>A 2D array of N balance variables</returns>
         public static object[,] SimulateField(Dictionary<DateTime, double> meanT,
-                                                      Dictionary<DateTime, double> meanRain,
-                                                      Dictionary<DateTime, double> meanPET,
-                                                      Dictionary<DateTime, double> testResults,
-                                                      Dictionary<DateTime, double> nAapplied,
-                                                      Config config,
-                                                      double initialN,
-                                                      bool ScheduleFert = true)
+            Dictionary<DateTime, double> meanRain,
+            Dictionary<DateTime, double> meanPET,
+            Dictionary<DateTime, double> testResults,
+            Dictionary<DateTime, double> nAapplied,
+            Config config,
+            double initialN,
+            bool ScheduleFert = true)
         {
-
-
             DateTime[] simDates = Functions.DateSeries(config.StartDate.AddDays(-1), config.EndDate);
 
             thisSim = new SimulationType(simDates, config, meanT, meanRain, meanPET);
@@ -61,14 +59,16 @@ namespace SVSModel.Simulation
                         if (d == crop.HarvestDate)
                             thisSim.ExportN[d.AddDays(1)] = currentCrop.TotalCropN[d];
                     }
+
                     currentCrop.TotalNDemand = currentCrop.TotalCropN;
                 }
+
                 crop.SimResults = currentCrop;
                 crop.ResRoot = crop.SimResults.RootN[crop.HarvestDate];
                 crop.ResStover = crop.SimResults.StoverN[crop.HarvestDate];
                 crop.ResFieldLoss = crop.SimResults.FieldLossN[crop.HarvestDate];
                 crop.NUptake = crop.SimResults.TotalCropN[crop.HarvestDate];
-                crop.NDemand = crop.SimResults.TotalNDemand[crop.HarvestDate];  
+                crop.NDemand = crop.SimResults.TotalNDemand[crop.HarvestDate];
             }
 
             // Calculate soil water content and drainage
@@ -125,22 +125,17 @@ namespace SVSModel.Simulation
             DateTime End = thisSim.config.Current.HarvestDate;
 
             CropNBalanceSummary CurrentNBalanceSummary = new CropNBalanceSummary(
-            mineralIn: Constants.InitialN,
-            cropIn: Functions.sumOverDates(Start, End, thisSim.NTransPlant),
-            residueIn: Functions.sumOverDates(Start, End, thisSim.NResidues),
-            sOMIn: Functions.sumOverDates(Start, End, thisSim.NSoilOM),
-            fertiliserIn: Functions.sumOverDates(Start, End, thisSim.NFertiliser),
-            minearlOut: thisSim.SoilN[End],
-            productOut: thisSim.ProductN[End],
-            stoverOut: thisSim.CropN[End] - thisSim.ProductN[End],
-            lossesOut: Functions.sumOverDates(Start, End, thisSim.NLost));
+                mineralIn: Constants.InitialN,
+                cropIn: Functions.sumOverDates(Start, End, thisSim.NTransPlant),
+                residueIn: Functions.sumOverDates(Start, End, thisSim.NResidues),
+                sOMIn: Functions.sumOverDates(Start, End, thisSim.NSoilOM),
+                fertiliserIn: Functions.sumOverDates(Start, End, thisSim.NFertiliser),
+                mineralOut: thisSim.SoilN[End],
+                productOut: thisSim.ProductN[End],
+                stoverOut: thisSim.CropN[End] - thisSim.ProductN[End],
+                lossesOut: Functions.sumOverDates(Start, End, thisSim.NLost));
             thisSim.CurrentNBalanceSummary = CurrentNBalanceSummary;
-
         }
-
-
-
-
     }
 
     public class SimulationType
@@ -168,10 +163,12 @@ namespace SVSModel.Simulation
         public Dictionary<DateTime, double> CropShortageN;
         public CropNBalanceSummary CurrentNBalanceSummary;
 
-        public SimulationType(DateTime[] _simDates, Config _config,
-                              Dictionary<DateTime, double> _meanT,
-                              Dictionary<DateTime, double> _meanRain,
-                              Dictionary<DateTime, double> _meanPET)
+        public SimulationType(
+            DateTime[] _simDates,
+            Config _config,
+            Dictionary<DateTime, double> _meanT,
+            Dictionary<DateTime, double> _meanRain,
+            Dictionary<DateTime, double> _meanPET)
         {
             config = _config;
             simDates = _simDates;
@@ -204,29 +201,48 @@ namespace SVSModel.Simulation
         public double ResidueIn { get; }
         public double SOMIn { get; }
         public double FertiliserIn { get; }
-        public double UncharacterisedIn { get { return Math.Max(0, Outs - Ins); } }
+
+        public double UncharacterisedIn
+        {
+            get { return Math.Max(0, Outs - Ins); }
+        }
 
         /// Out
         public double MinearlOut { get; }
+
         public double ProductOut { get; }
         public double StoverOut { get; }
         public double LossesOut { get; }
-        public double UncharacterisedOut { get { return Math.Max(0,Ins-Outs); } }
 
-        public double Ins { get { return MineralIn + CropIn + ResidueIn + SOMIn + FertiliserIn; } }
-        public double Outs { get { return MinearlOut + ProductOut+ StoverOut + LossesOut; } }
+        public double UncharacterisedOut
+        {
+            get { return Math.Max(0, Ins - Outs); }
+        }
 
-        public double balance { get { return Ins - Outs; } }
+        public double Ins
+        {
+            get { return MineralIn + CropIn + ResidueIn + SOMIn + FertiliserIn; }
+        }
+
+        public double Outs
+        {
+            get { return MinearlOut + ProductOut + StoverOut + LossesOut; }
+        }
+
+        public double balance
+        {
+            get { return Ins - Outs; }
+        }
 
         public CropNBalanceSummary(double mineralIn, double cropIn, double residueIn, double sOMIn, double fertiliserIn,
-                                   double minearlOut, double productOut, double stoverOut, double lossesOut) 
+            double mineralOut, double productOut, double stoverOut, double lossesOut)
         {
             MineralIn = mineralIn;
             CropIn = cropIn;
-            ResidueIn = residueIn;      
-            SOMIn = sOMIn;  
+            ResidueIn = residueIn;
+            SOMIn = sOMIn;
             FertiliserIn = fertiliserIn;
-            MinearlOut = minearlOut;
+            MinearlOut = mineralOut;
             ProductOut = productOut;
             StoverOut = stoverOut;
             LossesOut = lossesOut;
@@ -234,38 +250,61 @@ namespace SVSModel.Simulation
     }
 
     public class NBalanceSummary
-    { 
-        public Dictionary<string,int> Mineral { get; }
-        public Dictionary<string,int> CropProduct { get;}
-        public Dictionary<string ,int> OtherCropParts { get;}
+    {
+        public Dictionary<string, int> Mineral { get; }
+        public Dictionary<string, int> CropProduct { get; }
+        public Dictionary<string, int> OtherCropParts { get; }
         public Dictionary<string, int> SoilOrganic { get; }
         public Dictionary<string, int> Residues { get; }
-        public Dictionary<string, int> Fertiliser { get;}
+        public Dictionary<string, int> Fertiliser { get; }
         public Dictionary<string, int> UnCharacterised { get; }
-        public Dictionary <string, int> Total { get;}
+        public Dictionary<string, int> Total { get; }
 
         public NBalanceSummary(CropNBalanceSummary nBalance)
         {
-            double resMin = Math.Max(0, nBalance.ResidueIn);
-            double resImob = Math.Max(0, -nBalance.ResidueIn);
-            double unCharOut = nBalance.UncharacterisedOut + nBalance.LossesOut;
-            Mineral = new Dictionary<string, int>         { { "In", (int)Math.Round(nBalance.MineralIn,0) },
-                                                            { "Out", (int)Math.Round(nBalance.MinearlOut,0) } };
-            CropProduct = new Dictionary<string, int>     { { "In", 0 },
-                                                            { "Out", (int)Math.Round(nBalance.ProductOut,0) } };
-            OtherCropParts = new Dictionary<string, int>  { { "In", (int)Math.Round(nBalance.CropIn, 0) },
-                                                            { "Out",(int)Math.Round(nBalance.StoverOut, 0)} };
-            SoilOrganic = new Dictionary<string, int>     { { "In", (int)Math.Round(nBalance.SOMIn, 0) },
-                                                            { "Out", 0 }};
-            Residues = new Dictionary<string, int>        { { "In", (int)Math.Round(resMin,0) },
-                                                            { "Out", (int)Math.Round(resImob,0) } };
-            Fertiliser = new Dictionary<string, int>      { { "In",(int)Math.Round(nBalance.FertiliserIn,0) },
-                                                            { "Out",0 }};
-            UnCharacterised = new Dictionary<string, int> { { "In", (int)Math.Round(nBalance.UncharacterisedIn, 0) },
-                                                            { "Out", (int)Math.Round(unCharOut,0) } };
-            Total = new Dictionary<string, int>           { { "In", (int)Math.Round(nBalance.Ins) },
-                                                            { "Out", (int)Math.Round(nBalance.Outs) } };
+            var resMin = Math.Max(0, nBalance.ResidueIn);
+            var resImob = Math.Max(0, -nBalance.ResidueIn);
+            var unCharOut = nBalance.UncharacterisedOut + nBalance.LossesOut;
+            Mineral = new Dictionary<string, int>
+            {
+                { "In", (int)Math.Round(nBalance.MineralIn, 0) },
+                { "Out", (int)Math.Round(nBalance.MinearlOut, 0) }
+            };
+            CropProduct = new Dictionary<string, int>
+            {
+                { "In", 0 },
+                { "Out", (int)Math.Round(nBalance.ProductOut, 0) }
+            };
+            OtherCropParts = new Dictionary<string, int>
+            {
+                { "In", (int)Math.Round(nBalance.CropIn, 0) },
+                { "Out", (int)Math.Round(nBalance.StoverOut, 0) }
+            };
+            SoilOrganic = new Dictionary<string, int>
+            {
+                { "In", (int)Math.Round(nBalance.SOMIn, 0) },
+                { "Out", 0 }
+            };
+            Residues = new Dictionary<string, int>
+            {
+                { "In", (int)Math.Round(resMin, 0) },
+                { "Out", (int)Math.Round(resImob, 0) }
+            };
+            Fertiliser = new Dictionary<string, int>
+            {
+                { "In", (int)Math.Round(nBalance.FertiliserIn, 0) },
+                { "Out", 0 }
+            };
+            UnCharacterised = new Dictionary<string, int>
+            {
+                { "In", (int)Math.Round(nBalance.UncharacterisedIn, 0) },
+                { "Out", (int)Math.Round(unCharOut, 0) }
+            };
+            Total = new Dictionary<string, int>
+            {
+                { "In", (int)Math.Round(nBalance.Ins) },
+                { "Out", (int)Math.Round(nBalance.Outs) }
+            };
         }
-    
     }
 }
