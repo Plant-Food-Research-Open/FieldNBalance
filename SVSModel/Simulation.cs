@@ -83,11 +83,6 @@ namespace SVSModel.Simulation
             //Do initial nitorgen balance with no fertiliser or resets
             SoilNitrogen.UpdateBalance(config.StartDate, initialN, 0, 0, ref thisSim, false, nAapplied, ScheduleFert);
 
-            //Add fertiliser that has already been applied to the N balance
-            //DateTime StartApplicationDate = config.StartDate;
-            //DateTime StartSchedullingDate = Fertiliser.startSchedullingDate(nAapplied, testResults, config);
-            //Fertiliser.ApplyExistingFertiliser(StartApplicationDate, StartSchedullingDate, nAapplied, ref thisSim);
-
             //Reset soil N with test valaues
             SoilNitrogen.TestCorrection(testResults, ref thisSim);
 
