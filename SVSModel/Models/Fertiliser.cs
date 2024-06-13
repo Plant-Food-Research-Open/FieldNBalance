@@ -75,7 +75,7 @@ namespace SVSModel.Models
                         for (int passes = 0; passes < 50; passes++)
                         {
                             double lastPassLossEst = losses;
-                            double remainingReqN = remainingRequirement(d, endScheduleDate, thisSim, trigger) + losses;
+                            double remainingReqN = remainingRequirement(d, endScheduleDate, thisSim, initialN) + losses;
                             NAppn = remainingReqN / remainingSplits;
                             SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true, new Dictionary<DateTime, double>(),true);
                             losses = anticipatedLosses(d, endScheduleDate, thisSim.NLost);
@@ -90,12 +90,12 @@ namespace SVSModel.Models
             }
         }
 
-        private static double remainingRequirement(DateTime startDate, DateTime endDate, SimulationType thisSim, double trigger)
+        private static double remainingRequirement(DateTime startDate, DateTime endDate, SimulationType thisSim, double initialN)
         {
             double remainingCropN = thisSim.CropN[endDate] - thisSim.CropN[startDate];
             DateTime[] remainingDates = Functions.DateSeries(startDate, endDate);
             double remainingOrgN = remainingMineralisation(remainingDates, thisSim.NResidues, thisSim.NSoilOM);
-            double surplussMineralN = Math.Max(0, trigger - Constants.Trigger);
+            double surplussMineralN = Math.Max(0, initialN - Constants.Trigger);
             return Math.Max(0, remainingCropN - remainingOrgN - surplussMineralN);
         }
 
