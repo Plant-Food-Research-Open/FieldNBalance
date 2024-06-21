@@ -80,11 +80,11 @@ namespace SVSModel.Simulation
             // Calculate soil OM mineralisation
             SoilOrganic.Mineralisation(ref thisSim);
 
-            //Do initial nitorgen balance with no fertiliser or resets
-            SoilNitrogen.UpdateBalance(config.StartDate, initialN, 0, 0, ref thisSim, false, nAapplied, ScheduleFert);
+            //Do initial nitorgen balance with actual fertiliser but no scheduled fertiliser or resets
+            SoilNitrogen.UpdateBalance(config.StartDate, initialN, 0, 0, ref thisSim, false, new Dictionary<DateTime, double>(), ScheduleFert);
 
             //Reset soil N with test valaues
-            SoilNitrogen.TestCorrection(testResults, ref thisSim);
+            SoilNitrogen.TestsAndActualFertiliser(testResults, ref thisSim, nAapplied);
 
             //Calculate Fertiliser requirements and add into soil N
             DateTime StartSchedullingDate = Fertiliser.startSchedullingDate(nAapplied, testResults, config);

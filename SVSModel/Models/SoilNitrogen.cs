@@ -39,11 +39,6 @@ namespace SVSModel.Models
                 if (IsSet == false)
                 {
                     thisSim.SoilN[d] += thisSim.NSoilOM[d]; //add Som mineralisation
-                    if (nAapplied.ContainsKey(d))
-                    {
-                        thisSim.NFertiliser[d] = nAapplied[d];
-                        thisSim.SoilN[d] += nAapplied[d];  //add fertiliser
-                    }
                     double availableN = thisSim.SoilN[d] * 0.2; //20% of soil N can be used in a day
                     double potentialImobilisation = Math.Max(0, thisSim.NResidues[d] * -1); //if NResidues is negative imobilisatin is happening 
                     if (potentialImobilisation == 0)
@@ -104,13 +99,26 @@ namespace SVSModel.Models
         /// </summary>
         /// <param name="testResults">date indexed series of test results</param>
         /// <param name="soilN">date indexed series of soil mineral N estimates to be corrected with measurements.  Passed in as ref so 
+        /// <param name="nApplied">nitrogen fertiliser already applied</param>
         /// the corrections are applied to the property passed in</param>
-        public static void TestCorrection(Dictionary<DateTime, double> testResults, ref SimulationType thisSim)
+        public static void TestsAndActualFertiliser(Dictionary<DateTime, double> testResults, ref SimulationType thisSim, Dictionary<DateTime, double> nApplied)
         {
-            foreach (DateTime d in testResults.Keys)
+            List<DateTime> UpdateDates = testResults.Keys.ToList();
+            UpdateDates.AddRange(nApplied.Keys.ToList());
+            UpdateDates.Sort((a, b) => a.CompareTo(b));
+
+            foreach (DateTime d in UpdateDates)
             {
-                double dCorrection = testResults[d] - thisSim.SoilN[d];
-                SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d] - thisSim.NFertiliser[d], thisSim.NLost[d], ref thisSim, true, new Dictionary<DateTime, double>(), true); //need to take out fertiliser if fert applied on same day as test so it doesn't break balance check test
+                if (nApplied.ContainsKey(d))
+                {
+                    SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, true); 
+                    thisSim.NFertiliser[d] = nApplied[d];
+                }
+                if (testResults.ContainsKey(d))
+                {
+                    double dCorrection = testResults[d] - thisSim.SoilN[d];
+                    SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, true); 
+                }
             }
         }
     }
