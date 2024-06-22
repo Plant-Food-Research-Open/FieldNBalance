@@ -75,7 +75,7 @@ namespace SVSModel
 
             // derive crop Harvest State Variables 
 
-            thisCrop.HI = thisCrop.a_harvestIndex + thisCrop.fTotalProductFwt * thisCrop.b_harvestIndex;
+            thisCrop.HI = Math.Min(thisCrop.a_harvestIndex + thisCrop.fTotalProductFwt * thisCrop.b_harvestIndex,0.95);
             if (cropParams.YieldType == "Standing DM")
             {
                 thisCrop.fTotalProductFwt *= thisCrop.HI; // Yield is input at total standing DM but then partitioned to product and stover so need to adjust down her so it is only product
