@@ -115,7 +115,7 @@ namespace TestModel
                     double initialN = _testData.Item2;
 
                     Dictionary<System.DateTime, double> testResults = new Dictionary<System.DateTime, double>();
-                    Dictionary<System.DateTime, double> nApplied = fertDict(test, allFert);
+                    Dictionary<System.DateTime, double> nApplied = fertDict(test, allFert, _config);
 
                     string weatherStation = allTests["WeatherStation"][testRow].ToString();
 
@@ -272,7 +272,7 @@ namespace TestModel
             return testRow;
         }
 
-       private static Dictionary<System.DateTime, double> fertDict(string test, DataFrame allFert)
+       private static Dictionary<System.DateTime, double> fertDict(string test, DataFrame allFert, Config _config)
         {
             Dictionary<System.DateTime, double> fert = new Dictionary<System.DateTime, double>();
             foreach (DataFrameRow row in allFert.Rows)
@@ -292,18 +292,22 @@ namespace TestModel
                         date = (DateTime)row[1];
                     }
                     
+
                     DateTime last = new DateTime();
                     if (fert.Keys.Count > 0)
                     {
                         last = fert.Keys.Last();
                     }
-                    if (date == last) //If alread fertiliser added for that date add it to existing total
+                    if ((date >= _config.StartDate) && (date <= _config.StartDate))
                     {
-                        fert[last] += Double.Parse(row[2].ToString());
-                    }
-                    else //add it to a new date
-                    {
-                        fert.Add(date, Double.Parse(row[2].ToString()));
+                        if (date == last) //If alread fertiliser added for that date add it to existing total
+                        {
+                            fert[last] += Double.Parse(row[2].ToString());
+                        }
+                        else //add it to a new date
+                        {
+                            fert.Add(date, Double.Parse(row[2].ToString()));
+                        }
                     }
                 }
             }
