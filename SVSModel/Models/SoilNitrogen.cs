@@ -105,19 +105,24 @@ namespace SVSModel.Models
         {
             List<DateTime> UpdateDates = testResults.Keys.ToList();
             UpdateDates.AddRange(nApplied.Keys.ToList());
+            UpdateDates = UpdateDates.Distinct().ToList();
             UpdateDates.Sort((a, b) => a.CompareTo(b));
+            
 
             foreach (DateTime d in UpdateDates)
             {
-                if (nApplied.ContainsKey(d))
-                {
-                    SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, true); 
-                    thisSim.NFertiliser[d] = nApplied[d];
-                }
                 if (testResults.ContainsKey(d))
                 {
                     double dCorrection = testResults[d] - thisSim.SoilN[d];
                     SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, true); 
+                }
+                if (nApplied.ContainsKey(d))
+                {
+                    if (!testResults.ContainsKey(d)) // Dont after fertiliser if soil test was entered on the same day
+                    {
+                        SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, true);
+                    }
+                    thisSim.NFertiliser[d] = nApplied[d];
                 }
             }
         }
