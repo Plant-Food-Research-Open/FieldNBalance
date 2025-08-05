@@ -61,23 +61,24 @@ namespace SVSModel.Models
             int remainingSplits = thisSim.config.Field.Splits;
 
             // Determine dates that each fertiliser application should be made
+            
             foreach (DateTime d in schedullingDates)
             {
-                double trigger = thisSim.NUptake[d] * 10;
-                if (thisSim.SoilN[d] < trigger)
+                if (remainingSplits > 0)
                 {
-                    double initialN = thisSim.SoilN[d];
-                    double initialLossEst = thisSim.NLost[d];
-                    double losses = 0;
-                    double NAppn = 0;
-                    if (remainingSplits > 0)
+                    double trigger = thisSim.NUptake[d] * 10;
+                    if (thisSim.SoilN[d] < trigger)
                     {
+                        double initialN = thisSim.SoilN[d];
+                        double initialLossEst = thisSim.NLost[d];
+                        double losses = 0;
+                        double NAppn = 0;
                         for (int passes = 0; passes < 50; passes++)
                         {
                             double lastPassLossEst = losses;
                             double remainingReqN = remainingRequirement(d, endScheduleDate, thisSim, initialN) + losses;
                             NAppn = remainingReqN / remainingSplits;
-                            SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true, new Dictionary<DateTime, double>(),true);
+                            SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true, new Dictionary<DateTime, double>(), true);
                             losses = anticipatedLosses(d, endScheduleDate, thisSim.NLost);
                             double lossChange = losses - lastPassLossEst;
                             if (lossChange < 0.1)
@@ -95,7 +96,7 @@ namespace SVSModel.Models
             double remainingCropN = thisSim.CropN[endDate] - thisSim.CropN[startDate];
             DateTime[] remainingDates = Functions.DateSeries(startDate, endDate);
             double remainingOrgN = remainingMineralisation(remainingDates, thisSim.NResidues, thisSim.NSoilOM);
-            double surplussMineralN = Math.Max(0, initialN - Constants.Trigger);
+            double surplussMineralN = initialN - Constants.Trigger;
             return Math.Max(0, remainingCropN - remainingOrgN - surplussMineralN);
         }
 
