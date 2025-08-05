@@ -116,11 +116,11 @@ namespace SVSModel.Simulation
 
         private static void doNbalanceSummary(ref SimulationType thisSim)
         {
-            DateTime Start = thisSim.config.Prior.HarvestDate.AddDays(1);
+            DateTime Start = thisSim.config.Current.EstablishDate;
             DateTime End = thisSim.config.Current.HarvestDate;
 
             CropNBalanceSummary CurrentNBalanceSummary = new CropNBalanceSummary(
-                mineralIn: Constants.InitialN,
+                mineralIn: thisSim.SoilN[Start],
                 cropIn: Functions.sumOverDates(Start, End, thisSim.NTransPlant),
                 residueIn: Functions.sumOverDates(Start, End, thisSim.NResidues),
                 sOMIn: Functions.sumOverDates(Start, End, thisSim.NSoilOM),
