@@ -130,16 +130,17 @@ namespace SVSModel.Excel
 
                 NBalanceSummary nBalSum = new NBalanceSummary(Simulation.Simulation.thisSim.CurrentNBalanceSummary);
 
-                object[,] outputs = new object[3, 8];
+                object[,] outputs = new object[3, 9];
 
                 outputs[0, 0] = "Mineral"; Functions.packRows(0, nBalSum.Mineral, ref outputs);
-                outputs[0, 1] = "Crop Product"; Functions.packRows(1, nBalSum.CropProduct, ref outputs);
-                outputs[0, 2] = "Other Crop Parts"; Functions.packRows(2, nBalSum.OtherCropParts, ref outputs);
-                outputs[0, 3] = "Soil Organic"; Functions.packRows(3, nBalSum.SoilOrganic, ref outputs);
-                outputs[0, 4] = "Residues"; Functions.packRows(4, nBalSum.Residues, ref outputs);
-                outputs[0, 5] = "Fertiliser"; Functions.packRows(5, nBalSum.Fertiliser, ref outputs);
-                outputs[0, 6] = "Uncharacterised"; Functions.packRows(6, nBalSum.UnCharacterised, ref outputs);
-                outputs[0, 7] = "Total"; Functions.packRows(7, nBalSum.Total, ref outputs);
+                outputs[0, 1] = "UptakeN"; Functions.packRows(1, new Dictionary<string, int>() { { "In", 0 },{ "Out", 0 } }, ref outputs);
+                outputs[0, 2] = "Residue"; Functions.packRows(2, nBalSum.Residues, ref outputs);
+                outputs[0, 3] = "Organic"; Functions.packRows(3, nBalSum.SoilOrganic, ref outputs);
+                outputs[0, 4] = "Fertiliser"; Functions.packRows(4, nBalSum.Fertiliser, ref outputs);
+                outputs[0, 5] = "Other Crop Parts"; Functions.packRows(5, nBalSum.OtherCropParts, ref outputs);
+                outputs[0, 6] = "Crop Product"; Functions.packRows(6, nBalSum.CropProduct, ref outputs);
+                outputs[0, 7] = "Uncharacterised"; Functions.packRows(7, nBalSum.UnCharacterised, ref outputs);
+                outputs[0, 8] = "Total"; Functions.packRows(8, nBalSum.Total, ref outputs);
 
                 return outputs;
             }
