@@ -106,7 +106,7 @@ namespace TestModel
 
             foreach (string test in Tests)
             {
-                 if (test[0].ToString() != ">")
+                if (test[0].ToString() != ">")
                 {
                     int testRow = getTestRow(test, allTests);
 
@@ -300,7 +300,7 @@ namespace TestModel
                     {
                         last = fert.Keys.Last();
                     }
-                    if ((date >= _config.StartDate) && (date <= _config.StartDate))
+                    if ((date >= _config.StartDate) && (date <= _config.EndDate))
                     {
                         if (date == last) //If alread fertiliser added for that date add it to existing total
                         {
