@@ -24,7 +24,7 @@ namespace SVSModel.Models
         {
             //Make all the necessary data structures
             DateTime[] cropDates = Functions.DateSeries(config.Current.EstablishDate, config.Current.HarvestDate);
-            DateTime startSchedulleDate = config.Current.EstablishDate; //Earliest start to schedulling is establishment date
+            DateTime startSchedulleDate = config.Current.EstablishDate.AddDays(-1); //Earliest start to schedulling is establishment date
             if (testResults.Keys.Count > 0)
                 if (testResults.Keys.Last() > config.Current.EstablishDate) //If test results specified after establishment that becomes start of schedulling date
                     startSchedulleDate = testResults.Keys.Last();
@@ -80,6 +80,22 @@ namespace SVSModel.Models
 
             int splitsApplied = splitsAppliedAlready(startSchedulleDate, thisSim.NFertiliser, config);
 
+            // Calculate N application at planting
+            DateTime sowingDate = thisSim.config.Current.EstablishDate;
+            if (startSchedulleDate <= sowingDate)
+            {
+                double plantSowingNRequirement = thisSim.config.Current.NDemand * 0.33;
+                double sowingFert = Math.Max(0, plantSowingNRequirement - thisSim.SoilN[sowingDate]);
+                if (sowingFert > 0)
+                {
+                    double initialN = thisSim.SoilN[sowingDate];
+                    double initialLossEst = thisSim.NLost[sowingDate];
+                    SoilNitrogen.UpdateBalance(sowingDate, sowingFert, initialN, initialLossEst, ref thisSim, true, new Dictionary<DateTime, double>(), true);
+                    thisSim.NFertiliser[sowingDate] += sowingFert;
+                    splitsApplied += 1;
+                }
+            }
+
             // Set other variables needed to derive fertiliser requirement
             int remainingSplits = Math.Max(0,thisSim.config.Field.Splits - splitsApplied);
 
@@ -89,9 +105,13 @@ namespace SVSModel.Models
             {
                 if (remainingSplits > 0)
                 {
-                    double trigger = thisSim.NUptake[d] * 10;
-                    if (thisSim.SoilN[d] < trigger)
+                    double trigger = Math.Max(20,thisSim.NUptake[d] * 14);
+                    if ((thisSim.SoilN[d] < trigger) || ((d == endScheduleDate) && (remainingSplits > 0)))
                     {
+                        if (d == endScheduleDate)
+                        {
+                            remainingSplits = 1;
+                        }
                         double initialN = thisSim.SoilN[d];
                         double initialLossEst = thisSim.NLost[d];
                         double losses = 0;
@@ -99,10 +119,11 @@ namespace SVSModel.Models
                         for (int passes = 0; passes < 50; passes++)
                         {
                             double lastPassLossEst = losses;
-                            double remainingReqN = remainingRequirement(d, endScheduleDate, thisSim, initialN) + losses;
+                            trigger = Math.Max(15, thisSim.NUptake[thisSim.config.Current.HarvestDate] * 14);
+                            double remainingReqN = remainingRequirement(d, thisSim.config.Current.HarvestDate, thisSim, initialN, trigger) + losses;
                             NAppn = remainingReqN / remainingSplits;
                             SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true, new Dictionary<DateTime, double>(), true);
-                            losses = anticipatedLosses(d, endScheduleDate, thisSim.NLost);
+                            losses = anticipatedLosses(d, thisSim.config.Current.HarvestDate, thisSim.NLost);
                             double lossChange = losses - lastPassLossEst;
                             if (lossChange < 0.1)
                                 break;
@@ -114,13 +135,12 @@ namespace SVSModel.Models
             }
         }
 
-        private static double remainingRequirement(DateTime startDate, DateTime endDate, SimulationType thisSim, double initialN)
+        private static double remainingRequirement(DateTime startDate, DateTime endDate, SimulationType thisSim, double initialN, double trigger)
         {
             double remainingCropN = thisSim.CropN[endDate] - thisSim.CropN[startDate];
             DateTime[] remainingDates = Functions.DateSeries(startDate, endDate);
             double remainingOrgN = remainingMineralisation(remainingDates, thisSim.NResidues, thisSim.NSoilOM);
-            double Target = thisSim.NUptake[endDate] * 10;
-            double surplussMineralN = initialN - Target;
+            double surplussMineralN = initialN - trigger;
             return Math.Max(0, remainingCropN - remainingOrgN - surplussMineralN);
         }
 

@@ -34,8 +34,6 @@ namespace SVSModel
             // Derive Crop Parameters
             thisCrop.TtEstabToHarv = tt.Values.Last();
 
-            thisCrop.EndScheduleDate = calculate95PcUptakeDate(tt, cf.HarvestStage);
-
             thisCrop.TtSowToEmerg = 0;
             if (cf.EstablishStage == "Seed")
             {
@@ -80,7 +78,7 @@ namespace SVSModel
             thisCrop.HI = Math.Min(thisCrop.a_harvestIndex + thisCrop.fTotalProductFwt * thisCrop.b_harvestIndex,0.95);
             if (cropParams.YieldType == "Standing DM")
             {
-                thisCrop.fTotalProductFwt *= thisCrop.HI; // Yield is input at total standing DM but then partitioned to product and stover so need to adjust down her so it is only product
+                thisCrop.fTotalProductFwt *= thisCrop.HI; // Yield is input at total standing DM but then partitioned to product and stover so need to adjust down here so it is only product
             }
             thisCrop.fTotalProductDwt = thisCrop.fTotalProductFwt * (1 - cf.MoistureContent / 100);
             thisCrop.fFieldLossDwt = thisCrop.fTotalProductDwt * thisCrop.fFieldLossPct / 100;
@@ -129,8 +127,6 @@ namespace SVSModel
             thisCrop.Cover = Functions.scaledValues(coverScaller, cropParams.Acover, 1.0);
             thisCrop.RootDepth = Functions.scaledValues(rootDepthScaller, cropParams.MaxRD, 1.0);
 
-
-            
             return thisCrop;
         }
 
@@ -212,6 +208,28 @@ namespace SVSModel
             }
             return returnDate;
         }
+
+        public static DateTime calculateFinalFertiliserDate(SimulationType thisSim)
+        {
+            CropConfig cropToSchedule = thisSim.config.Current;
+            DateTime startDate = cropToSchedule.EstablishDate;
+            DateTime finalDate = cropToSchedule.HarvestDate;
+            double totalNDemand = cropToSchedule.NDemand;
+            CropType currentCrop = thisSim.config.Current.SimResults;
+
+            foreach (DateTime d in currentCrop.growDates)
+            {
+                if(currentCrop.TotalCropN[d] <= totalNDemand * 0.75)
+                {
+                    finalDate = d;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return finalDate;
+        }
     }
     public class CropType
     {
@@ -251,8 +269,7 @@ namespace SVSModel
         public double nHIRoot;
         public double nHIStover;
         public double nHIFieldLoss;
-        public DateTime EndScheduleDate;
-
+        
         /// Crop daily variables
 
         public Dictionary<DateTime, double> RootN;

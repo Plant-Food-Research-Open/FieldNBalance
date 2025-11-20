@@ -88,7 +88,7 @@ namespace SVSModel.Simulation
 
             //Calculate Fertiliser requirements and add into soil N
             DateTime StartSchedullingDate = Fertiliser.startSchedullingDate(nAapplied, testResults, config);
-            DateTime EndSchedullingDate = config.Current.SimResults.EndScheduleDate;
+            DateTime EndSchedullingDate = Crop.calculateFinalFertiliserDate(thisSim);
             Fertiliser.RemainingFertiliserSchedule(StartSchedullingDate, EndSchedullingDate, ref thisSim);
 
             doNbalanceSummary(ref thisSim);
@@ -130,6 +130,10 @@ namespace SVSModel.Simulation
                 stoverOut: thisSim.CropN[End] - thisSim.ProductN[End],
                 lossesOut: Functions.sumOverDates(Start, End, thisSim.NLost));
             thisSim.CurrentNBalanceSummary = CurrentNBalanceSummary;
+            if (Math.Abs(CurrentNBalanceSummary.balance)>1.0)
+            {
+                double breakplace = 0;
+            }
         }
     }
 
