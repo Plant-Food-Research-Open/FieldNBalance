@@ -3,6 +3,7 @@
 // Copyright (c) 2024 The New Zealand Institute for Plant and Food Research Limited
 
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace SVSModel.Configuration
 {
@@ -13,6 +14,7 @@ namespace SVSModel.Configuration
     public class CropParams
     {
         public string EndUse { get; private set; }
+        public string Group { get; private set; }
         public double TypicalYield { get; private set; }
         public double TypicalYield_kgPerHa
         {
@@ -45,6 +47,7 @@ namespace SVSModel.Configuration
         public CropParams(Dictionary<string, object> c)
         {
             EndUse = c["EndUse"].ToString();
+            Group = c["Group"].ToString();
             TypicalYield = Functions.Num(c["Typical Yield"]);
             TypicalYieldUnits = c["Typical Yield Units"].ToString();
             YieldType = c["Yield type"].ToString();

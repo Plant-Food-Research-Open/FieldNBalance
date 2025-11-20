@@ -31,6 +31,10 @@ namespace SVSModel
             CropParams cropParams = ExtractCropParams(cf.CropNameFull, allCropParams);// new Dictionary<string, double>();
             Dictionary<DateTime, double> tt = Functions.AccumulateTt(thisCrop.growDates, meanT, cropParams.Tbase);
 
+            // Set Catagoricals
+            thisCrop.EndUse = cropParams.EndUse;
+            thisCrop.Group = cropParams.Group;
+            
             // Derive Crop Parameters
             thisCrop.TtEstabToHarv = tt.Values.Last();
 
@@ -151,7 +155,7 @@ namespace SVSModel
                     cropRow += 1;
             }
 
-            List<string> coeffs = new List<string> { "EndUse", "Typical Yield","Typical Yield Units","Yield type","Typical Population (/ha)",
+            List<string> coeffs = new List<string> { "EndUse", "Group","Typical Yield","Typical Yield Units","Yield type","Typical Population (/ha)",
                                                       "TotalOrDry","Typical Dressing Loss %","Typical Field Loss %","Typical HI",
                                                       "HI Range","Moisture %","P Root","Max RD","A cover","rCover","Root [N]",
                                                       "Stover [N]","Product [N]","TtEmerg","Tbase"};
@@ -186,29 +190,6 @@ namespace SVSModel
             current.NUptake -= nShortage;
         }
 
-        private static DateTime calculate95PcUptakeDate(Dictionary<DateTime, double> Tt, string HarvestStage)
-        {
-            DateTime returnDate = Tt.Keys.Last();
-            if ((HarvestStage == "Maturity") || (HarvestStage == "Late"))
-            {
-                
-                double RelativeTtAt95Pc = Constants.ProportionTt["LateReproductive"] / Constants.ProportionTt[HarvestStage];
-                double TtAt95Pc = RelativeTtAt95Pc * Tt.Values.Last();
-                returnDate = Tt.Keys.First();
-                double diff = Math.Abs(TtAt95Pc - Tt.Values.First());
-                foreach (DateTime d in Tt.Keys)
-                {
-                    double nextDiff = Math.Abs(TtAt95Pc - Tt[d]);
-                    if (nextDiff < diff)
-                    {
-                        diff = nextDiff;
-                        returnDate = d;
-                    }
-                }
-            }
-            return returnDate;
-        }
-
         public static DateTime calculateFinalFertiliserDate(SimulationType thisSim)
         {
             CropConfig cropToSchedule = thisSim.config.Current;
@@ -228,12 +209,44 @@ namespace SVSModel
                     break;
                 }
             }
+
+            if ((currentCrop.EndUse == "Vegetable") && (currentCrop.Group == "Green"))
+            {
+                DateTime canopyClosureDate = calculateCanopyClosureDate(thisSim);
+                if (canopyClosureDate < finalDate)
+                {
+                    finalDate = canopyClosureDate;
+                }
+            }
+
             return finalDate;
+        }
+
+        public static DateTime calculateCanopyClosureDate(SimulationType thisSim)
+        {
+            CropConfig cropToSchedule = thisSim.config.Current;
+            DateTime closureDate = cropToSchedule.HarvestDate;
+            Dictionary<DateTime, double> Cover = cropToSchedule.SimResults.Cover;
+            foreach (DateTime d in Cover.Keys)
+            {
+                if (Cover[d] < 0.9)
+                {
+                    closureDate = d;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return closureDate;
         }
     }
     public class CropType
     {
-
+        //Crop catagoricals
+        public string EndUse;
+        public string Group;
+        
         public DateTime[] growDates;
         ///Crop parameters
         public double TtEstabToHarv;
