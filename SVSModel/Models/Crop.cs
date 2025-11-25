@@ -215,7 +215,7 @@ namespace SVSModel
                 DateTime canopyClosureDate = calculateCanopyClosureDate(thisSim);
                 if (canopyClosureDate < finalDate)
                 {
-                    finalDate = canopyClosureDate;
+                    //finalDate = canopyClosureDate;
                 }
             }
 
