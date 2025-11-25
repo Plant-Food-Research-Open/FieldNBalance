@@ -31,10 +31,9 @@ namespace SVSModel.Models
             DateTime lastFertDate = new DateTime();
             foreach (DateTime d in fert.Keys)
             {
-                if (fert[d] > 0)
-                    lastFertDate = d;
+                lastFertDate = d;
             }
-            if (lastFertDate > startSchedulleDate)
+            if (lastFertDate >= startSchedulleDate)
                 startSchedulleDate = lastFertDate.AddDays(1);  //If Fertiliser already applied after last test date them last fert date becomes start of scheudlling date
             return startSchedulleDate; 
         }

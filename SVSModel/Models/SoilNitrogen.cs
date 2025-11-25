@@ -118,7 +118,7 @@ namespace SVSModel.Models
                 }
                 if (nApplied.ContainsKey(d))
                 {
-                    if (!testResults.ContainsKey(d)) // Dont after fertiliser if soil test was entered on the same day
+                    if (!testResults.ContainsKey(d)) // Dont add fertiliser if soil test was entered on the same day
                     {
                         SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, true);
                     }
