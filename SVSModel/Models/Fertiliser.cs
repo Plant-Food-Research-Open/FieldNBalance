@@ -24,7 +24,7 @@ namespace SVSModel.Models
         {
             //Make all the necessary data structures
             DateTime[] cropDates = Functions.DateSeries(config.Current.EstablishDate, config.Current.HarvestDate);
-            DateTime startSchedulleDate = config.Current.EstablishDate.AddDays(-1); //Earliest start to schedulling is establishment date
+            DateTime startSchedulleDate = config.Current.EstablishDate; //Earliest start to schedulling is establishment date
             if (testResults.Keys.Count > 0)
                 if (testResults.Keys.Last() > config.Current.EstablishDate) //If test results specified after establishment that becomes start of schedulling date
                     startSchedulleDate = testResults.Keys.Last();
@@ -35,8 +35,7 @@ namespace SVSModel.Models
                     lastFertDate = d;
             }
             if (lastFertDate > startSchedulleDate)
-                startSchedulleDate = lastFertDate;  //If Fertiliser already applied after last test date them last fert date becomes start of scheudlling date
-            startSchedulleDate = startSchedulleDate.AddDays(1); //Start schedule the day after the last test or application
+                startSchedulleDate = lastFertDate.AddDays(1);  //If Fertiliser already applied after last test date them last fert date becomes start of scheudlling date
             return startSchedulleDate; 
         }
 

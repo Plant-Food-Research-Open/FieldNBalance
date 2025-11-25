@@ -116,7 +116,7 @@ namespace SVSModel.Simulation
 
         private static void doNbalanceSummary(ref SimulationType thisSim)
         {
-            DateTime Start = thisSim.config.Current.EstablishDate;
+            DateTime Start = thisSim.config.Current.EstablishDate.AddDays(-1);
             DateTime End = thisSim.config.Current.HarvestDate;
 
             CropNBalanceSummary CurrentNBalanceSummary = new CropNBalanceSummary(
