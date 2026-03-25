@@ -53,6 +53,7 @@ namespace SVSModel
                 thisCrop.TtEmergToSeedling = thisCrop.TtEmergToMat * Constants.ProportionTt["Seedling"];
             }
 
+            thisCrop.A_cov = cropParams.Acover;
             thisCrop.Xo_Biomass = thisCrop.TtEmergToMat * 0.5;
             thisCrop.b_Biomass = thisCrop.Xo_Biomass * .2;
             thisCrop.T_maxRD = Constants.ProportionTt["EarlyReproductive"] * thisCrop.TtEmergToMat;
@@ -212,24 +213,24 @@ namespace SVSModel
 
             if ((currentCrop.EndUse == "Vegetable") && (currentCrop.Group == "Green"))
             {
-                DateTime canopyClosureDate = calculateCanopyClosureDate(thisSim);
+                DateTime canopyClosureDate = calculateCanopyClosureDate(thisSim, currentCrop.A_cov);
                 if (canopyClosureDate < finalDate)
                 {
-                    //finalDate = canopyClosureDate;
+                    //Leave out until we can discuss the importance of this with growers.  finalDate = canopyClosureDate; 
                 }
             }
 
             return finalDate;
         }
 
-        public static DateTime calculateCanopyClosureDate(SimulationType thisSim)
+        public static DateTime calculateCanopyClosureDate(SimulationType thisSim,double A_cov)
         {
             CropConfig cropToSchedule = thisSim.config.Current;
             DateTime closureDate = cropToSchedule.HarvestDate;
             Dictionary<DateTime, double> Cover = cropToSchedule.SimResults.Cover;
             foreach (DateTime d in Cover.Keys)
             {
-                if (Cover[d] < 0.9)
+                if (Cover[d] < A_cov * 0.98)
                 {
                     closureDate = d;
                 }
@@ -260,6 +261,7 @@ namespace SVSModel
         public double T_sen;
         public double Xo_cov;
         public double b_cov;
+        public double A_cov;
         public double typicalYield;
         public double a_harvestIndex;
         public double b_harvestIndex;

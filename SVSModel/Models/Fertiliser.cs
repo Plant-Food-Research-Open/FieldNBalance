@@ -29,9 +29,9 @@ namespace SVSModel.Models
                 if (testResults.Keys.Last() > config.Current.EstablishDate) //If test results specified after establishment that becomes start of schedulling date
                     startSchedulleDate = testResults.Keys.Last();
             DateTime lastFertDate = new DateTime();
-            foreach (DateTime d in fert.Keys)
+            foreach (DateTime d in fert.Keys)  //Find the last date in the fertiliser already applied
             {
-                lastFertDate = d;
+                lastFertDate = d;  
             }
             if (lastFertDate >= startSchedulleDate)
                 startSchedulleDate = lastFertDate.AddDays(1);  //If Fertiliser already applied after last test date them last fert date becomes start of scheudlling date
@@ -164,7 +164,7 @@ namespace SVSModel.Models
             return losses;
         }
 
-            public static void ApplyExistingFertiliser(DateTime startApplicationDate, DateTime endApplicationDate, 
+        public static void ApplyExistingFertiliser(DateTime startApplicationDate, DateTime endApplicationDate, 
                                                    Dictionary<DateTime, double> appliedN,
                                                    ref SimulationType thisSim)
             
