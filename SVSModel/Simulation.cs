@@ -84,12 +84,15 @@ namespace SVSModel.Simulation
             SoilNitrogen.UpdateBalance(config.StartDate, initialN, 0, 0, ref thisSim, false, new Dictionary<DateTime, double>(), ScheduleFert);
 
             //Reset soil N with test valaues
-            SoilNitrogen.TestsAndActualFertiliser(testResults, ref thisSim, nAapplied);
+            SoilNitrogen.TestsAndActualFertiliser(testResults, ref thisSim, nAapplied, ScheduleFert);
 
             //Calculate Fertiliser requirements and add into soil N
             DateTime StartSchedullingDate = Fertiliser.startSchedullingDate(nAapplied, testResults, config);
             DateTime EndSchedullingDate = Crop.calculateFinalFertiliserDate(thisSim);
-            Fertiliser.RemainingFertiliserSchedule(StartSchedullingDate, EndSchedullingDate, ref thisSim);
+            if (ScheduleFert == true)
+            {
+                Fertiliser.RemainingFertiliserSchedule(StartSchedullingDate, EndSchedullingDate, ref thisSim);
+            }
 
             doNbalanceSummary(ref thisSim);
 

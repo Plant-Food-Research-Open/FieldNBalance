@@ -101,7 +101,7 @@ namespace SVSModel.Models
         /// <param name="soilN">date indexed series of soil mineral N estimates to be corrected with measurements.  Passed in as ref so 
         /// <param name="nApplied">nitrogen fertiliser already applied</param>
         /// the corrections are applied to the property passed in</param>
-        public static void TestsAndActualFertiliser(Dictionary<DateTime, double> testResults, ref SimulationType thisSim, Dictionary<DateTime, double> nApplied)
+        public static void TestsAndActualFertiliser(Dictionary<DateTime, double> testResults, ref SimulationType thisSim, Dictionary<DateTime, double> nApplied, bool ScheduleFert)
         {
             List<DateTime> UpdateDates = testResults.Keys.ToList();
             UpdateDates.AddRange(nApplied.Keys.ToList());
@@ -111,16 +111,16 @@ namespace SVSModel.Models
 
             foreach (DateTime d in UpdateDates)
             {
-                if (testResults.ContainsKey(d))
+                if (testResults.ContainsKey(d))  //Set soil N on days of tests
                 {
                     double dCorrection = testResults[d] - thisSim.SoilN[d];
-                    SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, true); 
+                    SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, ScheduleFert); 
                 }
-                if (nApplied.ContainsKey(d))
+                if (nApplied.ContainsKey(d))  //Update soil N on days of fertiliser application
                 {
                     if (!testResults.ContainsKey(d)) // Dont add fertiliser if soil test was entered on the same day
                     {
-                        SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, true);
+                        SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, ScheduleFert);
                     }
                     thisSim.NFertiliser[d] = nApplied[d];
                 }
