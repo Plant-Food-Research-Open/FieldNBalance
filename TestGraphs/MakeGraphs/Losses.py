@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.15.0
+#       jupytext_version: 1.18.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -104,7 +104,7 @@ for site in ['Lauder','Lincoln','Levin']:
         plt.legend(loc=(.05,0.6))
     plt.ylabel('Cum losses (kg/ha)')
     plt.text(0.05,0.9,site + " loss tests",fontsize = 16,transform=ax.transAxes)
-    plt.ylim(-10,400)
+    plt.ylim(-10,100)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
     plt.xticks(rotation=60)
     pos+=1

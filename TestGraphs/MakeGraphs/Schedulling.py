@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.15.0
+#       jupytext_version: 1.18.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -113,7 +113,7 @@ for t in TestNames:
     #plt.plot(AllData.loc[:,(t,'LostN')],label = 'LostN')
     #plt.plot(AllData.loc[:,(t,'SoilOMN')].cumsum(),label = 'SoilOMN')
     #plt.plot(AllData.loc[:,(t,'ResidueN')].cumsum(),label = 'ResidueN')
-    plt.plot(AllData.loc[:,(t,'UptakeN')]*10, '--',color = 'green',label = 'Daily Demand x 10')
+    plt.plot(AllData.loc[:,(t,'UptakeN')]*10, '--',color = 'green',label = 'Daily Demand x 14')
     
     plt.text(0.05,0.85,t,fontsize = 10,transform=ax.transAxes)
     if pos == 1:
@@ -134,7 +134,7 @@ for t in TestNames:
 # plt.text(0.05,0.95,"Crop Cover with different Establish and Harvest Stages",fontsize = 16,transform=ax.transAxes)
 Graph.tight_layout(pad=1.5)
 
-# plt.savefig(os.path.join(outPath,'3-CropStage_Cover.png'))
+plt.savefig(os.path.join(outPath,'8-Schedulling_SoilN.png'))
 # -
 
 Graph = plt.figure()
