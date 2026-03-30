@@ -137,20 +137,20 @@ namespace SVSModel.Models
         {
             double remainingCropN = thisSim.CropN[endDate] - thisSim.CropN[startDate];
             DateTime[] remainingDates = Functions.DateSeries(startDate, endDate);
-            double remainingOrgN = remainingMineralisation(remainingDates, thisSim.NResidues, thisSim.NSoilOM);
+            double remainingOrgN = remainingMineralisation(remainingDates, thisSim.NResidues, thisSim.NSoilOM, thisSim.NDemand);
             double surplussMineralN = initialN - trigger;
             return Math.Max(0, remainingCropN - remainingOrgN - surplussMineralN);
         }
 
-        private static double remainingMineralisation(DateTime[] remainingDates, Dictionary<DateTime, double> residueMin, Dictionary<DateTime, double> somN)
+        private static double remainingMineralisation(DateTime[] remainingDates, Dictionary<DateTime, double> residueMin, Dictionary<DateTime, double> somN, Dictionary<DateTime, double> NDemand)
         {
-            double mineralisation = 0;
+            double MineralNUsable = 0;
             foreach (DateTime d in remainingDates)
             {
-                mineralisation += residueMin[d];
-                mineralisation += somN[d];
+                double MinearlNAvailable = residueMin[d] + somN[d]; //This is how much minearl N the crop may take up
+                MineralNUsable = Math.Min(MinearlNAvailable, NDemand[d]); //Crop can not take up Available N if demand is less that what is available 
             }
-            return mineralisation;
+            return MineralNUsable;
         }
 
         private static double anticipatedLosses(DateTime startDate, DateTime endDate, Dictionary<DateTime, double> lostN)
