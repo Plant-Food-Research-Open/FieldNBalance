@@ -113,7 +113,7 @@ for t in TestNames:
     #plt.plot(AllData.loc[:,(t,'LostN')],label = 'LostN')
     #plt.plot(AllData.loc[:,(t,'SoilOMN')].cumsum(),label = 'SoilOMN')
     #plt.plot(AllData.loc[:,(t,'ResidueN')].cumsum(),label = 'ResidueN')
-    plt.plot(AllData.loc[:,(t,'UptakeN')]*10, '--',color = 'green',label = 'Daily Demand x 14')
+    plt.plot(AllData.loc[:,(t,'UptakeN')]*14, '--',color = 'green',label = 'Daily Demand x 14')
     
     plt.text(0.05,0.85,t,fontsize = 10,transform=ax.transAxes)
     if pos == 1:
@@ -135,18 +135,3 @@ for t in TestNames:
 Graph.tight_layout(pad=1.5)
 
 plt.savefig(os.path.join(outPath,'8-Schedulling_SoilN.png'))
-# -
-
-Graph = plt.figure()
-ax = Graph.add_subplot(1,1,1)
-pos = 0
-for t in tests:
-    plt.plot(AllData.loc[:,(t,'CropN')],lines[pos],color=CBcolors[colors[pos]],label = t)
-    pos +=1
-plt.legend(loc=(1.01,0.01))
-plt.ylabel('Cum CropNUptake (kg/ha)')
-plt.xticks(rotation=60)
-ax.xaxis.set_major_formatter(mdates.DateFormatter('%#d-%b'))
-plt.text(0.05,0.95,"NUptake With different establish and harvest stages",fontsize = 16,transform=ax.transAxes)
-Graph.tight_layout(pad=1.5)
-plt.savefig(os.path.join(outPath,'3-CropStage_NUptake.png'))
