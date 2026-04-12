@@ -25,7 +25,7 @@ jobs:
   publish-nuget:
     name: Publish Nuget
     needs: [ unit-tests ]
-    if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' }}
+    if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
     uses: ./.github/workflows/publish-svs.yml
     secrets: inherit
     with:
@@ -34,7 +34,7 @@ jobs:
   publish-nuget-beta:
     name: Publish Nuget Beta
     needs: [ unit-tests ]
-    if: ${{ github.ref_name != 'main' }}
+    if: ${{ github.ref_name != 'main' && github.event.pull_request.head.repo.full_name == github.repository }}
     uses: ./.github/workflows/publish-svs.yml
     secrets: inherit
     with:
