@@ -18,6 +18,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestComponents", "TestCompo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SVSModel.Tests", "SVSModel.Tests\SVSModel.Tests.csproj", "{1E04368C-6819-4263-853D-CDE9AECDFA2F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{73C2B72B-485E-4145-AE50-F808E8176B44}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{A3B84C44-078A-4AEA-9902-3D5D8FD46E95}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\publish-svs.yml = .github\workflows\publish-svs.yml
+		.github\workflows\main.yml = .github\workflows\main.yml
+		.github\workflows\unit-tests.yml = .github\workflows\unit-tests.yml
+		.github\workflows\validation-tests.yml = .github\workflows\validation-tests.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,5 +62,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65DAB7A8-9FD1-4073-9D72-0D12C600CE16}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A3B84C44-078A-4AEA-9902-3D5D8FD46E95} = {73C2B72B-485E-4145-AE50-F808E8176B44}
 	EndGlobalSection
 EndGlobal

@@ -1,10 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<id>SVSModel</id>
-		<version>1.2.4</version>
-		<authors>PotatoesNZ</authors>
-		<description>A wrapper of the SVS Model code</description>
+        <ImplicitUsings>disable</ImplicitUsings>
+		<PackageId>SVSModel</PackageId>
+		<Version>1.2.0</Version>
+		<Authors>PotatoesNZ</Authors>
+        <PackageTags>Nitrogen,Model,SVS</PackageTags>
+        <Description>A wrapper of the SVS Model code</Description>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
 		<LangVersion>12</LangVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -13,6 +16,10 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
 	<ItemGroup>
 		<None Remove="Data\CropCoefficientTableFull.csv" />

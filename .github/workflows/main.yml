@@ -1,0 +1,41 @@
+﻿name: Main
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+  release:
+    types: [ published ]
+
+jobs:
+  unit-tests:
+    name: Run Unit Tests
+    uses: ./.github/workflows/unit-tests.yml
+    secrets: inherit
+
+  validation-tests:
+    name: Run Validation Tests
+    if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' }}
+    uses: ./.github/workflows/validation-tests.yml
+    secrets: inherit
+
+  publish-nuget:
+    name: Publish Nuget
+    needs: [ unit-tests ]
+    if: ${{ github.ref_name == 'main' && github.event_name != 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
+    uses: ./.github/workflows/publish-svs.yml
+    secrets: inherit
+    with:
+      beta: false
+
+  publish-nuget-beta:
+    name: Publish Nuget Beta
+    needs: [ unit-tests ]
+    if: ${{ github.ref_name != 'main' && github.event.pull_request.head.repo.full_name == github.repository }}
+    uses: ./.github/workflows/publish-svs.yml
+    secrets: inherit
+    with:
+      beta: true

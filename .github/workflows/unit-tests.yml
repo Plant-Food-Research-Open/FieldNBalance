@@ -1,13 +1,7 @@
 name: Unit Tests
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  release:
-    types: [ published ]
-  workflow_dispatch: { }
+  workflow_call:
 
 permissions:
   contents: read
@@ -15,12 +9,11 @@ permissions:
   checks: write
 
 jobs:
-  build:
+  run-unit-tests:
     runs-on: ubuntu-latest
     
     steps:
       - uses: actions/checkout@v3
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
