@@ -170,16 +170,35 @@ namespace TestModel
 
         private static void runPythonScript(string path, string pyProg)
         {
-            string progToRun = Path.Join(path,pyProg);
+            string progToRun = Path.Combine(path, pyProg);
 
-            Process proc = new Process();
-            proc.StartInfo.FileName = "python";
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.Arguments = progToRun;
+            var proc = new Process();
+            proc.StartInfo = new ProcessStartInfo
+            {
+                FileName = "python", //@"C:\Path\To\Your\Python\python.exe", // strongly recommended
+                Arguments = $"\"{progToRun}\"",
+                WorkingDirectory = path,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
             proc.Start();
+
+            string stdout = proc.StandardOutput.ReadToEnd();
+            string stderr = proc.StandardError.ReadToEnd();
+
             proc.WaitForExit();
+
+            if (proc.ExitCode != 0)
+            {
+                throw new Exception(
+                    $"Python failed (exit {proc.ExitCode})\n{stderr}"
+                );
+            }
         }
+
 
         public static (SVSModel.Configuration.Config, double) SetConfigFromDataFrame(string test, DataFrame allTests)
         {
@@ -194,6 +213,7 @@ namespace TestModel
                                                     "Splits",
                                                     "PrePlantRain",
                                                     "InCropRain",
+                                                    "FinalFertDate",
                                                     "Irrigation",
                                                     "PriorCropNameFull",
                                                     "PriorFieldYield",
