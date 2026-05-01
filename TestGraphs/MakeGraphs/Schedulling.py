@@ -85,8 +85,6 @@ AllData.index = pd.to_datetime(AllData.index)
 
 # Make graph
 
-AllData.loc[:,'EarlyReproductive_1'].columns
-
 colors = ['purple','purple','green','green','orange','orange','blue','blue','red','red','black','yellow','yellow']
 lines = ['-','--','-','--','-','--','-','--','-','--','-','-','--']
 
@@ -96,16 +94,22 @@ TestNames = []
 for st in Stages:
     for sp in Splits:
         TestNames.append(st+'_'+sp)
+TestNames.append("SetEnd_early")
+TestNames.append("SetEnd_mid")
+TestNames.append("SetEnd_late")
+TestNames.append("SetEnd_verylate")
 
 
-AllData
+AllData.columns
+
+TestNames
 
 # +
 Graph = plt.figure(figsize=(10,5))
 
 pos = 1
 for t in TestNames:
-    ax = Graph.add_subplot(3,4,pos)
+    ax = Graph.add_subplot(4,4,pos)
     plt.plot(AllData.loc[:,(t,'SoilMineralN')],color = 'brown',label = 'Soil N')
     #plt.plot(AllData.loc[:,(t,'FertiliserN')],label = 'Fertiliser')
     #plt.plot(AllData.loc[:,(t,'CropN')],label = 'CropN')
