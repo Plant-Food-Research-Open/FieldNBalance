@@ -196,6 +196,8 @@ namespace SVSModel
             CropConfig cropToSchedule = thisSim.config.Current;
             DateTime startDate = cropToSchedule.EstablishDate;
             DateTime finalDate = cropToSchedule.HarvestDate;
+            DateTime userDefinedFinalDate = thisSim.config.Field.FinalFertDate;
+
             double totalNDemand = cropToSchedule.NDemand;
             CropType currentCrop = thisSim.config.Current.SimResults;
 
@@ -211,15 +213,9 @@ namespace SVSModel
                 }
             }
 
-            if ((currentCrop.EndUse == "Vegetable") && (currentCrop.Group == "Green"))
-            {
-                DateTime canopyClosureDate = calculateCanopyClosureDate(thisSim, currentCrop.A_cov);
-                if (canopyClosureDate < finalDate)
-                {
-                    //Leave out until we can discuss the importance of this with growers.  finalDate = canopyClosureDate; 
-                }
-            }
-
+            if (userDefinedFinalDate < finalDate)
+                finalDate = userDefinedFinalDate;
+            
             return finalDate;
         }
 
