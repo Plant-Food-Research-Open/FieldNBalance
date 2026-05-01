@@ -39,29 +39,32 @@ namespace SVSModel.Models
                 if (IsSet == false)
                 {
                     thisSim.SoilN[d] += thisSim.NSoilOM[d]; //add Som mineralisation
-                    double availableN = thisSim.SoilN[d] * 0.2; //20% of soil N can be used in a day
+                    double rootExtractionFactor = Math.Max(0.1, Math.Min(1, thisSim.RootDepth[d] / 0.3)) * 0.2;//20% of soil N can be used in a day if roots are deeper than 30cm
+                    double plantAvailableN = thisSim.SoilN[d] * rootExtractionFactor; 
+                    double microbeAvailableN = thisSim.SoilN[d] * 0.2;
                     double potentialImobilisation = Math.Max(0, thisSim.NResidues[d] * -1); //if NResidues is negative imobilisatin is happening 
                     if (potentialImobilisation == 0)
                     {
                         thisSim.SoilN[d] += thisSim.NResidues[d]; // If imobilisation not happening add mineralisation from residues to soil
-                        availableN = thisSim.SoilN[d] * 0.2;  //and recalculate available soil N to account for residue mineralisation 
+                        plantAvailableN = thisSim.SoilN[d] * rootExtractionFactor;  //and recalculate available soil N to account for residue mineralisation 
+                        microbeAvailableN = thisSim.SoilN[d] * 0.2;
                     }
                     double potentialCropUptake = thisSim.NUptake[d];
                     double potentialUptake = potentialCropUptake + potentialImobilisation;
                     double actualCropUptake = potentialCropUptake;  //Start with uptake at potential and revise down if shortage
                     double actualImobilisation = potentialImobilisation; //Start with uptake at potential and revise down if shortage
-                    if ((potentialUptake > availableN)&& (scheduleFert == false)) //Is there a shortage  Only constrain crop N uptake if tests are being run.  For schedulling to work need to have crop uptake unconstrained
+                    if (((potentialUptake > microbeAvailableN)||(potentialCropUptake>plantAvailableN))&& (scheduleFert == false)) //Is there a shortage  Only constrain crop N uptake if tests are being run.  For schedulling to work need to have crop uptake unconstrained
                     {
                         double propnCropPotUptake = 0;
                         propnCropPotUptake = potentialCropUptake / potentialUptake;  //What proportion of the limited N will the crop get based on its relative demand
-                        actualCropUptake = availableN * propnCropPotUptake;
+                        actualCropUptake = plantAvailableN * propnCropPotUptake;
                         double CropNshortage = potentialCropUptake - actualCropUptake;
                         thisSim.CropShortageN[d] = CropNshortage;
                         if (CropNshortage > 0)
                         {
                             Crop.ConstrainNUptake(ref thisSim, CropNshortage, d); //Reduce Crop uptake below potential
                         }
-                        actualImobilisation = availableN * (1 - propnCropPotUptake);  //What proporiton of the limited N will residue imobilisation get based on its relative demand
+                        actualImobilisation = Math.Min(potentialImobilisation,microbeAvailableN - actualCropUptake);  //What proporiton of the limited N will residue imobilisation get based on its relative demand
                         if (actualImobilisation > 0)
                         {
                             thisSim.NResidues[d] = -actualImobilisation; //Reduce imobilisation below potential
