@@ -20,24 +20,46 @@ namespace SVSModel.Models
         /// <param name="residue">series of mineral N released daily to the soil from residue mineralisation</param>
         /// <param name="som">series of mineral N released daily to the soil from organic matter</param>
         /// <returns>date indexed series of estimated soil mineral N content</returns>
-        public static void UpdateBalance(DateTime updateDate, double dResetN, double preSetSoilN, double lossAlreadyCountedPriorToSet, ref SimulationType thisSim, bool IsSet, Dictionary<DateTime, double> nAapplied, bool scheduleFert)
+        public static void UpdateBalance(DateTime updateDate, double deltaN, double preSetSoilN, double lossAlreadyCountedPriorToSet, ref SimulationType thisSim, bool IsSet, Dictionary<DateTime, double> nAapplied, bool scheduleFert, bool isFert = true)
         {
 
             thisSim.SoilN[updateDate] = preSetSoilN; //Fertiliser iterates through this multiple times so need to set start soil N back to value at start of itterations
             DateTime[] updateDates = Functions.DateSeries(updateDate, thisSim.config.Following.HarvestDate);
             foreach (DateTime d in updateDates)
             {
-                if (d == updateDate)
+                if (IsSet == true)
                 {
-                    thisSim.SoilN[d] += dResetN;
+                    if (d == updateDate)
+                    {
+                        thisSim.SoilN[d] += deltaN;
+                    }
+                    else
+                    {
+                        thisSim.SoilN[d] = thisSim.SoilN[d.AddDays(-1)];
+                    }
                 }
+                
                 else
                 {
-                    thisSim.SoilN[d] = thisSim.SoilN[d.AddDays(-1)];
-                }
+                    if ((isFert) && (d == updateDate))
+                    {
+                        thisSim.NFertiliserReleased[d] = deltaN;
+                    }
+                    else if (d == updateDate)
+                    {
+                        thisSim.ResetDeltaN[d] = deltaN;
+                    }
 
-                if (IsSet == false)
-                {
+                    if ((thisSim.NFertiliserReleased[d] != 0)||(thisSim.ResetDeltaN[d] != 0))//(d == updateDate)
+                    {
+                        deltaN = thisSim.NFertiliserReleased[d] + thisSim.ResetDeltaN[d];
+                        thisSim.SoilN[d] += deltaN;
+                    }
+                    else
+                    {
+                        thisSim.SoilN[d] = thisSim.SoilN[d.AddDays(-1)];
+                    }
+
                     thisSim.SoilN[d] += thisSim.NSoilOM[d]; //add Som mineralisation
                     double rootExtractionFactor = Math.Max(0.1, Math.Min(1, thisSim.RootDepth[d] / 0.3)) * 0.2;//20% of soil N can be used in a day if roots are deeper than 30cm
                     double plantAvailableN = thisSim.SoilN[d] * rootExtractionFactor; 
@@ -84,14 +106,14 @@ namespace SVSModel.Models
                                                dtransPlantN: thisSim.NTransPlant[d],
                                                dResidueN: thisSim.NResidues[d],
                                                dSOMN: thisSim.NSoilOM[d],
-                                               dResetN: dResetN,
+                                               dResetN: deltaN,
                                                finalMinearlN: thisSim.SoilN[d],
                                                standingCropN: thisSim.CropN[d],
                                                dExportN: thisSim.ExportN[d],
                                                dLostN: thisSim.NLost[d],
-                                               dFertiliserN: thisSim.NFertiliser[d]);
+                                               dFertiliserN: thisSim.NFertiliserApplied[d]);
                 lossAlreadyCountedPriorToSet = 0; //Only discount losses already counted on day of reset
-                dResetN = 0; // Reset N only a non zero number on the set day otherwise zero
+                deltaN = 0; // Reset N only a non zero number on the set day otherwise zero
                 IsSet = false; // IsSet only true on the day the set is actioned, needs to be false so full balance is done every other day
             }
 
@@ -117,15 +139,15 @@ namespace SVSModel.Models
                 if (testResults.ContainsKey(d))  //Set soil N on days of tests
                 {
                     double dCorrection = testResults[d] - thisSim.SoilN[d];
-                    SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, ScheduleFert); 
+                    SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, ScheduleFert, false); 
                 }
                 if (nApplied.ContainsKey(d))  //Update soil N on days of fertiliser application
                 {
                     if (!testResults.ContainsKey(d)) // Dont add fertiliser if soil test was entered on the same day
                     {
-                        SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, ScheduleFert);
+                        SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, ScheduleFert, true);
                     }
-                    thisSim.NFertiliser[d] = nApplied[d];
+                    thisSim.NFertiliserApplied[d] = nApplied[d];
                 }
             }
         }

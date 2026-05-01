@@ -82,7 +82,7 @@ namespace SVSModel.Simulation
             SoilOrganic.Mineralisation(ref thisSim);
 
             //Do initial nitorgen balance with actual fertiliser but no scheduled fertiliser or resets
-            SoilNitrogen.UpdateBalance(config.StartDate, initialN, 0, 0, ref thisSim, false, new Dictionary<DateTime, double>(), ScheduleFert);
+            SoilNitrogen.UpdateBalance(config.StartDate, initialN, 0, 0, ref thisSim, false, new Dictionary<DateTime, double>(), ScheduleFert, false);
 
             //Reset soil N with test valaues
             SoilNitrogen.TestsAndActualFertiliser(testResults, ref thisSim, nAapplied, ScheduleFert);
@@ -105,7 +105,7 @@ namespace SVSModel.Simulation
             outputs[0, 2] = "UptakeN"; Functions.packRows(2, thisSim.NUptake, ref outputs);
             outputs[0, 3] = "ResidueN"; Functions.packRows(3, thisSim.NResidues, ref outputs);
             outputs[0, 4] = "SoilOMN"; Functions.packRows(4, thisSim.NSoilOM, ref outputs);
-            outputs[0, 5] = "FertiliserN"; Functions.packRows(5, thisSim.NFertiliser, ref outputs);
+            outputs[0, 5] = "FertiliserN"; Functions.packRows(5, thisSim.NFertiliserApplied, ref outputs);
             outputs[0, 6] = "CropN"; Functions.packRows(6, thisSim.CropN, ref outputs);
             outputs[0, 7] = "ProductN"; Functions.packRows(7, thisSim.ProductN, ref outputs);
             outputs[0, 8] = "LostN"; Functions.packRows(8, thisSim.NLost, ref outputs);
@@ -128,7 +128,7 @@ namespace SVSModel.Simulation
                 cropIn: Functions.sumOverDates(Start, End, thisSim.NTransPlant),
                 residueIn: Functions.sumOverDates(Start, End, thisSim.NResidues),
                 sOMIn: Functions.sumOverDates(Start, End, thisSim.NSoilOM),
-                fertiliserIn: Functions.sumOverDates(Start, End, thisSim.NFertiliser),
+                fertiliserIn: Functions.sumOverDates(Start, End, thisSim.NFertiliserApplied),
                 mineralOut: thisSim.SoilN[End],
                 productOut: thisSim.ProductN[End],
                 stoverOut: thisSim.CropN[End] - thisSim.ProductN[End],
@@ -161,10 +161,12 @@ namespace SVSModel.Simulation
         public Dictionary<DateTime, double> NResidues;
         public Dictionary<DateTime, double> NSoilOM;
         public Dictionary<DateTime, double> NLost;
-        public Dictionary<DateTime, double> NFertiliser;
+        public Dictionary<DateTime, double> NFertiliserApplied;
+        public Dictionary<DateTime, double> NFertiliserReleased;
         public Dictionary<DateTime, double> SoilN;
         public Dictionary<DateTime, double> ExportN;
         public Dictionary<DateTime, double> CropShortageN;
+        public Dictionary<DateTime, double> ResetDeltaN;
         public CropNBalanceSummary CurrentNBalanceSummary;
 
         public SimulationType(
@@ -192,10 +194,12 @@ namespace SVSModel.Simulation
             NResidues = Functions.dictMaker(simDates, new double[simDates.Length]);
             NSoilOM = Functions.dictMaker(simDates, new double[simDates.Length]);
             NLost = Functions.dictMaker(simDates, new double[simDates.Length]);
-            NFertiliser = Functions.dictMaker(simDates, new double[simDates.Length]);
+            NFertiliserApplied = Functions.dictMaker(simDates, new double[simDates.Length]);
+            NFertiliserReleased = Functions.dictMaker(simDates, new double[simDates.Length]);
             SoilN = Functions.dictMaker(simDates, new double[simDates.Length]);
             ExportN = Functions.dictMaker(simDates, new double[simDates.Length]);
             CropShortageN = Functions.dictMaker(simDates, new double[simDates.Length]);
+            ResetDeltaN = Functions.dictMaker(simDates, new double[simDates.Length]);
         }
     }
 
