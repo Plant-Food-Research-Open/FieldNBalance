@@ -52,25 +52,7 @@ namespace SVSModel.Configuration
             Texture = c["Texture"].ToString(); 
             PMN = Functions.Num(c["PMN"]);
             Splits = int.Parse(c["Splits"].ToString());
-            DateTime defaultFinalFertDate =
-                new DateTime(2200, 1, 1);
-
-            if (!c.TryGetValue("FinalFertDate", out object ffdObj) ||
-                ffdObj == null ||
-                string.IsNullOrWhiteSpace(ffdObj.ToString()))
-            {
-                FinalFertDate = defaultFinalFertDate;
-            }
-            else if (DateTime.TryParse(ffdObj.ToString(), out DateTime parsedDate))
-            {
-                FinalFertDate = parsedDate;
-            }
-            else
-            {
-                throw new ArgumentException(
-                    $"FinalFertDate value '{ffdObj}' is not a valid date.");
-            }
-
+            FinalFertDate = Functions.Date(c["FinalFertDate"]);
 
             _rawRocks = Functions.Num(c["Rocks"]);
             _sampleDepth = c["SampleDepth"].ToString();

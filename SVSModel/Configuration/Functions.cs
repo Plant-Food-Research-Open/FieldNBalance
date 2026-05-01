@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Microsoft.Data.Analysis;
 
@@ -251,26 +252,55 @@ namespace SVSModel.Configuration
             int Nrows = arr.GetLength(0);
             for (int r = 0; r < Nrows; r++)
             {
-                if (arr[r, 1].ToString() == "")
-                    errorlist.Add(arr[r, 0].ToString());
-                if (arr[r, 1] == null)
-                    errorlist.Add(arr[r, 0].ToString());
+                if (arr[r, 0].ToString() != "FinalFertDate")
+                {
+                    if (arr[r, 1].ToString() == "")
+                        errorlist.Add(arr[r, 0].ToString());
+                    if (arr[r, 1] == null)
+                        errorlist.Add(arr[r, 0].ToString());
+                }
             }
             return errorlist;
         }
 
-        public static DateTime Date(object configDate)
+        public static DateTime Date(object value,
+                                    DateTime? defaultValue = null)
         {
-            if (configDate.GetType() == typeof(double))
-            {
-                return DateTime.FromOADate((double)configDate);
-            }
-            else
-            {
-                return (DateTime)configDate;
-            }
+            // Default fallback if not supplied
+            defaultValue ??= new DateTime(2200, 1, 1);
+
+            if (value == null)
+                return defaultValue.Value;
+
+            // Already a DateTime
+            if (value is DateTime dt)
+                return dt;
+
+            // Excel serial date (ExcelDNA case)
+            if (value is double d)
+                return DateTime.FromOADate(d);
+
+            // Everything else → string handling
+            string s = value.ToString();
+
+            if (string.IsNullOrWhiteSpace(s))
+                return defaultValue.Value;
+
+            // Try parse using current culture + invariant
+            if (DateTime.TryParse(s, out DateTime parsed))
+                return parsed;
+
+            if (DateTime.TryParse(
+                    s,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out parsed))
+                return parsed;
+
+            throw new ArgumentException(
+                $"Cannot parse date value '{value}'.");
         }
-        
+
         /// <summary>
         /// Parses a double out of a generic `object` input
         /// </summary>
