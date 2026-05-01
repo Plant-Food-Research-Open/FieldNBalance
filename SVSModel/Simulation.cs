@@ -54,6 +54,7 @@ namespace SVSModel.Simulation
                         thisSim.CropN[d] = currentCrop.TotalCropN[d];
                         thisSim.ProductN[d] = currentCrop.SaleableProductN[d];
                         thisSim.Cover[d] = currentCrop.Cover[d];
+                        thisSim.RootDepth[d] = currentCrop.RootDepth[d];
                         if (d == crop.EstablishDate)
                             thisSim.NTransPlant[d] = currentCrop.TotalCropN[d];
                         if (d == crop.HarvestDate)
@@ -153,6 +154,7 @@ namespace SVSModel.Simulation
         public Dictionary<DateTime, double> CropN;
         public Dictionary<DateTime, double> ProductN;
         public Dictionary<DateTime, double> Cover;
+        public Dictionary<DateTime, double> RootDepth;
         public Dictionary<DateTime, double> RSWC;
         public Dictionary<DateTime, double> Drainage;
         public Dictionary<DateTime, double> Irrigation;
@@ -182,6 +184,7 @@ namespace SVSModel.Simulation
             NUptake = Functions.dictMaker(simDates, new double[simDates.Length]);
             CropN = Functions.dictMaker(simDates, new double[simDates.Length]);
             ProductN = Functions.dictMaker(simDates, new double[simDates.Length]);
+            RootDepth = Functions.dictMaker(simDates, new double[simDates.Length]);
             Cover = Functions.dictMaker(simDates, new double[simDates.Length]);
             RSWC = Functions.dictMaker(simDates, new double[simDates.Length]);
             Drainage = Functions.dictMaker(simDates, new double[simDates.Length]);
