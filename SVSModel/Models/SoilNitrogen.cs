@@ -20,7 +20,8 @@ namespace SVSModel.Models
         /// <param name="residue">series of mineral N released daily to the soil from residue mineralisation</param>
         /// <param name="som">series of mineral N released daily to the soil from organic matter</param>
         /// <returns>date indexed series of estimated soil mineral N content</returns>
-        public static void UpdateBalance(DateTime updateDate, double setDeltaN, double preSetSoilN, double lossAlreadyCountedPriorToSet, ref SimulationType thisSim, bool SetToday, Dictionary<DateTime, double> nAapplied, bool fertSchedullingOn)
+        public static void UpdateBalance(DateTime updateDate, double setDeltaN, double preSetSoilN, double lossAlreadyCountedPriorToSet, 
+                                          ref SimulationType thisSim, bool SetToday, bool fertSchedullingOn)
         {
 
             thisSim.SoilN[updateDate] = preSetSoilN; //Fertiliser iterates through this multiple times so need to set start soil N back to value at start of itterations
@@ -89,7 +90,7 @@ namespace SVSModel.Models
                                                standingCropN: thisSim.CropN[d],
                                                dExportN: thisSim.ExportN[d],
                                                dLostN: thisSim.NLost[d],
-                                               dFertiliserN: thisSim.NFertiliser[d]);
+                                               dFertiliserN: thisSim.NFertiliserApplied[d]);
                 lossAlreadyCountedPriorToSet = 0; //Only discount losses already counted on day of reset
                 setDeltaN = 0; // Reset N only a non zero number on the set day otherwise zero
                 SetToday = false; // IsSet only true on the day the set is actioned, needs to be false so full balance is done every other day
@@ -117,15 +118,17 @@ namespace SVSModel.Models
                 if (testResults.ContainsKey(d))  //Set soil N on days of tests
                 {
                     double dCorrection = testResults[d] - thisSim.SoilN[d];
-                    SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, ScheduleFert); 
+                    thisSim.ResetDeltaN[d] = dCorrection;
+                    SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, ScheduleFert); 
                 }
                 if (nApplied.ContainsKey(d))  //Update soil N on days of fertiliser application
                 {
+                    Fertiliser.calculateFertiliserRelease(nApplied[d], d, thisSim);
                     if (!testResults.ContainsKey(d)) // Dont add fertiliser if soil test was entered on the same day
                     {
-                        SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, nApplied, ScheduleFert);
+                        SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, ScheduleFert);
                     }
-                    thisSim.NFertiliser[d] = nApplied[d];
+                    thisSim.NFertiliserApplied[d] = nApplied[d];
                 }
             }
         }

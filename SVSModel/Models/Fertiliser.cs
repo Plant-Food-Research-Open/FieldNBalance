@@ -76,7 +76,7 @@ namespace SVSModel.Models
             Config config = thisSim.config;
             DateTime[] schedullingDates = Functions.DateSeries(startSchedulleDate, endScheduleDate);
 
-            int splitsApplied = splitsAppliedAlready(startSchedulleDate, thisSim.NFertiliser, config);
+            int splitsApplied = splitsAppliedAlready(startSchedulleDate, thisSim.NFertiliserApplied, config);
 
             // Calculate N application at planting
             DateTime sowingDate = thisSim.config.Current.EstablishDate;
@@ -88,8 +88,9 @@ namespace SVSModel.Models
                 {
                     double initialN = thisSim.SoilN[sowingDate];
                     double initialLossEst = thisSim.NLost[sowingDate];
-                    SoilNitrogen.UpdateBalance(sowingDate, sowingFert, initialN, initialLossEst, ref thisSim, true, new Dictionary<DateTime, double>(), true);
-                    thisSim.NFertiliser[sowingDate] += sowingFert;
+                    Fertiliser.calculateFertiliserRelease(sowingFert, sowingDate, thisSim);
+                    SoilNitrogen.UpdateBalance(sowingDate, sowingFert, initialN, initialLossEst, ref thisSim, true, true);
+                    thisSim.NFertiliserApplied[sowingDate] += sowingFert;
                     splitsApplied += 1;
                 }
             }
@@ -120,17 +121,24 @@ namespace SVSModel.Models
                             trigger = Math.Max(15, thisSim.NUptake[thisSim.config.Current.HarvestDate] * 14);
                             double remainingReqN = remainingRequirement(d, thisSim.config.Current.HarvestDate, thisSim, initialN, trigger) + losses;
                             NAppn = remainingReqN / remainingSplits;
-                            SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true, new Dictionary<DateTime, double>(), true);
+                            Fertiliser.calculateFertiliserRelease(NAppn,d,thisSim);
+                            SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true, true);
                             losses = anticipatedLosses(d, thisSim.config.Current.HarvestDate, thisSim.NLost);
                             double lossChange = losses - lastPassLossEst;
                             if (lossChange < 0.1)
                                 break;
                         }
-                        thisSim.NFertiliser[d] += NAppn;
+                        Fertiliser.calculateFertiliserRelease(NAppn, d, thisSim);
+                        thisSim.NFertiliserApplied[d] += NAppn;
                         remainingSplits -= 1;
                     }
                 }
             }
+        }
+
+        public static void calculateFertiliserRelease(double nApplied, DateTime applicationDate, SimulationType thisSim)
+        {
+            thisSim.NFertiliserReleased[applicationDate] += nApplied;
         }
 
         private static double remainingRequirement(DateTime startDate, DateTime endDate, SimulationType thisSim, double initialN, double trigger)
