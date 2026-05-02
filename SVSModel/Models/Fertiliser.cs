@@ -76,7 +76,7 @@ namespace SVSModel.Models
             Config config = thisSim.config;
             DateTime[] schedullingDates = Functions.DateSeries(startSchedulleDate, endScheduleDate);
 
-            int splitsApplied = splitsAppliedAlready(startSchedulleDate, thisSim.NFertiliserApplied, config);
+            int splitsApplied = splitsAppliedAlready(startSchedulleDate, thisSim.NFertiliser, config);
 
             // Calculate N application at planting
             DateTime sowingDate = thisSim.config.Current.EstablishDate;
@@ -89,7 +89,7 @@ namespace SVSModel.Models
                     double initialN = thisSim.SoilN[sowingDate];
                     double initialLossEst = thisSim.NLost[sowingDate];
                     SoilNitrogen.UpdateBalance(sowingDate, sowingFert, initialN, initialLossEst, ref thisSim, true, new Dictionary<DateTime, double>(), true);
-                    thisSim.NFertiliserApplied[sowingDate] += sowingFert;
+                    thisSim.NFertiliser[sowingDate] += sowingFert;
                     splitsApplied += 1;
                 }
             }
@@ -126,7 +126,7 @@ namespace SVSModel.Models
                             if (lossChange < 0.1)
                                 break;
                         }
-                        thisSim.NFertiliserApplied[d] += NAppn;
+                        thisSim.NFertiliser[d] += NAppn;
                         remainingSplits -= 1;
                     }
                 }
