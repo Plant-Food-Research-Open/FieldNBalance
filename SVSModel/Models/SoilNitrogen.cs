@@ -30,15 +30,15 @@ namespace SVSModel.Models
             {
                 if (d == updateDate)
                 {
-                    thisSim.SoilN[d] += setDeltaN;
+                    thisSim.SoilN[d] = thisSim.SoilN[d.AddDays(-1)] + setDeltaN;
                 }
                 else
                 {
                     thisSim.SoilN[d] = thisSim.SoilN[d.AddDays(-1)];
                 }
 
-                if (SetToday == false)
-                {
+                //if (SetToday == false)
+                //{
                     thisSim.SoilN[d] += thisSim.NSoilOM[d]; //add Som mineralisation
                     double rootExtractionFactor = Math.Max(0.1, Math.Min(1, thisSim.RootDepth[d] / 0.3)) * 0.2;//20% of soil N can be used in a day if roots are deeper than 30cm
                     double plantAvailableN = thisSim.SoilN[d] * rootExtractionFactor; 
@@ -73,11 +73,11 @@ namespace SVSModel.Models
                     }
                     thisSim.SoilN[d] -= actualCropUptake;  //Remove actual crop uptake from soil
                     thisSim.SoilN[d] -= actualImobilisation; //Remove actual imobilisaiton from soil.  This will be zero if mineralisation is occuring.
-                }
+                //}
 
                 double newLossEstimate = Losses.DailyLoss(d, thisSim);
                 thisSim.NLost[d] = newLossEstimate;
-                thisSim.SoilN[d] -= (newLossEstimate - lossAlreadyCountedPriorToSet);
+                thisSim.SoilN[d] -= newLossEstimate;//(newLossEstimate - lossAlreadyCountedPriorToSet);
                 //resetN -= lossAlreadyCountedPriorToSet;
 
                 CheckNBalance todayCheck = new CheckNBalance(initSoilN: thisSim.SoilN[d.AddDays(-1)],
@@ -119,14 +119,14 @@ namespace SVSModel.Models
                 {
                     double dCorrection = testResults[d] - thisSim.SoilN[d];
                     thisSim.ResetDeltaN[d] = dCorrection;
-                    SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, ScheduleFert); 
+                    SoilNitrogen.UpdateBalance(d, dCorrection, thisSim.SoilN[d.AddDays(-1)], thisSim.NLost[d], ref thisSim, true, ScheduleFert); 
                 }
                 if (nApplied.ContainsKey(d))  //Update soil N on days of fertiliser application
                 {
                     Fertiliser.calculateFertiliserRelease(nApplied[d], d, thisSim);
                     if (!testResults.ContainsKey(d)) // Dont add fertiliser if soil test was entered on the same day
                     {
-                        SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d], thisSim.NLost[d], ref thisSim, true, ScheduleFert);
+                        SoilNitrogen.UpdateBalance(d, nApplied[d], thisSim.SoilN[d.AddDays(-1)], thisSim.NLost[d], ref thisSim, false, ScheduleFert);
                     }
                     thisSim.NFertiliserApplied[d] = nApplied[d];
                 }

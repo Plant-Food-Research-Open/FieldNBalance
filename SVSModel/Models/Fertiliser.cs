@@ -86,10 +86,10 @@ namespace SVSModel.Models
                 double sowingFert = Math.Max(0, plantSowingNRequirement - thisSim.SoilN[sowingDate]);
                 if (sowingFert > 0)
                 {
-                    double initialN = thisSim.SoilN[sowingDate];
+                    double initialN = thisSim.SoilN[sowingDate.AddDays(-1)];
                     double initialLossEst = thisSim.NLost[sowingDate];
                     Fertiliser.calculateFertiliserRelease(sowingFert, sowingDate, thisSim);
-                    SoilNitrogen.UpdateBalance(sowingDate, sowingFert, initialN, initialLossEst, ref thisSim, true, true);
+                    SoilNitrogen.UpdateBalance(sowingDate, sowingFert, initialN, initialLossEst, ref thisSim, false, true);
                     thisSim.NFertiliserApplied[sowingDate] += sowingFert;
                     splitsApplied += 1;
                 }
@@ -111,7 +111,7 @@ namespace SVSModel.Models
                         {
                             remainingSplits = 1;
                         }
-                        double initialN = thisSim.SoilN[d];
+                        double initialN = thisSim.SoilN[d.AddDays(-1)];
                         double initialLossEst = thisSim.NLost[d];
                         double losses = 0;
                         double NAppn = 0;
@@ -122,7 +122,7 @@ namespace SVSModel.Models
                             double remainingReqN = remainingRequirement(d, thisSim.config.Current.HarvestDate, thisSim, initialN, trigger) + losses;
                             NAppn = remainingReqN / remainingSplits;
                             Fertiliser.calculateFertiliserRelease(NAppn,d,thisSim);
-                            SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true, true);
+                            SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, false, true);
                             losses = anticipatedLosses(d, thisSim.config.Current.HarvestDate, thisSim.NLost);
                             double lossChange = losses - lastPassLossEst;
                             if (lossChange < 0.1)
