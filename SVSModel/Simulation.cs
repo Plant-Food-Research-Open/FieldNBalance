@@ -83,7 +83,7 @@ namespace SVSModel.Simulation
 
             //Do initial nitorgen balance with actual fertiliser but no scheduled fertiliser or resets
             thisSim.ResetDeltaN[config.StartDate] = initialN;
-            SoilNitrogen.UpdateBalance(config.StartDate, initialN, 0, 0, ref thisSim, false, ScheduleFert);
+            SoilNitrogen.UpdateBalance(config.StartDate, ref thisSim, ScheduleFert);
 
             //Reset soil N with test valaues
             SoilNitrogen.TestsAndActualFertiliser(testResults, ref thisSim, nAapplied, ScheduleFert);
