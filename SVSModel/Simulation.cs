@@ -55,6 +55,8 @@ namespace SVSModel.Simulation
                         thisSim.ProductN[d] = currentCrop.SaleableProductN[d];
                         thisSim.Cover[d] = currentCrop.Cover[d];
                         thisSim.RootDepth[d] = currentCrop.RootDepth[d];
+                        thisSim.StoverNconc[d] = currentCrop.StoverNconc[d];
+                        thisSim.ProductNconc[d] = currentCrop.ProductNconc[d];
                         if (d == crop.EstablishDate)
                             thisSim.NTransPlant[d] = currentCrop.TotalCropN[d];
                         if (d == crop.HarvestDate)
@@ -99,7 +101,7 @@ namespace SVSModel.Simulation
             doNbalanceSummary(ref thisSim);
 
             //Pack Daily State Variables into a 2D array so they can be output
-            object[,] outputs = new object[simDates.Length + 1, 14];
+            object[,] outputs = new object[simDates.Length + 1, 16];
 
             outputs[0, 0] = "Date"; Functions.packRows(0, simDates, ref outputs);
             outputs[0, 1] = "SoilMineralN"; Functions.packRows(1, thisSim.SoilN, ref outputs);
@@ -115,6 +117,8 @@ namespace SVSModel.Simulation
             outputs[0, 11] = "Irrigation"; Functions.packRows(11, thisSim.Irrigation, ref outputs);
             outputs[0, 12] = "Green cover"; Functions.packRows(12, thisSim.Cover, ref outputs);
             outputs[0, 13] = "NDemand"; Functions.packRows(13, thisSim.NDemand, ref outputs);
+            outputs[0, 14] = "StoverNconc"; Functions.packRows(14, thisSim.StoverNconc, ref outputs);
+            outputs[0, 15] = "ProductNconc"; Functions.packRows(15, thisSim.ProductNconc, ref outputs);
 
             return outputs;
         }
@@ -168,6 +172,8 @@ namespace SVSModel.Simulation
         public Dictionary<DateTime, double> ExportN;
         public Dictionary<DateTime, double> CropShortageN;
         public Dictionary<DateTime, double> ResetDeltaN;
+        public Dictionary<DateTime, double> StoverNconc;
+        public Dictionary<DateTime, double> ProductNconc;
         public CropNBalanceSummary CurrentNBalanceSummary;
 
         public SimulationType(
@@ -201,6 +207,8 @@ namespace SVSModel.Simulation
             ExportN = Functions.dictMaker(simDates, new double[simDates.Length]);
             CropShortageN = Functions.dictMaker(simDates, new double[simDates.Length]);
             ResetDeltaN = Functions.dictMaker(simDates, new double[simDates.Length]);
+            StoverNconc = Functions.dictMaker(simDates, new double[simDates.Length]);
+            ProductNconc = Functions.dictMaker(simDates, new double[simDates.Length]);
         }
     }
 

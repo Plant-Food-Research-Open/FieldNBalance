@@ -127,7 +127,7 @@ namespace TestModel
                     
                     object[,] output = Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, _config, initialN, scheduleFert);
 
-                    DataFrameColumn[] columns = new DataFrameColumn[14];
+                    DataFrameColumn[] columns = new DataFrameColumn[16];
                     List<string> OutPutHeaders = new List<string>();
                     for (int i = 0; i < output.GetLength(1); i += 1)
                     {
