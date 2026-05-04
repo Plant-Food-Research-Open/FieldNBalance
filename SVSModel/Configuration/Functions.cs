@@ -83,12 +83,19 @@ namespace SVSModel.Configuration
         /// <param name="date">An array of DateTimes</param>
         /// <param name="values">An array of doubles</param>
         /// <returns>dictionary converted from arr</returns>
-        public static Dictionary<DateTime, double> dictMaker(DateTime[] dates, double[] values)
+        public static Dictionary<DateTime, double> dictMaker(DateTime[] dates, double[] values = null)
         {
             Dictionary<DateTime, double> dict = new Dictionary<DateTime, double>();
             for (int r = 0; r < dates.Length; r++)
             {
-                dict.Add(dates[r], values[r]);
+                if (values != null)
+                {
+                    dict.Add(dates[r], values[r]);
+                }
+                else
+                {
+                    dict.Add(dates[r], double.NaN);
+                }
             }
             return dict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
         }
@@ -201,6 +208,48 @@ namespace SVSModel.Configuration
             Dictionary<DateTime, double> sv = new Dictionary<DateTime, double>();
             foreach (DateTime d in scaller.Keys)
                 sv.Add(d, scaller[d] * final * correction);
+            return sv;
+        }
+
+        /// <summary>
+        /// Takes arrays of daily values and adds them together 
+        /// </summary>
+        /// <param name="members">list of 2D arrays to be summed</param>
+        /// <returns>An array of Daily State Variables for the model</returns>
+        public static Dictionary<DateTime, double> sumArrays(List<Dictionary<DateTime, double>> members)
+        {
+            Dictionary<DateTime, double> summed = new Dictionary<DateTime, double>();
+            bool first = true;
+            foreach (Dictionary<DateTime, double> member in members)
+            {
+                foreach (DateTime d in member.Keys)
+                {
+                    if (first)
+                    {
+                        summed.Add(d, member[d]);
+                    }
+                    else
+                    {
+                        summed[d] += member[d];
+                    }
+                }
+                first = false;
+            }
+            return summed;
+        }
+
+        /// <summary>
+        /// Takes an array of daily scaller values (0-1) and multiplies them by the final value to give Daily State Variable values 
+        /// </summary>
+        /// <param name="scaller">2D array of daily values for 0-1 scaller</param>
+        /// <param name="final">The Daily State Variable value on the last day of the simulation</param>
+        /// <param name="correction">A factor to apply Stage of harvest correction</param>
+        /// <returns>An array of Daily State Variables for the model</returns>
+        public static Dictionary<DateTime, double> scaledValues(Dictionary<DateTime, double> scaller, Dictionary<DateTime, double> final, double correction)
+        {
+            Dictionary<DateTime, double> sv = new Dictionary<DateTime, double>();
+            foreach (DateTime d in scaller.Keys)
+                sv.Add(d, scaller[d] * final[d] * correction);
             return sv;
         }
 
@@ -340,6 +389,13 @@ namespace SVSModel.Configuration
         public static double sigmoid(double dX, double Xo, double b)
         {
             return 1 / (1 + Math.Exp(-(dX - Xo) / b));
+        }
+
+        public static double exponential(double dX, double Tt_mat, double adjFact)
+        {
+            double k = -4 / Tt_mat;
+            double naked = Math.Exp(dX * k);
+            return Math.Max(0, Math.Min(1, (naked - adjFact) * (1 / (1 - adjFact))));
         }
     }
 }

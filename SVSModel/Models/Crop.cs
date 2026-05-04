@@ -99,35 +99,49 @@ namespace SVSModel
             thisCrop.nHIStover = thisCrop.fStoverN / thisCrop.fCropN;
             thisCrop.nHIFieldLoss = thisCrop.fFieldLossN  / thisCrop.fCropN;
 
-
-
             //Daily time-step, calculate Daily Scallers to give in-crop patterns
             double estab_adjust = -thisCrop.TtSowToEmerg + thisCrop.TtEmergToSeedling;
-            Dictionary<DateTime, double> biomassScaller = new Dictionary<DateTime, double>();
-            Dictionary<DateTime, double> coverScaller = new Dictionary<DateTime, double>();
-            Dictionary<DateTime, double> rootDepthScaller = new Dictionary<DateTime, double>();
+            Dictionary<DateTime, double> biomassScaller = Functions.dictMaker(thisCrop.growDates);
+            Dictionary<DateTime, double> coverScaller = Functions.dictMaker(thisCrop.growDates);
+            Dictionary<DateTime, double> rootDepthScaller = Functions.dictMaker(thisCrop.growDates);
+            thisCrop.StoverNconc = Functions.dictMaker(thisCrop.growDates);
+            thisCrop.ProductNconc = Functions.dictMaker(thisCrop.growDates);
+            double earlyNStover = Math.Max(0, 0.06 - (cropParams.StoverN / 100));
+            double earlyNProduct = Math.Max(0, 0.06 - (cropParams.ProductN / 100));
             foreach (DateTime d in tt.Keys)
             {
                 double ttEmerged = Math.Max(0, tt[d] + estab_adjust);
                 double bmScaller = Functions.sigmoid(ttEmerged, thisCrop.Xo_Biomass , thisCrop.b_Biomass);
-                biomassScaller.Add(d, bmScaller);
+                biomassScaller[d] = bmScaller;
                 double rdScaller = 1;
                 if (ttEmerged < thisCrop.T_maxRD)
                     rdScaller = ttEmerged / thisCrop.T_maxRD;
-                rootDepthScaller.Add(d, rdScaller);
+                rootDepthScaller[d] = rdScaller;
                 double cScaller = Math.Max(0, (1 - (ttEmerged - thisCrop.T_sen) / (thisCrop.TtEmergToMat - thisCrop.T_sen)));
                 if (ttEmerged < thisCrop.T_sen)
                     cScaller = Functions.sigmoid(ttEmerged,thisCrop.Xo_cov ,thisCrop.b_cov);
-                coverScaller.Add(d, cScaller);
+                coverScaller[d] = cScaller;
+                double nScaller = Functions.exponential(ttEmerged, thisCrop.TtEmergToMat, Constants.ProportionNDilution[cf.HarvestStage]);
+                double stoverNconc = (cropParams.StoverN / 100) + earlyNStover * nScaller;
+                thisCrop.StoverNconc[d] = cropParams.StoverN/100;//stoverNconc;
+                double productNconc = (cropParams.ProductN / 100) + earlyNProduct * nScaller;
+                thisCrop.ProductNconc[d] = cropParams.ProductN/100; //productNconc;
             }
 
             // Multiply Harvest State Variables by Daily Scallers to give Daily State Variables
+            thisCrop.StoverDwt = Functions.scaledValues(biomassScaller, thisCrop.fStoverDwt, thisCrop.stageCorrection);
+            thisCrop.SaleableProductDwt = Functions.scaledValues(biomassScaller, thisCrop.fSaleableProductDwt, thisCrop.stageCorrection);
+            thisCrop.FieldLossDwt = Functions.scaledValues(biomassScaller, thisCrop.fFieldLossDwt, thisCrop.stageCorrection);
+            thisCrop.RootDwt = Functions.scaledValues(biomassScaller, thisCrop.fRootDwt, thisCrop.stageCorrection);
             thisCrop.RootN = Functions.scaledValues(biomassScaller, thisCrop.fRootN, thisCrop.stageCorrection);
+            //thisCrop.StoverN = Functions.scaledValues(thisCrop.StoverDwt, stoverNConc, thisCrop.stageCorrection);
+            //thisCrop.SaleableProductN = Functions.scaledValues(thisCrop.SaleableProductDwt, saleableProductNConc, thisCrop.stageCorrection);
+            //thisCrop.FieldLossN = Functions.scaledValues(thisCrop.FieldLossDwt, saleableProductNConc, thisCrop.stageCorrection);
             thisCrop.StoverN = Functions.scaledValues(biomassScaller, thisCrop.fStoverN, thisCrop.stageCorrection);
             thisCrop.SaleableProductN = Functions.scaledValues(biomassScaller, thisCrop.fSaleableProductN, thisCrop.stageCorrection);
             thisCrop.FieldLossN = Functions.scaledValues(biomassScaller, thisCrop.fFieldLossN, thisCrop.stageCorrection);
             thisCrop.DressingLossN = Functions.scaledValues(biomassScaller, thisCrop.fDressingLossN, thisCrop.stageCorrection);
-            thisCrop.TotalCropN = Functions.scaledValues(biomassScaller, thisCrop.fCropN, thisCrop.stageCorrection);
+            thisCrop.TotalCropN = Functions.sumArrays(new List<Dictionary<DateTime, double>> {thisCrop.RootN, thisCrop.StoverN, thisCrop.SaleableProductN, thisCrop.FieldLossN, thisCrop.DressingLossN });
             thisCrop.CropUptakeN = Functions.dictMaker(thisCrop.growDates, Functions.calcDelta(thisCrop.TotalCropN.Values.ToArray()));
             thisCrop.Cover = Functions.scaledValues(coverScaller, cropParams.Acover, 1.0);
             thisCrop.RootDepth = Functions.scaledValues(rootDepthScaller, cropParams.MaxRD, 1.0);
@@ -280,9 +294,14 @@ namespace SVSModel
         public double nHIRoot;
         public double nHIStover;
         public double nHIFieldLoss;
-        
+
         /// Crop daily variables
 
+        public Dictionary<DateTime, double> RootDwt;
+        public Dictionary<DateTime, double> StoverDwt;
+        public Dictionary<DateTime, double> SaleableProductDwt;
+        public Dictionary<DateTime, double> FieldLossDwt;
+        public Dictionary<DateTime, double> DressingLossDwt;
         public Dictionary<DateTime, double> RootN;
         public Dictionary<DateTime, double> StoverN;
         public Dictionary<DateTime, double> SaleableProductN;
@@ -293,6 +312,8 @@ namespace SVSModel
         public Dictionary<DateTime, double> Cover;
         public Dictionary<DateTime, double> RootDepth;
         public Dictionary<DateTime, double> TotalNDemand;
+        public Dictionary<DateTime, double> StoverNconc;
+        public Dictionary<DateTime, double> ProductNconc;
 
     }
 }
