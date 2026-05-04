@@ -2,6 +2,7 @@
 // Author: Hamish Brown.
 // Copyright (c) 2024 The New Zealand Institute for Plant and Food Research Limited
 
+using System;
 using System.Collections.Generic;
 
 namespace SVSModel.Configuration
@@ -18,6 +19,7 @@ namespace SVSModel.Configuration
         public string Texture { get; init; }
         public double PMN { get; init; }
         public int Splits { get; init; }
+        public DateTime FinalFertDate { get; init; }
         public double _rawRocks { internal get; init; }
         public string _sampleDepth { internal get; init; }
         public string _prePlantRain { internal get; init; }
@@ -50,6 +52,7 @@ namespace SVSModel.Configuration
             Texture = c["Texture"].ToString(); 
             PMN = Functions.Num(c["PMN"]);
             Splits = int.Parse(c["Splits"].ToString());
+            FinalFertDate = Functions.Date(c["FinalFertDate"]);
 
             _rawRocks = Functions.Num(c["Rocks"]);
             _sampleDepth = c["SampleDepth"].ToString();
