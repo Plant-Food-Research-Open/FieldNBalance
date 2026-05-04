@@ -121,11 +121,12 @@ namespace SVSModel
                 if (ttEmerged < thisCrop.T_sen)
                     cScaller = Functions.sigmoid(ttEmerged,thisCrop.Xo_cov ,thisCrop.b_cov);
                 coverScaller[d] = cScaller;
-                double nScaller = Functions.exponential(ttEmerged, thisCrop.TtEmergToMat, Constants.ProportionNDilution[cf.HarvestStage]);
+                double corectionFactor = Math.Max(Constants.ProportionNDilution[cf.HarvestStage], 0.06);//Need to keen correction factor at this level or else Ncon falls to slow in later harvested situations
+                double nScaller = Functions.exponential(ttEmerged, thisCrop.TtEmergToMat, corectionFactor);
                 double stoverNconc = (cropParams.StoverN / 100) + earlyNStover * nScaller;
-                thisCrop.StoverNconc[d] = cropParams.StoverN/100;//stoverNconc;
+                thisCrop.StoverNconc[d] = stoverNconc;
                 double productNconc = (cropParams.ProductN / 100) + earlyNProduct * nScaller;
-                thisCrop.ProductNconc[d] = cropParams.ProductN/100; //productNconc;
+                thisCrop.ProductNconc[d] = productNconc;
             }
 
             // Multiply Harvest State Variables by Daily Scallers to give Daily State Variables

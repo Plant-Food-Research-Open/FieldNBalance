@@ -62,7 +62,6 @@ namespace SVSModel.Simulation
                         if (d == crop.HarvestDate)
                             thisSim.ExportN[d.AddDays(1)] = currentCrop.TotalCropN[d];
                     }
-
                     currentCrop.TotalNDemand = currentCrop.TotalCropN;
                 }
 
