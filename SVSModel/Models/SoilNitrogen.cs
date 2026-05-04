@@ -96,7 +96,7 @@ namespace SVSModel.Models
                                                standingCropN: thisSim.CropN[d],
                                                dExportN: thisSim.ExportN[d],
                                                dLostN: thisSim.NLost[d],
-                                               dFertiliserN: thisSim.ResetDeltaN[d]);
+                                               dFertiliserN: thisSim.ResetDeltaN[d] );
             }
 
         }
