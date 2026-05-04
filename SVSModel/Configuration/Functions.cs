@@ -245,7 +245,7 @@ namespace SVSModel.Configuration
         /// <param name="final">The Daily State Variable value on the last day of the simulation</param>
         /// <param name="correction">A factor to apply Stage of harvest correction</param>
         /// <returns>An array of Daily State Variables for the model</returns>
-        public static Dictionary<DateTime, double> scaledValues(Dictionary<DateTime, double> scaller, Dictionary<DateTime, double> final, double correction)
+        public static Dictionary<DateTime, double> scaledValues(Dictionary<DateTime, double> scaller, Dictionary<DateTime, double> final, double correction = 1)
         {
             Dictionary<DateTime, double> sv = new Dictionary<DateTime, double>();
             foreach (DateTime d in scaller.Keys)
