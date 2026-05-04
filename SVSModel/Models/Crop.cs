@@ -121,7 +121,7 @@ namespace SVSModel
                 if (ttEmerged < thisCrop.T_sen)
                     cScaller = Functions.sigmoid(ttEmerged,thisCrop.Xo_cov ,thisCrop.b_cov);
                 coverScaller[d] = cScaller;
-                double corectionFactor = Math.Max(Constants.ProportionNDilution[cf.HarvestStage], 0.06);//Need to keen correction factor at this level or else Ncon falls to slow in later harvested situations
+                double corectionFactor = Math.Max(Constants.ProportionNDilution[cf.HarvestStage], 0.06);//Need to keep correction factor at this level or else Ncon falls to slow in later harvested situations
                 double nScaller = Functions.exponential(ttEmerged, thisCrop.TtEmergToMat, corectionFactor);
                 double stoverNconc = (cropParams.StoverN / 100) + earlyNStover * nScaller;
                 thisCrop.StoverNconc[d] = stoverNconc;
@@ -138,9 +138,6 @@ namespace SVSModel
             thisCrop.StoverN = Functions.scaledValues(thisCrop.StoverDwt, thisCrop.StoverNconc);
             thisCrop.SaleableProductN = Functions.scaledValues(thisCrop.SaleableProductDwt, thisCrop.ProductNconc);
             thisCrop.FieldLossN = Functions.scaledValues(thisCrop.FieldLossDwt, thisCrop.ProductNconc);
-            //thisCrop.StoverN = Functions.scaledValues(biomassScaller, thisCrop.fStoverN, thisCrop.stageCorrection);
-            //thisCrop.SaleableProductN = Functions.scaledValues(biomassScaller, thisCrop.fSaleableProductN, thisCrop.stageCorrection);
-            //thisCrop.FieldLossN = Functions.scaledValues(biomassScaller, thisCrop.fFieldLossN, thisCrop.stageCorrection);
             thisCrop.DressingLossN = Functions.scaledValues(biomassScaller, thisCrop.fDressingLossN, thisCrop.stageCorrection);
             thisCrop.TotalCropN = Functions.sumArrays(new List<Dictionary<DateTime, double>> {thisCrop.RootN, thisCrop.StoverN, thisCrop.SaleableProductN, thisCrop.FieldLossN, thisCrop.DressingLossN });
             thisCrop.CropUptakeN = Functions.dictMaker(thisCrop.growDates, Functions.calcDelta(thisCrop.TotalCropN.Values.ToArray()));
