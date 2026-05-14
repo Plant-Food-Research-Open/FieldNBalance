@@ -61,6 +61,10 @@ namespace SVSModel.Models
                 double potentialUptake = potentialCropUptake + potentialImobilisation;
                 double actualCropUptake = potentialCropUptake;  //Start with uptake at potential and revise down if shortage
                 double actualImobilisation = potentialImobilisation; //Start with uptake at potential and revise down if shortage
+                // Note: N shortage constraint only applies when ScheduleFert=false
+                // When scheduling is on (true), shortages are NOT constrained here;
+                // the scheduler compensates by recommending additional fertilizer
+                // This allows dynamic scheduling to work around supply constraints
                 if (((potentialUptake > microbeAvailableN) || (potentialCropUptake > plantAvailableN)) && (fertSchedullingOn == false)) //Is there a shortage  Only constrain crop N uptake if tests are being run.  For schedulling to work need to have crop uptake unconstrained
                 {
                     double propnCropPotUptake = 0;

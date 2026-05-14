@@ -82,6 +82,8 @@ namespace SVSModel.Models
             double sigmaFtm = 0;
             foreach (DateTime d in thisSim.simDates)
             {
+                // Residues are added on harvest date but mineralization begins the day after
+                // to account for incorporation/settling time
                 if (d >= additionDate.AddDays(1))
                 {
                     double Ft = VanHoffQ10(thisSim.meanT[d]);
