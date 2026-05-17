@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Microsoft.Data.Analysis;
 
@@ -82,12 +83,19 @@ namespace SVSModel.Configuration
         /// <param name="date">An array of DateTimes</param>
         /// <param name="values">An array of doubles</param>
         /// <returns>dictionary converted from arr</returns>
-        public static Dictionary<DateTime, double> dictMaker(DateTime[] dates, double[] values)
+        public static Dictionary<DateTime, double> dictMaker(DateTime[] dates, double[] values = null)
         {
             Dictionary<DateTime, double> dict = new Dictionary<DateTime, double>();
             for (int r = 0; r < dates.Length; r++)
             {
-                dict.Add(dates[r], values[r]);
+                if (values != null)
+                {
+                    dict.Add(dates[r], values[r]);
+                }
+                else
+                {
+                    dict.Add(dates[r], double.NaN);
+                }
             }
             return dict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
         }
@@ -204,6 +212,48 @@ namespace SVSModel.Configuration
         }
 
         /// <summary>
+        /// Takes arrays of daily values and adds them together 
+        /// </summary>
+        /// <param name="members">list of 2D arrays to be summed</param>
+        /// <returns>An array of Daily State Variables for the model</returns>
+        public static Dictionary<DateTime, double> sumArrays(List<Dictionary<DateTime, double>> members)
+        {
+            Dictionary<DateTime, double> summed = new Dictionary<DateTime, double>();
+            bool first = true;
+            foreach (Dictionary<DateTime, double> member in members)
+            {
+                foreach (DateTime d in member.Keys)
+                {
+                    if (first)
+                    {
+                        summed.Add(d, member[d]);
+                    }
+                    else
+                    {
+                        summed[d] += member[d];
+                    }
+                }
+                first = false;
+            }
+            return summed;
+        }
+
+        /// <summary>
+        /// Takes an array of daily scaller values (0-1) and multiplies them by the final value to give Daily State Variable values 
+        /// </summary>
+        /// <param name="scaller">2D array of daily values for 0-1 scaller</param>
+        /// <param name="final">The Daily State Variable value on the last day of the simulation</param>
+        /// <param name="correction">A factor to apply Stage of harvest correction</param>
+        /// <returns>An array of Daily State Variables for the model</returns>
+        public static Dictionary<DateTime, double> scaledValues(Dictionary<DateTime, double> scaller, Dictionary<DateTime, double> final, double correction = 1)
+        {
+            Dictionary<DateTime, double> sv = new Dictionary<DateTime, double>();
+            foreach (DateTime d in scaller.Keys)
+                sv.Add(d, scaller[d] * final[d] * correction);
+            return sv;
+        }
+
+        /// <summary>
         /// Creates an array of dates for the duration of the simulation
         /// </summary>
         /// <param name="start">Date to start series</param>
@@ -251,26 +301,55 @@ namespace SVSModel.Configuration
             int Nrows = arr.GetLength(0);
             for (int r = 0; r < Nrows; r++)
             {
-                if (arr[r, 1].ToString() == "")
-                    errorlist.Add(arr[r, 0].ToString());
-                if (arr[r, 1] == null)
-                    errorlist.Add(arr[r, 0].ToString());
+                if (arr[r, 0].ToString() != "FinalFertDate")
+                {
+                    if (arr[r, 1].ToString() == "")
+                        errorlist.Add(arr[r, 0].ToString());
+                    if (arr[r, 1] == null)
+                        errorlist.Add(arr[r, 0].ToString());
+                }
             }
             return errorlist;
         }
 
-        public static DateTime Date(object configDate)
+        public static DateTime Date(object value,
+                                    DateTime? defaultValue = null)
         {
-            if (configDate.GetType() == typeof(double))
-            {
-                return DateTime.FromOADate((double)configDate);
-            }
-            else
-            {
-                return (DateTime)configDate;
-            }
+            // Default fallback if not supplied
+            defaultValue ??= new DateTime(2200, 1, 1);
+
+            if (value == null)
+                return defaultValue.Value;
+
+            // Already a DateTime
+            if (value is DateTime dt)
+                return dt;
+
+            // Excel serial date (ExcelDNA case)
+            if (value is double d)
+                return DateTime.FromOADate(d);
+
+            // Everything else → string handling
+            string s = value.ToString();
+
+            if (string.IsNullOrWhiteSpace(s))
+                return defaultValue.Value;
+
+            // Try parse using current culture + invariant
+            if (DateTime.TryParse(s, out DateTime parsed))
+                return parsed;
+
+            if (DateTime.TryParse(
+                    s,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out parsed))
+                return parsed;
+
+            throw new ArgumentException(
+                $"Cannot parse date value '{value}'.");
         }
-        
+
         /// <summary>
         /// Parses a double out of a generic `object` input
         /// </summary>
@@ -310,6 +389,13 @@ namespace SVSModel.Configuration
         public static double sigmoid(double dX, double Xo, double b)
         {
             return 1 / (1 + Math.Exp(-(dX - Xo) / b));
+        }
+
+        public static double exponential(double dX, double Tt_mat, double adjFact)
+        {
+            double k = -4 / Tt_mat;
+            double naked = Math.Exp(dX * k);
+            return Math.Max(0, Math.Min(1, (naked - adjFact) * (1 / (1 - adjFact))));
         }
     }
 }

@@ -43,6 +43,19 @@ public class CropConfig
             return _rawYield * toKGperHA;
         }
     }
+
+    public string StageToEndSchedulCalcs
+    {
+        get
+        {
+            string ret = HarvestStage;
+            if ((HarvestStage == "Maturity")||(HarvestStage == "Late"))
+            {
+                ret = "LateReproductive";
+            }
+            return ret;
+        }
+    }
     public double ResidueFactRetained => Constants.ResidueFactRetained[_residueRemoval];
     public double ResidueFactIncorporated => Constants.ResidueIncorporation[_residueIncorporation];
 

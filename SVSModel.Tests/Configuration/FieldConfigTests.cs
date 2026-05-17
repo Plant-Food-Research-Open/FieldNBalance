@@ -22,6 +22,7 @@ public class FieldConfigTests
     private static readonly string PrePlantRain = Defaults.RainPrior;
     private static readonly string InCropRain = Defaults.RainDuring;
     private static readonly string Irrigation = Defaults.IrrigationApplied;
+    private static readonly string FinalFertDate = Defaults.FinalFertDate;
 
     private readonly Dictionary<string, object> ExcelInputDict = new()
     {
@@ -34,7 +35,8 @@ public class FieldConfigTests
         { "SampleDepth", SampleDepth },
         { "PrePlantRain", PrePlantRain },
         { "InCropRain", InCropRain },
-        { "Irrigation", Irrigation }
+        { "Irrigation", Irrigation },
+        { "FinalFertDate",  FinalFertDate}
     };
 
     [Fact]

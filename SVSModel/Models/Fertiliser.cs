@@ -29,15 +29,13 @@ namespace SVSModel.Models
                 if (testResults.Keys.Last() > config.Current.EstablishDate) //If test results specified after establishment that becomes start of schedulling date
                     startSchedulleDate = testResults.Keys.Last();
             DateTime lastFertDate = new DateTime();
-            foreach (DateTime d in fert.Keys)
+            foreach (DateTime d in fert.Keys)  //Find the last date in the fertiliser already applied
             {
-                if (fert[d] > 0)
-                    lastFertDate = d;
+                lastFertDate = d;
             }
-            if (lastFertDate > startSchedulleDate)
-                startSchedulleDate = lastFertDate;  //If Fertiliser already applied after last test date them last fert date becomes start of scheudlling date
-            startSchedulleDate = startSchedulleDate.AddDays(1); //Start schedule the day after the last test or application
-            return startSchedulleDate; 
+            if (lastFertDate >= startSchedulleDate)
+                startSchedulleDate = lastFertDate.AddDays(1);  //If Fertiliser already applied after last test date them last fert date becomes start of scheudlling date
+            return startSchedulleDate;
         }
 
         /// <summary>
@@ -53,14 +51,14 @@ namespace SVSModel.Models
             DateTime[] datesPassedAlready = Functions.DateSeries(config.Current.EstablishDate, startSchedulleDate);
             foreach (DateTime d in datesPassedAlready)
             {
-                if (fert[d]>0)
+                if (fert[d] > 0)
                 {
                     splitsAppliedAlready += 1;
                 }
             }
             return splitsAppliedAlready;
         }
-        
+
         /// <summary>
         /// Adds specified establishment fert to the soil N then determines how much additional fertiliser N is required and when the crop will need it.
         /// </summary>
@@ -72,66 +70,112 @@ namespace SVSModel.Models
         /// <param name="cropN">Date indexed series of standing crop N</param>
         /// <param name="testResults">Date indexed set of test values</param>
         /// <returns></returns>
-        public static void RemainingFertiliserSchedule(DateTime startSchedulleDate,DateTime endScheduleDate,
+        public static void RemainingFertiliserSchedule(DateTime startSchedulleDate, DateTime endScheduleDate,
                                                        ref SimulationType thisSim)
         {
             Config config = thisSim.config;
-            DateTime[] schedullingDates = Functions.DateSeries(startSchedulleDate, endScheduleDate);
+            
+            int splitsApplied = splitsAppliedAlready(startSchedulleDate, thisSim.NFertiliserApplied, config);
 
-            int splitsApplied = splitsAppliedAlready(startSchedulleDate, thisSim.NFertiliser, config);
+            // Calculate N application at planting
+            DateTime sowingDate = thisSim.config.Current.EstablishDate;
+            if (startSchedulleDate <= sowingDate)
+            {
+                double plantSowingNRequirement = thisSim.config.Current.NDemand * 0.33;
+                double sowingFert = Math.Max(0, plantSowingNRequirement - thisSim.SoilN[sowingDate]);
+                if (sowingFert > 0)
+                {
+                    Fertiliser.SetFertiliserRelease(sowingFert, sowingDate, thisSim);
+                    SoilNitrogen.UpdateBalance(sowingDate, ref thisSim, true);
+                    thisSim.NFertiliserApplied[sowingDate] += sowingFert;
+                    splitsApplied += 1;
+                }
+            }
 
             // Set other variables needed to derive fertiliser requirement
-            int remainingSplits = Math.Max(0,thisSim.config.Field.Splits - splitsApplied);
+            int remainingSplits = Math.Max(0, thisSim.config.Field.Splits - splitsApplied);
 
             // Determine dates that each fertiliser application should be made
-            
+            startSchedulleDate = startSchedulleDate.AddDays(8);  //Move internal schedulling dates forward 8 days as fertiliser is recommended 8 days before trigger is met
+            endScheduleDate = endScheduleDate.AddDays(8);  //Move internal schedulling dates forward 8 days as fertiliser is recommended 8 days before trigger is met
+            DateTime[] schedullingDates = Functions.DateSeries(startSchedulleDate, endScheduleDate);
+
             foreach (DateTime d in schedullingDates)
             {
                 if (remainingSplits > 0)
                 {
-                    double trigger = thisSim.NUptake[d] * 10;
-                    if (thisSim.SoilN[d] < trigger)
+                    double trigger = Math.Max(20, thisSim.NUptake[d] * 14);
+                    if ((thisSim.SoilN[d] < trigger) || ((d == endScheduleDate) && (remainingSplits > 0)))
                     {
-                        double initialN = thisSim.SoilN[d];
-                        double initialLossEst = thisSim.NLost[d];
+                        if (d == endScheduleDate)
+                        {
+                            remainingSplits = 1;
+                        }
+                        double initialN = thisSim.SoilN[d.AddDays(-1)];
                         double losses = 0;
                         double NAppn = 0;
                         for (int passes = 0; passes < 50; passes++)
                         {
                             double lastPassLossEst = losses;
-                            double remainingReqN = remainingRequirement(d, endScheduleDate, thisSim, initialN) + losses;
+                            trigger = Math.Max(15, thisSim.NUptake[thisSim.config.Current.HarvestDate] * 14);
+                            double remainingReqN = remainingRequirement(d, thisSim.config.Current.HarvestDate, thisSim, initialN, trigger) + losses;
                             NAppn = remainingReqN / remainingSplits;
-                            SoilNitrogen.UpdateBalance(d, NAppn, initialN, initialLossEst, ref thisSim, true, new Dictionary<DateTime, double>(), true);
-                            losses = anticipatedLosses(d, endScheduleDate, thisSim.NLost);
+                            Fertiliser.SetFertiliserRelease(NAppn, d.AddDays(-8), thisSim, true);
+                            SoilNitrogen.UpdateBalance(d.AddDays(-8), ref thisSim, true);
+                            losses = anticipatedLosses(d.AddDays(-8), thisSim.config.Current.HarvestDate, thisSim.NLost);
                             double lossChange = losses - lastPassLossEst;
                             if (lossChange < 0.1)
                                 break;
                         }
-                        thisSim.NFertiliser[d] += NAppn;
+                        thisSim.NFertiliserApplied[d.AddDays(-8)] += NAppn;
                         remainingSplits -= 1;
                     }
                 }
             }
         }
 
-        private static double remainingRequirement(DateTime startDate, DateTime endDate, SimulationType thisSim, double initialN)
+        private static Dictionary<int, double> releasePatttern = new Dictionary<int, double>
+        {
+            { 6, 0.10 },
+            { 7, 0.20 },
+            { 8, 0.40 },
+            { 9, 0.20 },
+            { 10, 0.10 }
+        };
+
+        public static void SetFertiliserRelease(double nApplied, DateTime applicationDate, SimulationType thisSim, bool overwrite = false)
+        {
+            for (int i = 6; i <= 10; i++)
+            {
+                if (overwrite == false)
+                {
+                    thisSim.NFertiliserReleased[applicationDate.AddDays(i)] += nApplied * releasePatttern[i];
+                }
+                if (overwrite == true)
+                {
+                    thisSim.NFertiliserReleased[applicationDate.AddDays(i)] = nApplied * releasePatttern[i];
+                }
+            }
+        }
+
+        private static double remainingRequirement(DateTime startDate, DateTime endDate, SimulationType thisSim, double initialN, double trigger)
         {
             double remainingCropN = thisSim.CropN[endDate] - thisSim.CropN[startDate];
             DateTime[] remainingDates = Functions.DateSeries(startDate, endDate);
-            double remainingOrgN = remainingMineralisation(remainingDates, thisSim.NResidues, thisSim.NSoilOM);
-            double surplussMineralN = initialN - Constants.Trigger;
+            double remainingOrgN = remainingMineralisation(remainingDates, thisSim.NResidues, thisSim.NSoilOM, thisSim.NDemand);
+            double surplussMineralN = initialN - trigger;
             return Math.Max(0, remainingCropN - remainingOrgN - surplussMineralN);
         }
 
-        private static double remainingMineralisation(DateTime[] remainingDates, Dictionary<DateTime, double> residueMin, Dictionary<DateTime, double> somN)
+        private static double remainingMineralisation(DateTime[] remainingDates, Dictionary<DateTime, double> residueMin, Dictionary<DateTime, double> somN, Dictionary<DateTime, double> NDemand)
         {
-            double mineralisation = 0;
+            double MineralNUsable = 0;
             foreach (DateTime d in remainingDates)
             {
-                mineralisation += residueMin[d];
-                mineralisation += somN[d];
+                double MinearlNAvailable = residueMin[d] + somN[d]; //This is how much minearl N the crop may take up
+                MineralNUsable = Math.Min(MinearlNAvailable, NDemand[d]); //Crop can not take up Available N if demand is less that what is available 
             }
-            return mineralisation;
+            return MineralNUsable;
         }
 
         private static double anticipatedLosses(DateTime startDate, DateTime endDate, Dictionary<DateTime, double> lostN)
@@ -145,10 +189,10 @@ namespace SVSModel.Models
             return losses;
         }
 
-            public static void ApplyExistingFertiliser(DateTime startApplicationDate, DateTime endApplicationDate, 
+        public static void ApplyExistingFertiliser(DateTime startApplicationDate, DateTime endApplicationDate,
                                                    Dictionary<DateTime, double> appliedN,
                                                    ref SimulationType thisSim)
-            
+
         {
             DateTime[] applicationDates = Functions.DateSeries(startApplicationDate, endApplicationDate);
 
