@@ -81,7 +81,7 @@ namespace SVSModel.Models
             int splitsApplied = splitsAppliedAlready(startSchedulleDate, thisSim.NFertiliser, config);
 
             // Set other variables needed to derive fertiliser requirement
-            int remainingSplits = Math.Max(0,thisSim.config.Field.Splits - splitsApplied);
+            int remainingSplits = Math.Max(1,thisSim.config.Field.Splits - splitsApplied);
 
             // Determine dates that each fertiliser application should be made
             
