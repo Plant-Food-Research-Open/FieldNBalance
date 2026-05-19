@@ -18,15 +18,15 @@ jobs:
       cancel-in-progress: true
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Set up Python 3.10
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: '3.10'
 
       - name: Install and configure Poetry
-        uses: snok/install-poetry@v1
+        uses: snok/install-poetry@v1.4.1
         with:
           version: 1.7.1
           virtualenvs-create: true
@@ -38,7 +38,7 @@ jobs:
           poetry install --no-interaction --no-root  
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 8.0.x
 
@@ -54,7 +54,7 @@ jobs:
           dotnet run --project TestConsole/TestsConsole.csproj
 
       - name: Upload test sets
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: TestSets
           path: TestComponents/TestSets
@@ -70,14 +70,14 @@ jobs:
           echo "{date}={$(date +'%Y-%m-%d')}" >> $GITHUB_ENV
 
       - name: Upload validation report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: validation_report
           path: html
 
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'
-        uses: JamesIves/github-pages-deploy-action@v4.4.1
+        uses: JamesIves/github-pages-deploy-action@v4.8.0
         with:
           clean: false
           branch: gh-pages
