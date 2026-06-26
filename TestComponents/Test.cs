@@ -47,7 +47,7 @@ namespace TestModel
             }
 
 
-            List<string> sets = new List<string> { "WS1", "WS2", "CropStage", "Residues", "Location", "Moisture", "Losses" };
+            List<string> sets = new List<string> { "WS1", "WS2", "CropStage", "Residues", "Location", "Moisture", "Losses", "Schedulling" };
 
             //Delete graphs from previous test run
             string graphFolder = Path.Join(Directory.GetCurrentDirectory(), "TestGraphs", "Outputs");
@@ -123,9 +123,11 @@ namespace TestModel
 
                     MetDataDictionaries metData = ModelInterface.BuildMetDataDictionaries(_config.Prior.EstablishDate, _config.Following.HarvestDate.AddDays(1), weatherStation, actualWeather);
 
-                    object[,] output = Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, _config, initialN, false);
+                    bool scheduleFert = set == "Schedulling";
+                    
+                    object[,] output = Simulation.SimulateField(metData.MeanT, metData.Rain, metData.MeanPET, testResults, nApplied, _config, initialN, scheduleFert);
 
-                    DataFrameColumn[] columns = new DataFrameColumn[14];
+                    DataFrameColumn[] columns = new DataFrameColumn[16];
                     List<string> OutPutHeaders = new List<string>();
                     for (int i = 0; i < output.GetLength(1); i += 1)
                     {
@@ -168,16 +170,35 @@ namespace TestModel
 
         private static void runPythonScript(string path, string pyProg)
         {
-            string progToRun = Path.Join(path,pyProg);
+            string progToRun = Path.Combine(path, pyProg);
 
-            Process proc = new Process();
-            proc.StartInfo.FileName = "python";
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.Arguments = progToRun;
+            var proc = new Process();
+            proc.StartInfo = new ProcessStartInfo
+            {
+                FileName = "python", //@"C:\Path\To\Your\Python\python.exe", // strongly recommended
+                Arguments = $"\"{progToRun}\"",
+                WorkingDirectory = path,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
             proc.Start();
+
+            string stdout = proc.StandardOutput.ReadToEnd();
+            string stderr = proc.StandardError.ReadToEnd();
+
             proc.WaitForExit();
+
+            if (proc.ExitCode != 0)
+            {
+                throw new Exception(
+                    $"Python failed (exit {proc.ExitCode})\n{stderr}"
+                );
+            }
         }
+
 
         public static (SVSModel.Configuration.Config, double) SetConfigFromDataFrame(string test, DataFrame allTests)
         {
@@ -192,6 +213,7 @@ namespace TestModel
                                                     "Splits",
                                                     "PrePlantRain",
                                                     "InCropRain",
+                                                    "FinalFertDate",
                                                     "Irrigation",
                                                     "PriorCropNameFull",
                                                     "PriorFieldYield",
@@ -298,7 +320,7 @@ namespace TestModel
                     {
                         last = fert.Keys.Last();
                     }
-                    if ((date >= _config.StartDate) && (date <= _config.StartDate))
+                    if ((date >= _config.StartDate) && (date <= _config.EndDate))
                     {
                         if (date == last) //If alread fertiliser added for that date add it to existing total
                         {

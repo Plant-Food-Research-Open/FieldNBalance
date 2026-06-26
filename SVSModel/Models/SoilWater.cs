@@ -41,6 +41,7 @@ namespace SVSModel.Models
                     double T = Math.Min(SWC[yest] * 0.1, thisSim.meanPET[d] * thisSim.Cover[d]);
                     double E = thisSim.meanPET[d] * (1 - thisSim.Cover[d]) * thisSim.RSWC[yest];
                     SWC[d] = SWC[yest] + thisSim.meanRain[d] - T - E;
+                    SWC[d] = Math.Max(0, SWC[d]);
                     if (SWC[d] > dul)
                     {
                         thisSim.Drainage[d] = SWC[d] - dul;

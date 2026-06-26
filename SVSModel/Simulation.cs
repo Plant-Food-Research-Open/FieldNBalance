@@ -54,12 +54,14 @@ namespace SVSModel.Simulation
                         thisSim.CropN[d] = currentCrop.TotalCropN[d];
                         thisSim.ProductN[d] = currentCrop.SaleableProductN[d];
                         thisSim.Cover[d] = currentCrop.Cover[d];
+                        thisSim.RootDepth[d] = currentCrop.RootDepth[d];
+                        thisSim.StoverNconc[d] = currentCrop.StoverNconc[d];
+                        thisSim.ProductNconc[d] = currentCrop.ProductNconc[d];
                         if (d == crop.EstablishDate)
                             thisSim.NTransPlant[d] = currentCrop.TotalCropN[d];
                         if (d == crop.HarvestDate)
                             thisSim.ExportN[d.AddDays(1)] = currentCrop.TotalCropN[d];
                     }
-
                     currentCrop.TotalNDemand = currentCrop.TotalCropN;
                 }
 
@@ -81,27 +83,31 @@ namespace SVSModel.Simulation
             SoilOrganic.Mineralisation(ref thisSim);
 
             //Do initial nitorgen balance with actual fertiliser but no scheduled fertiliser or resets
-            SoilNitrogen.UpdateBalance(config.StartDate, initialN, 0, 0, ref thisSim, false, new Dictionary<DateTime, double>(), ScheduleFert);
+            thisSim.ResetDeltaN[config.StartDate] = initialN;
+            SoilNitrogen.UpdateBalance(config.StartDate, ref thisSim, ScheduleFert);
 
             //Reset soil N with test valaues
-            SoilNitrogen.TestsAndActualFertiliser(testResults, ref thisSim, nAapplied);
+            SoilNitrogen.TestsAndActualFertiliser(testResults, ref thisSim, nAapplied, ScheduleFert);
 
             //Calculate Fertiliser requirements and add into soil N
             DateTime StartSchedullingDate = Fertiliser.startSchedullingDate(nAapplied, testResults, config);
-            DateTime EndSchedullingDate = config.Current.HarvestDate;
-            Fertiliser.RemainingFertiliserSchedule(StartSchedullingDate, EndSchedullingDate, ref thisSim);
+            DateTime EndSchedullingDate = Crop.calculateFinalFertiliserDate(thisSim);
+            if (ScheduleFert == true)
+            {
+                Fertiliser.RemainingFertiliserSchedule(StartSchedullingDate, EndSchedullingDate, ref thisSim);
+            }
 
             doNbalanceSummary(ref thisSim);
 
             //Pack Daily State Variables into a 2D array so they can be output
-            object[,] outputs = new object[simDates.Length + 1, 14];
+            object[,] outputs = new object[simDates.Length + 1, 16];
 
             outputs[0, 0] = "Date"; Functions.packRows(0, simDates, ref outputs);
             outputs[0, 1] = "SoilMineralN"; Functions.packRows(1, thisSim.SoilN, ref outputs);
             outputs[0, 2] = "UptakeN"; Functions.packRows(2, thisSim.NUptake, ref outputs);
             outputs[0, 3] = "ResidueN"; Functions.packRows(3, thisSim.NResidues, ref outputs);
             outputs[0, 4] = "SoilOMN"; Functions.packRows(4, thisSim.NSoilOM, ref outputs);
-            outputs[0, 5] = "FertiliserN"; Functions.packRows(5, thisSim.NFertiliser, ref outputs);
+            outputs[0, 5] = "FertiliserN"; Functions.packRows(5, thisSim.NFertiliserApplied, ref outputs);
             outputs[0, 6] = "CropN"; Functions.packRows(6, thisSim.CropN, ref outputs);
             outputs[0, 7] = "ProductN"; Functions.packRows(7, thisSim.ProductN, ref outputs);
             outputs[0, 8] = "LostN"; Functions.packRows(8, thisSim.NLost, ref outputs);
@@ -110,13 +116,15 @@ namespace SVSModel.Simulation
             outputs[0, 11] = "Irrigation"; Functions.packRows(11, thisSim.Irrigation, ref outputs);
             outputs[0, 12] = "Green cover"; Functions.packRows(12, thisSim.Cover, ref outputs);
             outputs[0, 13] = "NDemand"; Functions.packRows(13, thisSim.NDemand, ref outputs);
+            outputs[0, 14] = "StoverNconc"; Functions.packRows(14, thisSim.StoverNconc, ref outputs);
+            outputs[0, 15] = "ProductNconc"; Functions.packRows(15, thisSim.ProductNconc, ref outputs);
 
             return outputs;
         }
 
         private static void doNbalanceSummary(ref SimulationType thisSim)
         {
-            DateTime Start = thisSim.config.Current.EstablishDate;
+            DateTime Start = thisSim.config.Current.EstablishDate.AddDays(-1);
             DateTime End = thisSim.config.Current.HarvestDate;
 
             CropNBalanceSummary CurrentNBalanceSummary = new CropNBalanceSummary(
@@ -124,12 +132,16 @@ namespace SVSModel.Simulation
                 cropIn: Functions.sumOverDates(Start, End, thisSim.NTransPlant),
                 residueIn: Functions.sumOverDates(Start, End, thisSim.NResidues),
                 sOMIn: Functions.sumOverDates(Start, End, thisSim.NSoilOM),
-                fertiliserIn: Functions.sumOverDates(Start, End, thisSim.NFertiliser),
+                fertiliserIn: Functions.sumOverDates(Start, End, thisSim.NFertiliserApplied),
                 mineralOut: thisSim.SoilN[End],
                 productOut: thisSim.ProductN[End],
                 stoverOut: thisSim.CropN[End] - thisSim.ProductN[End],
                 lossesOut: Functions.sumOverDates(Start, End, thisSim.NLost));
             thisSim.CurrentNBalanceSummary = CurrentNBalanceSummary;
+            if (Math.Abs(CurrentNBalanceSummary.balance)>1.0)
+            {
+                double breakplace = 0;
+            }
         }
     }
 
@@ -146,16 +158,21 @@ namespace SVSModel.Simulation
         public Dictionary<DateTime, double> CropN;
         public Dictionary<DateTime, double> ProductN;
         public Dictionary<DateTime, double> Cover;
+        public Dictionary<DateTime, double> RootDepth;
         public Dictionary<DateTime, double> RSWC;
         public Dictionary<DateTime, double> Drainage;
         public Dictionary<DateTime, double> Irrigation;
         public Dictionary<DateTime, double> NResidues;
         public Dictionary<DateTime, double> NSoilOM;
         public Dictionary<DateTime, double> NLost;
-        public Dictionary<DateTime, double> NFertiliser;
+        public Dictionary<DateTime, double> NFertiliserApplied;
+        public Dictionary<DateTime, double> NFertiliserReleased;
         public Dictionary<DateTime, double> SoilN;
         public Dictionary<DateTime, double> ExportN;
         public Dictionary<DateTime, double> CropShortageN;
+        public Dictionary<DateTime, double> ResetDeltaN;
+        public Dictionary<DateTime, double> StoverNconc;
+        public Dictionary<DateTime, double> ProductNconc;
         public CropNBalanceSummary CurrentNBalanceSummary;
 
         public SimulationType(
@@ -175,6 +192,7 @@ namespace SVSModel.Simulation
             NUptake = Functions.dictMaker(simDates, new double[simDates.Length]);
             CropN = Functions.dictMaker(simDates, new double[simDates.Length]);
             ProductN = Functions.dictMaker(simDates, new double[simDates.Length]);
+            RootDepth = Functions.dictMaker(simDates, new double[simDates.Length]);
             Cover = Functions.dictMaker(simDates, new double[simDates.Length]);
             RSWC = Functions.dictMaker(simDates, new double[simDates.Length]);
             Drainage = Functions.dictMaker(simDates, new double[simDates.Length]);
@@ -182,10 +200,14 @@ namespace SVSModel.Simulation
             NResidues = Functions.dictMaker(simDates, new double[simDates.Length]);
             NSoilOM = Functions.dictMaker(simDates, new double[simDates.Length]);
             NLost = Functions.dictMaker(simDates, new double[simDates.Length]);
-            NFertiliser = Functions.dictMaker(simDates, new double[simDates.Length]);
+            NFertiliserApplied = Functions.dictMaker(simDates, new double[simDates.Length]);
+            NFertiliserReleased = Functions.dictMaker(simDates, new double[simDates.Length]);
             SoilN = Functions.dictMaker(simDates, new double[simDates.Length]);
             ExportN = Functions.dictMaker(simDates, new double[simDates.Length]);
             CropShortageN = Functions.dictMaker(simDates, new double[simDates.Length]);
+            ResetDeltaN = Functions.dictMaker(simDates, new double[simDates.Length]);
+            StoverNconc = Functions.dictMaker(simDates, new double[simDates.Length]);
+            ProductNconc = Functions.dictMaker(simDates, new double[simDates.Length]);
         }
     }
 
