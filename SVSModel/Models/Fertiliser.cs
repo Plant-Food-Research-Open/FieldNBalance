@@ -29,13 +29,15 @@ namespace SVSModel.Models
                 if (testResults.Keys.Last() > config.Current.EstablishDate) //If test results specified after establishment that becomes start of schedulling date
                     startSchedulleDate = testResults.Keys.Last();
             DateTime lastFertDate = new DateTime();
-            foreach (DateTime d in fert.Keys)  //Find the last date in the fertiliser already applied
+            foreach (DateTime d in fert.Keys)
             {
-                lastFertDate = d;
+                if (fert[d] > 0)
+                    lastFertDate = d;
             }
-            if (lastFertDate >= startSchedulleDate)
-                startSchedulleDate = lastFertDate.AddDays(1);  //If Fertiliser already applied after last test date them last fert date becomes start of scheudlling date
-            return startSchedulleDate;
+            if (lastFertDate > startSchedulleDate)
+                startSchedulleDate = lastFertDate;  //If Fertiliser already applied after last test date them last fert date becomes start of scheudlling date
+            startSchedulleDate = startSchedulleDate.AddDays(1); //Start schedule the day after the last test or application
+            return startSchedulleDate; 
         }
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace SVSModel.Models
             }
 
             // Set other variables needed to derive fertiliser requirement
-            int remainingSplits = Math.Max(0, thisSim.config.Field.Splits - splitsApplied);
+            int remainingSplits = Math.Max(1,thisSim.config.Field.Splits - splitsApplied);
 
             // Determine dates that each fertiliser application should be made
             startSchedulleDate = startSchedulleDate.AddDays(8);  //Move internal schedulling dates forward 8 days as fertiliser is recommended 8 days before trigger is met
