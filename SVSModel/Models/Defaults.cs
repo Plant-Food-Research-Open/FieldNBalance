@@ -48,4 +48,5 @@ public static class Defaults
     public static readonly string RainPrior = "Typical";
     public static readonly string RainDuring = "Typical";
     public static readonly string IrrigationApplied = "None";
+    public static readonly string FinalFertDate = "";
 }

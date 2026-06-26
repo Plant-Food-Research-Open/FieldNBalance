@@ -37,6 +37,19 @@ namespace SVSModel.Configuration
             { "Late", 1.2957 }
         };
 
+        /// <summary>Dictionary containing values for the proportion of the standard N dilution curve that is not complete by each stage</summary>
+        public static readonly Dictionary<string, double> ProportionNDilution = new()
+        {
+            { "Seed", 1.0 },
+            { "Seedling", 1.0 },
+            { "Vegetative", 0.1353},
+            { "EarlyReproductive", 0.0964 },
+            { "MidReproductive", 0.0654 },
+            { "LateReproductive", 0.0416 },
+            { "Maturity", 0.0183 },
+            { "Late", 0.0056 }
+        };
+
         /// <summary>Dictionary containing conversion from specified units to kg/ha which are the units that the model works in </summary>
         public static readonly Dictionary<string, double> UnitConversions = new()
         {
