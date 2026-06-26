@@ -35,7 +35,7 @@ namespace SVSModel.Models
                     lastFertDate = d;
             }
             if (lastFertDate > startSchedulleDate)
-                startSchedulleDate = lastFertDate;  //If Fertiliser already applied after last test date them last fert date becomes start of scheudlling date
+                startSchedulleDate = lastFertDate;  //If Fertiliser already applied after last test date then last fert date becomes start of scheudlling date
             startSchedulleDate = startSchedulleDate.AddDays(1); //Start schedule the day after the last test or application
             return startSchedulleDate; 
         }
