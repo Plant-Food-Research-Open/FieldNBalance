@@ -37,9 +37,10 @@ namespace SVSModel.Models
             DateTime[] updateDates = Functions.DateSeries(updateDate, thisSim.config.Following.HarvestDate);
             foreach (DateTime d in updateDates)
             {
-                if ((thisSim.NFertiliserReleased[d] > 0)||(thisSim.ResetDeltaN[d] !=0))
+                double dailyFertRelease = thisSim.NFertiliserReleased[d] + thisSim.NFertiliserScheduledReleased[d];
+                if ((dailyFertRelease > 0)||(thisSim.ResetDeltaN[d] !=0))
                 {
-                    thisSim.SoilN[d] = thisSim.SoilN[d.AddDays(-1)] + thisSim.NFertiliserReleased[d] + thisSim.ResetDeltaN[d];
+                    thisSim.SoilN[d] = thisSim.SoilN[d.AddDays(-1)] + dailyFertRelease + thisSim.ResetDeltaN[d];
                 }
                 else
                 {
@@ -95,7 +96,7 @@ namespace SVSModel.Models
                                                dtransPlantN: thisSim.NTransPlant[d],
                                                dResidueN: thisSim.NResidues[d],
                                                dSOMN: thisSim.NSoilOM[d],
-                                               dResetN: thisSim.NFertiliserReleased[d],
+                                               dResetN: dailyFertRelease,
                                                finalMinearlN: thisSim.SoilN[d],
                                                standingCropN: thisSim.CropN[d],
                                                dExportN: thisSim.ExportN[d],

@@ -175,8 +175,12 @@ namespace TestModel
             var proc = new Process();
             proc.StartInfo = new ProcessStartInfo
             {
-                FileName = "python", //@"C:\Path\To\Your\Python\python.exe", // strongly recommended
+                //For Remote
+				FileName = "python", //@"C:\Path\To\Your\Python\python.exe",
                 Arguments = $"\"{progToRun}\"",
+				//For Local
+				//FileName = @"C:\Users\Cflhxb\AppData\Local\miniforge3\condabin\conda.bat",
+                //Arguments =$"run -n sim_env python \"{progToRun}\"",
                 WorkingDirectory = path,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -194,7 +198,7 @@ namespace TestModel
             if (proc.ExitCode != 0)
             {
                 throw new Exception(
-                    $"Python failed (exit {proc.ExitCode})\n{stderr}"
+                    $"Python failed (exit {proc.ExitCode})\n\nSTDOUT:\n{stdout}\n\nSTDERR:\n{stderr}"
                 );
             }
         }
