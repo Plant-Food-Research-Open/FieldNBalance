@@ -167,6 +167,8 @@ namespace SVSModel.Simulation
         public Dictionary<DateTime, double> NLost;
         public Dictionary<DateTime, double> NFertiliserApplied;
         public Dictionary<DateTime, double> NFertiliserReleased;
+        public Dictionary<DateTime, double> NFertiliserScheduled;
+        public Dictionary<DateTime, double> NFertiliserScheduledReleased;
         public Dictionary<DateTime, double> SoilN;
         public Dictionary<DateTime, double> ExportN;
         public Dictionary<DateTime, double> CropShortageN;
@@ -202,6 +204,8 @@ namespace SVSModel.Simulation
             NLost = Functions.dictMaker(simDates, new double[simDates.Length]);
             NFertiliserApplied = Functions.dictMaker(simDates, new double[simDates.Length]);
             NFertiliserReleased = Functions.dictMaker(simDates, new double[simDates.Length]);
+            NFertiliserScheduled = Functions.dictMaker(simDates, new double[simDates.Length]);
+            NFertiliserScheduledReleased = Functions.dictMaker(simDates, new double[simDates.Length]);
             SoilN = Functions.dictMaker(simDates, new double[simDates.Length]);
             ExportN = Functions.dictMaker(simDates, new double[simDates.Length]);
             CropShortageN = Functions.dictMaker(simDates, new double[simDates.Length]);

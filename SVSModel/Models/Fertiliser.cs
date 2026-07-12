@@ -121,8 +121,10 @@ namespace SVSModel.Models
                             double lastPassLossEst = losses;
                             trigger = Math.Max(15, thisSim.NUptake[thisSim.config.Current.HarvestDate] * 14);
                             double remainingReqN = remainingRequirement(d, thisSim.config.Current.HarvestDate, thisSim, initialN, trigger) + losses;
+                            if (remainingReqN < 1)
+                                break;  // in some instances this loop is entered when remainingReqN is very low and causes problems.  So stop here, not need to proceed
                             NAppn = remainingReqN / remainingSplits;
-                            Fertiliser.SetFertiliserRelease(NAppn, d.AddDays(-8), thisSim, true);
+                            Fertiliser.SetScheduledFertiliserRelease(NAppn, d.AddDays(-8), thisSim);
                             SoilNitrogen.UpdateBalance(d.AddDays(-8), ref thisSim, true);
                             losses = anticipatedLosses(d.AddDays(-8), thisSim.config.Current.HarvestDate, thisSim.NLost);
                             double lossChange = losses - lastPassLossEst;
@@ -145,18 +147,19 @@ namespace SVSModel.Models
             { 10, 0.10 }
         };
 
-        public static void SetFertiliserRelease(double nApplied, DateTime applicationDate, SimulationType thisSim, bool overwrite = false)
+        public static void SetFertiliserRelease(double nApplied, DateTime applicationDate, SimulationType thisSim)
         {
             for (int i = 6; i <= 10; i++)
             {
-                if (overwrite == false)
-                {
                     thisSim.NFertiliserReleased[applicationDate.AddDays(i)] += nApplied * releasePatttern[i];
-                }
-                if (overwrite == true)
-                {
-                    thisSim.NFertiliserReleased[applicationDate.AddDays(i)] = nApplied * releasePatttern[i];
-                }
+            }
+        }
+
+        public static void SetScheduledFertiliserRelease(double nApplied, DateTime applicationDate, SimulationType thisSim)
+        {
+            for (int i = 6; i <= 10; i++)
+            {
+                thisSim.NFertiliserScheduledReleased[applicationDate.AddDays(i)] = nApplied * releasePatttern[i];
             }
         }
 
